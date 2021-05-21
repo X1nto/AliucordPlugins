@@ -1,16 +1,18 @@
 # Stallman for Aliucord
 A stallman plugin for Aliucord Discord client that gives you the ability to customize the Linux copypasta by replacing the word "Linux" with your desired phrase.
 
-Usage:
+## Usage
 ```
 /stallman [your phrase here]
 ```
 
-Example:
+## Example
+### Input
 ```
 /stallman Aliucord
 ```
-Output:
+
+### Output
 ```
 I'd just like to interject for a moment. What you're referring to as Aliucord, is in fact, GNU/Aliucord, or as I've recently taken to calling it, GNU plus Aliucord. Aliucord is not an operating system unto itself, but rather another free component of a fully functioning GNU system made useful by the GNU corelibs, shell utilities and vital system components comprising a full OS as defined by POSIX.
 
