@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class LinuxCopypasta extends Plugin {
+public class Stallman extends Plugin {
 
     @NotNull
     @Override
