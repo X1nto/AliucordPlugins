@@ -2,7 +2,7 @@ include ':Stallman'
 rootProject.name = "AliucordPlugins"
 
 include ':DiscordStubs'
-project(':DiscordStubs').projectDir = new File('../repo/Aliucord/DiscordStubs')
+project(':DiscordStubs').projectDir = new File('../repo/DiscordStubs')
 
 include ':Aliucord'
-project(':Aliucord').projectDir = new File('../repo/Aliucord/Aliucord')
+project(':Aliucord').projectDir = new File('../repo/Aliucord')
