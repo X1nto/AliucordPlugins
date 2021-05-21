@@ -4,7 +4,7 @@ A stallman plugin for Aliucord Discord client that gives you the ability to cust
 Usage:
 ```
 /stallman [your phrase here]
-``
+```
 
 Example:
 ```
