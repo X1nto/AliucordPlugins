@@ -1,5 +1,5 @@
 rootProject.name = "AliucordLinuxCopypasta"
-include ':LinuxCopypasta'
+include ':Stallman'
 
 include ':DiscordStubs'
 project(':DiscordStubs').projectDir = new File('../../Aliucord/DiscordStubs')
