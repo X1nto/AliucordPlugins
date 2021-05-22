@@ -6,3 +6,6 @@ Download from the build branch.
 
 ## [Stallman](/Stallman)
 Stallman plugin for Aliucord Discord client that gives you the ability to customize the Linux copypasta by replacing the word "Linux" with your desired phrase.
+
+## [Nitrospoof](/NitroSpoof)
+A plugin that lets you workaround Nitro requirement for emotes.
