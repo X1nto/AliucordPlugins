@@ -4,6 +4,6 @@ public enum EmoteSize {
 
     SIXTY_FOUR,
     FORTY,
-    THIRTY_TWO;
+    THIRTY_TWO
 
 }
