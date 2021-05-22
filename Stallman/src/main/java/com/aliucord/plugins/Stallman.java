@@ -1,23 +1,24 @@
 package com.aliucord.plugins;
 
 import android.content.Context;
+
+import androidx.annotation.NonNull;
+
 import com.aliucord.entities.Plugin;
 import com.aliucord.api.CommandsAPI;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
 public class Stallman extends Plugin {
 
-    @NotNull
+    @NonNull
     @Override
     public Manifest getManifest() {
         Manifest manifest = new Manifest();
-        manifest.authors = new Manifest.Author[] { new Manifest.Author("Xinto") };
+        manifest.authors = new Manifest.Author[] { new Manifest.Author("Xinto", 423915768191647755L) };
         manifest.description = "A plugin that replaces the word \"Linux\" in the Linux Copypasta with your desired string.";
         manifest.version = "1.0.0";
-        manifest.updateUrl = "https://raw.githubusercontent.com/X1nto/AliucordStallman/updater.json";
+        manifest.updateUrl = "https://raw.githubusercontent.com/X1nto/AliucordPlugins/builds/updater.json";
         return manifest;
     }
 
