@@ -1,10 +1,24 @@
 package com.aliucord.plugins;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import com.aliucord.PluginManager;
+import com.aliucord.Utils;
+import com.aliucord.api.SettingsAPI;
 import com.aliucord.entities.Plugin;
+import com.aliucord.widgets.LinearLayout;
+import com.discord.app.AppBottomSheet;
+import com.discord.utilities.color.ColorCompat;
+import com.discord.views.CheckedSetting;
+import com.discord.views.RadioManager;
+import com.lytefast.flexinput.R$b;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -30,7 +44,7 @@ public class NitroSpoof extends Plugin {
         Manifest manifest = new Manifest();
         manifest.authors = new Manifest.Author[] { new Manifest.Author("Xinto",423915768191647755L) };
         manifest.description = "Use all emotes in any server without nitro";
-        manifest.version = "1.0.0";
+        manifest.version = "1.0.1";
         manifest.updateUrl = "https://raw.githubusercontent.com/X1nto/AliucordPlugins/builds/updater.json";
         return manifest;
     }
@@ -91,6 +105,54 @@ public class NitroSpoof extends Plugin {
     @Override
     public void stop(Context context) {
         patcher.unpatchAll();
+    }
+
+    public static class EmoteSizeSettings extends AppBottomSheet {
+
+        @Override
+        public int getContentViewResId() {
+            return 0;
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            Context context = inflater.getContext();
+            LinearLayout layout = new LinearLayout(context);
+            layout.setBackgroundColor(ColorCompat.getThemedColor(context, R$b.colorBackgroundPrimary));
+
+            List<CheckedSetting> radios = Arrays.asList(
+                    Utils.createCheckedSetting(context, CheckedSetting.ViewType.RADIO, "Big (64x64)", null),
+                    Utils.createCheckedSetting(context, CheckedSetting.ViewType.RADIO, "Medium (40x40)", null),
+                    Utils.createCheckedSetting(context, CheckedSetting.ViewType.RADIO, "Small (32x32)", null)
+            );
+
+            RadioManager radioManager = new RadioManager(radios);
+            SettingsAPI sets = PluginManager.plugins.get("NitroSpoof").sets;
+            EmoteSize emoteSize = EmoteSize.valueOf(sets.getString("emotesize", EmoteSize.FORTY.name()));
+
+            int radioSize = radios.size();
+            for (int i = 0; i < radioSize; i++) {
+                int finalSize = i;
+                CheckedSetting radio = radios.get(i);
+                radio.e(e -> {
+                    sets.setString("emotesize", EmoteSize.values()[finalSize].name());
+                    radioManager.a(radio);
+                });
+                layout.addView(radio);
+                if (i == emoteSize.ordinal()) radioManager.a(radio);
+            }
+
+            return layout;
+        }
+    }
+
+    public enum EmoteSize {
+
+        SIXTY_FOUR,
+        FORTY,
+        THIRTY_TWO
+
     }
 
 }
