@@ -9,3 +9,7 @@ Stallman plugin for Aliucord Discord client that gives you the ability to custom
 
 ## [Nitrospoof](/NitroSpoof)
 A plugin that lets you workaround Nitro requirement for emotes.
+
+## [ShowHiddenChannels](/ShowHiddenChannels)
+Allows you to see hidden channels in servers
+
