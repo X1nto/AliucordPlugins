@@ -1,5 +1,6 @@
 include ':Stallman'
 include ':NitroSpoof'
+include ':ShowHiddenChannels'
 rootProject.name = "AliucordPlugins"
 
 include ':DiscordStubs'
@@ -7,4 +8,3 @@ project(':DiscordStubs').projectDir = new File('../repo/DiscordStubs')
 
 include ':Aliucord'
 project(':Aliucord').projectDir = new File('../repo/Aliucord')
-include ':ShowHiddenChannels'
