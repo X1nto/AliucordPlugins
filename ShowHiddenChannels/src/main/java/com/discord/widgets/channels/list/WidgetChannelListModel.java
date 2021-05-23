@@ -6,6 +6,10 @@ public final class WidgetChannelListModel {
 
         public static final class TextLikeChannelData {
 
+            public final boolean getHide() {
+                return false;
+            }
+
             public final int getMentionCount() {
                 return 0;
             }
