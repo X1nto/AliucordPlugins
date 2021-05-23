@@ -20,6 +20,8 @@ import java.util.Map;
 
 public class ShowHiddenChannels extends Plugin {
 
+    private static final String suffix = " (hidden)";
+
     public static Map<String, List<String>> getClassesToPatch() {
         Map<String, List<String>> map = new HashMap<>();
         map.put("com.discord.widgets.channels.list.WidgetChannelListModel$Companion$guildListBuilder$$inlined$forEach$lambda$3", Collections.singletonList("invoke"));
@@ -46,11 +48,11 @@ public class ShowHiddenChannels extends Plugin {
             Channel channel = lambda3.$channel;
             String channelName = channel.l();
 
-            if (!channelName.contains(" (Hidden)") && !PermissionUtils.INSTANCE.hasAccess(lambda3.$channel, lambda3.$permissions)) {
+            if (!channelName.contains(suffix) && !PermissionUtils.INSTANCE.hasAccess(lambda3.$channel, lambda3.$permissions)) {
                 try {
                     Field nameField = channel.getClass().getDeclaredField("name");
                     nameField.setAccessible(true);
-                    nameField.set(channel, channelName + " (Hidden)");
+                    nameField.set(channel, channelName + suffix);
                 } catch (NoSuchFieldException | IllegalAccessException e) {
                     e.printStackTrace();
                 }
