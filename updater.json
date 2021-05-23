@@ -7,6 +7,10 @@
     "version": "1.0.1",
     "minimumDiscordVersion": 1498
   },
+  "ShowHiddenChannels": {
+    "version": "0.1.0",
+    "minimumDiscordVersion": 1498
+  },
   "default": {
     "minimumDiscordVersion": 1456,
     "version": "1.0.0",
