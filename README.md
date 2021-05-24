@@ -14,5 +14,5 @@ A plugin that lets you workaround Nitro requirement for emotes.
 Allows you to see hidden channels in servers.
 
 ## [Lyrics](/Lyrics)
-Searches lyrics of a song.
+Get lyrics to a specific song
 
