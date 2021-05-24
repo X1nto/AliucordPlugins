@@ -16,5 +16,4 @@ Searches lyrics of a song.
 ![image](/screenshots/lyrics_example.png)
 
 ## Additional Info
-Ported from the [Powercord lyrics plugin](https://github.com/powercord-community/lyrics)
-Uses `lyrics-api.powercord.dev`
+Ported from [Powercord lyrics plugin](https://github.com/powercord-community/lyrics)
