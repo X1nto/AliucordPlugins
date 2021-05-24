@@ -11,5 +11,8 @@ Stallman plugin for Aliucord Discord client that gives you the ability to custom
 A plugin that lets you workaround Nitro requirement for emotes.
 
 ## [ShowHiddenChannels](/ShowHiddenChannels)
-Allows you to see hidden channels in servers
+Allows you to see hidden channels in servers.
+
+## [Lyrics](/Lyrics)
+Searches lyrics of a song.
 
