@@ -1,7 +1,9 @@
 package com.aliucord.plugins;
 
 import android.content.Context;
+import android.util.Log;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 
 import com.aliucord.entities.Plugin;
@@ -25,6 +27,8 @@ public class ShowHiddenChannels extends Plugin {
     public static Map<String, List<String>> getClassesToPatch() {
         Map<String, List<String>> map = new HashMap<>();
         map.put("com.discord.widgets.channels.list.WidgetChannelListModel$Companion$guildListBuilder$$inlined$forEach$lambda$3", Collections.singletonList("invoke"));
+        map.put("com.discord.widgets.channels.list.WidgetChannelsListAdapter.ItemChannelText", Collections.singletonList("getHashIcon"));
+        //map.put("com.discord.utilities.channel.GuildChannelIconUtilsKt", Collections.singletonList("guildChannelIcon"));
         return map;
     }
 
@@ -51,18 +55,45 @@ public class ShowHiddenChannels extends Plugin {
             Channel channel = lambda3.$channel;
             String channelName = channel.l();
 
-            if (!channelName.contains(suffix) && !PermissionUtils.INSTANCE.hasAccess(lambda3.$channel, lambda3.$permissions)) {
-                try {
-                    Field nameField = channel.getClass().getDeclaredField("name");
-                    nameField.setAccessible(true);
-                    nameField.set(channel, channelName + suffix);
-                } catch (NoSuchFieldException | IllegalAccessException e) {
-                    e.printStackTrace();
+            boolean isChannelMuted = lambda3.$muted;
+
+            if (!PermissionUtils.INSTANCE.hasAccess(lambda3.$channel, lambda3.$permissions)) {
+                //Mute the channel to apply muted style
+                isChannelMuted = true;
+
+                if (!channelName.contains(suffix)) {
+                    try {
+                        Field nameField = channel.getClass().getDeclaredField("name");
+                        nameField.setAccessible(true);
+                        nameField.set(channel, channelName + suffix);
+                    } catch (NoSuchFieldException | IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-
-            return new ChannelListItemTextChannel(channel, textLikeChannelData.getSelected(), textLikeChannelData.getMentionCount(), textLikeChannelData.getUnread(), lambda3.$muted, textLikeChannelData.getLocked(), lambda3.$channelsWithActiveThreads$inlined.contains(lambda3.$channel.g()));
+            return new ChannelListItemTextChannel(channel, textLikeChannelData.getSelected(), textLikeChannelData.getMentionCount(), textLikeChannelData.getUnread(), isChannelMuted, textLikeChannelData.getLocked(), lambda3.$channelsWithActiveThreads$inlined.contains(lambda3.$channel.g()));
         });
+        patcher.patch("com.discord.widgets.channels.list.WidgetChannelsListAdapter.ItemChannelText", "getHashIcon", (_this, args, ret) -> {
+            ChannelListItemTextChannel textChannel = (ChannelListItemTextChannel) args.get(0);
+            Log.d("test", String.valueOf(ret));
+            if (textChannel.getChannel().l().contains(suffix)) {
+                @DrawableRes int drawable = resources.getIdentifier("ic_channel_hidden", "drawable", "com.aliucord.plugins");
+                Log.d("test", String.valueOf(drawable));
+                return drawable;
+            }
+            return ret;
+        });
+//        patcher.patch("com.discord.utilities.channel.GuildChannelIconUtilsKt", "guildChannelIcon", (_this, args, ret) -> {
+//            Channel channel = (Channel) args.get(0);
+//            Log.d("testRet", String.valueOf(ret));
+//            Log.d("testChannelName", channel.l());
+//            if (channel.l().contains(suffix)) {
+//                @DrawableRes int drawable = resources.getIdentifier("ic_channel_hidden", "drawable", "com.aliucord.plugins");
+//                Log.d("testDrawable", String.valueOf(drawable));
+//                return drawable;
+//            }
+//            return ret;
+//        });
     }
 
     @Override
