@@ -11,6 +11,10 @@
     "version": "0.1.1",
     "minimumDiscordVersion": 1498
   },
+  "Lyrics": {
+    "version": "1.0.0",
+    "minimumDiscordVersion": 1498
+  },
   "default": {
     "minimumDiscordVersion": 1456,
     "version": "1.0.0",
