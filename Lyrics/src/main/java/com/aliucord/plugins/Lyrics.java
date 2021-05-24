@@ -45,13 +45,17 @@ public class Lyrics extends Plugin {
             try {
                 ResponseModel.Data data = fetch((String) args.get("song name"));
 
-                embed.setTitle(data.getName());
-                embed.setDescription(data.getLyrics());
-                embed.setUrl(data.getUrl());
+                ModelMessageEmbed.Item authorItem = new ModelMessageEmbed.Item();
+                Utils.setPrivateField(authorItem.getClass(), authorItem, "name", data.artist);
+                embed.setAuthor(authorItem);
+
+                embed.setTitle(data.name);
+                embed.setDescription(data.lyrics);
+                embed.setUrl(data.url);
                 embed.setColor(0x209CEE);
 
                 ModelMessageEmbed.Item footerItem = new ModelMessageEmbed.Item();
-                Utils.setPrivateField(footerItem.getClass(), footerItem, "text", String.format("Lyrics provided by KSoft.Si | © %s %s", data.getArtist(), data.getAlbum_year().split(",")[0]));
+                Utils.setPrivateField(footerItem.getClass(), footerItem, "text", String.format("Lyrics provided by KSoft.Si | © %s %s", data.artist, data.album_year.split(",")[0]));
                 embed.setFooter(footerItem);
             } catch (Exception e) {
                 return new CommandsAPI.CommandResult("Failed to fetch data", null, false);
@@ -80,68 +84,20 @@ public class Lyrics extends Plugin {
 
         ResponseModel responseModel = Utils.fromJson(res.toString().trim(), ResponseModel.class);
 
-        return responseModel.getData().get(0);
+        return responseModel.data.get(0);
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public static class ResponseModel {
 
         private List<Data> data;
 
-        public List<Data> getData() {
-            return data;
-        }
-
-        public void setData(List<Data> data) {
-            this.data = data;
-        }
-
         private static class Data {
-
             private String lyrics;
             private String artist;
             private String album_year;
             private String name;
             private String url;
-
-            public String getAlbum_year() {
-                return album_year;
-            }
-
-            public String getArtist() {
-                return artist;
-            }
-
-            public String getLyrics() {
-                return lyrics;
-            }
-
-            public String getName() {
-                return name;
-            }
-
-            public String getUrl() {
-                return url;
-            }
-
-            public void setAlbum_year(String album_year) {
-                this.album_year = album_year;
-            }
-
-            public void setArtist(String artist) {
-                this.artist = artist;
-            }
-
-            public void setLyrics(String lyrics) {
-                this.lyrics = lyrics;
-            }
-
-            public void setName(String name) {
-                this.name = name;
-            }
-
-            public void setUrl(String url) {
-                this.url = url;
-            }
         }
 
     }
