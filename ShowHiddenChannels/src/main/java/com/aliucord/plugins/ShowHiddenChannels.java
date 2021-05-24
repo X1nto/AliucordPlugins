@@ -34,7 +34,7 @@ public class ShowHiddenChannels extends Plugin {
         Manifest manifest = new Manifest();
         manifest.authors = new Manifest.Author[] { new Manifest.Author("Xinto",423915768191647755L) };
         manifest.description = "Show hidden channels in servers";
-        manifest.version = "0.1.0";
+        manifest.version = "0.1.1";
         manifest.updateUrl = "https://raw.githubusercontent.com/X1nto/AliucordPlugins/builds/updater.json";
         return manifest;
     }
@@ -42,8 +42,11 @@ public class ShowHiddenChannels extends Plugin {
     @Override
     public void start(Context context) {
         patcher.patch("com.discord.widgets.channels.list.WidgetChannelListModel$Companion$guildListBuilder$$inlined$forEach$lambda$3", "invoke", (_this, args, ret) -> {
+            if (ret != null) return ret;
             WidgetChannelListModel$Companion$guildListBuilder$$inlined$forEach$lambda$3 lambda3 = (WidgetChannelListModel$Companion$guildListBuilder$$inlined$forEach$lambda$3) _this;
+            if (PermissionUtils.INSTANCE.hasAccess(lambda3.$channel, lambda3.$permissions)) return null;
             WidgetChannelListModel.Companion.TextLikeChannelData textLikeChannelData = WidgetChannelListModel$Companion$guildListBuilder$$inlined$forEach$lambda$1.invoke$default(lambda3.$getTextLikeChannelData$1, lambda3.$channel, lambda3.$muted, null, 4, null);
+            if (textLikeChannelData == null || textLikeChannelData.getHide()) return null;
 
             Channel channel = lambda3.$channel;
             String channelName = channel.l();
@@ -58,7 +61,7 @@ public class ShowHiddenChannels extends Plugin {
                 }
             }
 
-            return new ChannelListItemTextChannel(channel, textLikeChannelData.getSelected(), textLikeChannelData.getMentionCount(), textLikeChannelData.getUnread(), lambda3.$muted, textLikeChannelData.getLocked(), lambda3.$channelsWithActiveThreads$inlined.contains(Long.valueOf(lambda3.$channel.g())));
+            return new ChannelListItemTextChannel(channel, textLikeChannelData.getSelected(), textLikeChannelData.getMentionCount(), textLikeChannelData.getUnread(), lambda3.$muted, textLikeChannelData.getLocked(), lambda3.$channelsWithActiveThreads$inlined.contains(lambda3.$channel.g()));
         });
     }
 
