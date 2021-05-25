@@ -1,12 +1,11 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
 }
 
 android {
     compileSdkVersion 30
 
     defaultConfig {
-        applicationId "com.aliucord.plugins"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
