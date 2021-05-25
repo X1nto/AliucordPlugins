@@ -16,3 +16,6 @@ Allows you to see hidden channels in servers.
 ## [Lyrics](/Lyrics)
 Get lyrics to a specific song
 
+## [Gnuify](/Gnuify)
+Appends "GNU/" prefix to every word in the sentence.
+

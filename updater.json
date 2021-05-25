@@ -15,6 +15,10 @@
     "version": "1.0.0",
     "minimumDiscordVersion": 1498
   },
+  "Gnuify": {
+    "version": "1.0.0",
+    "minimumDiscordVersion": 1498
+  },
   "default": {
     "minimumDiscordVersion": 1456,
     "version": "1.0.0",

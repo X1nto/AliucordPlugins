@@ -2,6 +2,7 @@ include ':Stallman'
 include ':NitroSpoof'
 include ':ShowHiddenChannels'
 include ':Lyrics'
+include ':Gnuify'
 rootProject.name = "AliucordPlugins"
 
 include ':DiscordStubs'
