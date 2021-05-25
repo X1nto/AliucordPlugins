@@ -4,10 +4,8 @@ plugins {
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.aliucord.plugins"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
