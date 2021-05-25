@@ -28,7 +28,7 @@ public class Lyrics extends Plugin {
     public Manifest getManifest() {
         Manifest manifest = new Manifest();
         manifest.authors = new Manifest.Author[] { new Manifest.Author("Xinto",423915768191647755L) };
-        manifest.description = "Get lyrics to a specific song";
+        manifest.description = "Get lyrics to a specific song.";
         manifest.version = "1.0.0";
         manifest.updateUrl = "https://raw.githubusercontent.com/X1nto/AliucordPlugins/builds/updater.json";
         return manifest;

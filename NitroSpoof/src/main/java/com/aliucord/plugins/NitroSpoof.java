@@ -43,7 +43,7 @@ public class NitroSpoof extends Plugin {
     public Manifest getManifest() {
         Manifest manifest = new Manifest();
         manifest.authors = new Manifest.Author[] { new Manifest.Author("Xinto",423915768191647755L) };
-        manifest.description = "Use all emotes in any server without nitro";
+        manifest.description = "Use all emotes in any server without Nitro.";
         manifest.version = "1.0.1";
         manifest.updateUrl = "https://raw.githubusercontent.com/X1nto/AliucordPlugins/builds/updater.json";
         return manifest;

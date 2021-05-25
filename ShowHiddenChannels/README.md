@@ -1,2 +1,2 @@
 # ShowHiddenChannels
-Allows you to see hidden channels in servers
+Allows you to see hidden channels in servers.

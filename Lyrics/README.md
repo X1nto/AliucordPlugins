@@ -1,5 +1,5 @@
 # Lyrics
-Get lyrics to a specific song
+Get lyrics to a specific song.
 
 ## Usage
 ```
