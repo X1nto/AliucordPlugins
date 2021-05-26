@@ -1,23 +1,18 @@
 {
   "Stallman": {
-    "version": "1.0.1",
-    "minimumDiscordVersion": 74107
+    "version": "1.0.1"
   },
   "NitroSpoof": {
-    "version": "1.0.1",
-    "minimumDiscordVersion": 74107
+    "version": "1.0.1"
   },
   "ShowHiddenChannels": {
-    "version": "0.2.1",
-    "minimumDiscordVersion": 74107
+    "version": "0.2.1"
   },
   "Lyrics": {
-    "version": "1.0.0",
-    "minimumDiscordVersion": 74107
+    "version": "1.0.0"
   },
   "Gnuify": {
-    "version": "1.0.0",
-    "minimumDiscordVersion": 74107
+    "version": "1.0.0"
   },
   "default": {
     "version": "1.0.0",
