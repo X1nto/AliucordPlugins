@@ -29,7 +29,7 @@ import java.util.Map;
 
 public class ShowHiddenChannels extends Plugin {
 
-    private static final String suffix = " (hidden)";
+    private static final String suffix = "\u200B";
 
     private static final String channelListClass = "com.discord.widgets.channels.list.WidgetChannelListModel$Companion$guildListBuilder$$inlined$forEach$lambda$3";
     private static final String channelListMethod = "invoke";
@@ -56,7 +56,7 @@ public class ShowHiddenChannels extends Plugin {
         Manifest manifest = new Manifest();
         manifest.authors = new Manifest.Author[] { new Manifest.Author("Xinto",423915768191647755L) };
         manifest.description = "Allows you to see hidden channels in servers.";
-        manifest.version = "0.2.0";
+        manifest.version = "0.2.1";
         manifest.updateUrl = "https://raw.githubusercontent.com/X1nto/AliucordPlugins/builds/updater.json";
         return manifest;
     }
