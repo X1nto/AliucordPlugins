@@ -27,7 +27,7 @@ public class HideInviteButton extends Plugin {
     public Manifest getManifest() {
         Manifest manifest = new Manifest();
         manifest.authors = new Manifest.Author[]{new Manifest.Author("Xinto", 423915768191647755L)};
-        manifest.description = "Hides invite button in channels list";
+        manifest.description = "Hides invite button in channels list.";
         manifest.version = "1.0.0";
         manifest.updateUrl = "https://raw.githubusercontent.com/X1nto/AliucordPlugins/builds/updater.json";
         return manifest;
