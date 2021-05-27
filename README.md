@@ -19,3 +19,5 @@ Get lyrics to a specific song
 ## [Gnuify](/Gnuify)
 Appends "GNU/" prefix to every word in the sentence.
 
+## [HideInviteButton](/HideInviteButton)
+Hides invite button in the channels list.
