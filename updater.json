@@ -14,6 +14,9 @@
   "Gnuify": {
     "version": "1.0.0"
   },
+  "HideInviteButton": {
+    "version": "1.0.0"
+  },
   "default": {
     "version": "1.0.0",
     "minimumDiscordVersion": 74107,
