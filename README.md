@@ -8,7 +8,10 @@ Download from the build branch.
 Appends "GNU/" prefix to every word in the sentence.
 
 ## [HideInviteButton](/HideInviteButton)
-Hides invite button in the channels list.
+Hides the invite button in the channels list.
+
+## [HideSearchBox](/HideSearchBox)
+Hides the search box in the DM list.
 
 ## [Lyrics](/Lyrics)
 Get lyrics to a specific song.
