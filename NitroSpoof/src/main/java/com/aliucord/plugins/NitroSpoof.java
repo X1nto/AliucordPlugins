@@ -28,9 +28,13 @@ import java.util.Map;
 
 public class NitroSpoof extends Plugin {
 
+    private static final String className = "com.discord.models.domain.emoji.ModelEmojiCustom";
+    private static final String getChatInputText = "getChatInputText";
+    private static final String isUsable = "isUsable";
+
     public static Map<String, List<String>> getClassesToPatch() {
         Map<String, List<String>> map = new HashMap<>();
-        map.put("com.discord.models.domain.emoji.ModelEmojiCustom", Arrays.asList("getChatInputText", "isUsable"));
+        map.put(className, Arrays.asList(getChatInputText, isUsable));
         return map;
     }
 
@@ -51,7 +55,7 @@ public class NitroSpoof extends Plugin {
 
     @Override
     public void start(Context context) {
-        patcher.patch("com.discord.models.domain.emoji.ModelEmojiCustom", "getChatInputText", (_this, args, ret) -> {
+        patcher.patch(className, getChatInputText, (_this, args, ret) -> {
             try {
                 Field isUsableField = _this.getClass().getDeclaredField("isUsable");
                 isUsableField.setAccessible(true);
@@ -99,7 +103,7 @@ public class NitroSpoof extends Plugin {
             }
             return ret;
         });
-        patcher.patch("com.discord.models.domain.emoji.ModelEmojiCustom", "isUsable", (_this, args, ret) -> true);
+        patcher.patch(className, isUsable, (_this, args, ret) -> true);
     }
 
     @Override
