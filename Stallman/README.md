@@ -1,5 +1,5 @@
 # Stallman
-Stallman plugin for Aliucord Discord client that gives you the ability to customize the Linux copypasta by replacing the word "Linux" with your desired phrase.
+Replace "Linux" in the GNU/Linux copypasta with your desired phrase.
 Originally made for Powercord: https://github.com/luimu64/stallman-powercord
 
 ## Usage

@@ -1,9 +1,9 @@
-include ':Stallman'
-include ':NitroSpoof'
-include ':ShowHiddenChannels'
-include ':Lyrics'
 include ':Gnuify'
 include ':HideInviteButton'
+include ':Lyrics'
+include ':NitroSpoof'
+include ':ShowHiddenChannels'
+include ':Stallman'
 rootProject.name = "AliucordPlugins"
 
 include ':DiscordStubs'
