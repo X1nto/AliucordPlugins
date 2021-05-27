@@ -1,2 +1,2 @@
 # HideInviteButton
-Hides invite button in the channels list.
+Hides the invite button in the channels list.
