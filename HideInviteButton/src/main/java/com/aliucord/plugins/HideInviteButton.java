@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.aliucord.entities.Plugin;
+import com.discord.widgets.channels.list.WidgetChannelsListAdapter;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,17 +36,13 @@ public class HideInviteButton extends Plugin {
     @Override
     public void start(Context context) {
         patcher.patch("com.discord.widgets.channels.list.WidgetChannelsListAdapter$ItemInvite", "onConfigure", (_this, args, ret) -> {
-            try {
-                View itemView = (View) _this.getClass().getField("itemView").get(_this);
-                assert itemView != null;
-                itemView.setVisibility(View.GONE);
+            View itemView = (View) ((WidgetChannelsListAdapter.ItemInvite) _this).itemView;
+            assert itemView != null;
+            itemView.setVisibility(View.GONE);
 
-                //Adjust LayoutParams, especially height, otherwise list
-                //will include padding of the button with it's original size
-                itemView.setLayoutParams(new ViewGroup.LayoutParams(0, 10));
-            } catch (IllegalAccessException | NoSuchFieldException e) {
-                e.printStackTrace();
-            }
+            //Adjust LayoutParams, especially height, otherwise list
+            //will include padding of the button with it's original size
+            itemView.setLayoutParams(new ViewGroup.LayoutParams(0, 10));
             return ret;
         });
     }
