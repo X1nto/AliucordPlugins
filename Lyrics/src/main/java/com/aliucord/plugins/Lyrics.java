@@ -10,7 +10,6 @@ import com.aliucord.entities.MessageEmbed;
 import com.aliucord.entities.Plugin;
 import com.discord.api.commands.ApplicationCommandType;
 import com.discord.models.commands.ApplicationCommandOption;
-import com.discord.models.domain.ModelMessageEmbed;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -31,7 +30,7 @@ public class Lyrics extends Plugin {
         Manifest manifest = new Manifest();
         manifest.authors = new Manifest.Author[] { new Manifest.Author("Xinto",423915768191647755L) };
         manifest.description = "Get lyrics to a specific song.";
-        manifest.version = "1.0.1";
+        manifest.version = "1.0.2";
         manifest.updateUrl = "https://raw.githubusercontent.com/X1nto/AliucordPlugins/builds/updater.json";
         return manifest;
     }
@@ -76,21 +75,15 @@ public class Lyrics extends Plugin {
         return new CommandsAPI.CommandResult(lyrics);
     }
 
-    private CommandsAPI.CommandResult lyricsEmbed(ResponseModel.Data data) throws Exception {
-        MessageEmbed embed = new MessageEmbed();
+    private CommandsAPI.CommandResult lyricsEmbed(ResponseModel.Data data) {
+        MessageEmbed embed = new MessageEmbed()
+                .setAuthor(new MessageEmbed.Author(data.artist))
+                .setTitle(data.name)
+                .setDescription(data.lyrics)
+                .setUrl(data.url)
+                .setColor(0x209CEE)
+                .setFooter(String.format("Lyrics provided by KSoft.Si | © %s %s", data.artist, data.album_year.split(",")[0]), "https://external-content.duckduckgo.com/iu/?u=https://cdn.ksoft.si/images/Logo128.png");
 
-        ModelMessageEmbed.Item authorItem = new ModelMessageEmbed.Item();
-        Utils.setPrivateField(authorItem.getClass(), authorItem, "name", data.artist);
-        embed.setAuthor(authorItem);
-
-        embed.setTitle(data.name);
-        embed.setDescription(data.lyrics);
-        embed.setUrl(data.url);
-        embed.setColor(0x209CEE);
-
-        ModelMessageEmbed.Item footerItem = new ModelMessageEmbed.Item();
-        Utils.setPrivateField(footerItem.getClass(), footerItem, "text", String.format("Lyrics provided by KSoft.Si | © %s %s", data.artist, data.album_year.split(",")[0]));
-        embed.setFooter(footerItem);
         return new CommandsAPI.CommandResult("", Collections.singletonList(embed), false);
     }
 
