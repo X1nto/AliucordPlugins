@@ -30,7 +30,7 @@ public class Lyrics extends Plugin {
         Manifest manifest = new Manifest();
         manifest.authors = new Manifest.Author[] { new Manifest.Author("Xinto",423915768191647755L) };
         manifest.description = "Get lyrics to a specific song.";
-        manifest.version = "1.0.2";
+        manifest.version = "1.0.3";
         manifest.updateUrl = "https://raw.githubusercontent.com/X1nto/AliucordPlugins/builds/updater.json";
         return manifest;
     }
@@ -77,14 +77,14 @@ public class Lyrics extends Plugin {
 
     private CommandsAPI.CommandResult lyricsEmbed(ResponseModel.Data data) {
         MessageEmbed embed = new MessageEmbed()
-                .setAuthor(new MessageEmbed.Author(data.artist))
+                .setAuthor(data.artist, null, null)
                 .setTitle(data.name)
                 .setDescription(data.lyrics)
                 .setUrl(data.url)
                 .setColor(0x209CEE)
                 .setFooter(String.format("Lyrics provided by KSoft.Si | © %s %s", data.artist, data.album_year.split(",")[0]), "https://external-content.duckduckgo.com/iu/?u=https://cdn.ksoft.si/images/Logo128.png");
 
-        return new CommandsAPI.CommandResult("", Collections.singletonList(embed), false);
+        return new CommandsAPI.CommandResult("", Collections.singletonList(embed.embed), false);
     }
 
     private ResponseModel.Data fetch(String song) throws Exception {
