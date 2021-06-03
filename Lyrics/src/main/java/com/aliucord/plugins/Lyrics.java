@@ -4,21 +4,19 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.aliucord.Utils;
+import com.aliucord.Http;
 import com.aliucord.api.CommandsAPI;
-import com.aliucord.entities.MessageEmbed;
+import com.aliucord.entities.MessageEmbedBuilder;
 import com.aliucord.entities.Plugin;
 import com.discord.api.commands.ApplicationCommandType;
+import com.discord.api.message.embed.MessageEmbed;
 import com.discord.models.commands.ApplicationCommandOption;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class Lyrics extends Plugin {
 
     private static final String baseUrl = "https://lyrics-api.powercord.dev/lyrics?input=";
@@ -30,7 +28,7 @@ public class Lyrics extends Plugin {
         Manifest manifest = new Manifest();
         manifest.authors = new Manifest.Author[] { new Manifest.Author("Xinto",423915768191647755L) };
         manifest.description = "Get lyrics to a specific song.";
-        manifest.version = "1.0.3";
+        manifest.version = "1.1.0";
         manifest.updateUrl = "https://raw.githubusercontent.com/X1nto/AliucordPlugins/builds/updater.json";
         return manifest;
     }
@@ -76,31 +74,20 @@ public class Lyrics extends Plugin {
     }
 
     private CommandsAPI.CommandResult lyricsEmbed(ResponseModel.Data data) {
-        MessageEmbed embed = new MessageEmbed()
+        MessageEmbed embed = new MessageEmbedBuilder()
                 .setAuthor(data.artist, null, null)
                 .setTitle(data.name)
                 .setDescription(data.lyrics)
                 .setUrl(data.url)
                 .setColor(0x209CEE)
-                .setFooter(String.format("Lyrics provided by KSoft.Si | © %s %s", data.artist, data.album_year.split(",")[0]), "https://external-content.duckduckgo.com/iu/?u=https://cdn.ksoft.si/images/Logo128.png");
+                .setFooter(String.format("Lyrics provided by KSoft.Si | © %s %s", data.artist, data.album_year.split(",")[0]), "https://external-content.duckduckgo.com/iu/?u=https://cdn.ksoft.si/images/Logo128.png")
+                .build();
 
-        return new CommandsAPI.CommandResult("", Collections.singletonList(embed.embed), false);
+        return new CommandsAPI.CommandResult(null, Collections.singletonList(embed), false, "Lyrics", data.album_art);
     }
 
     private ResponseModel.Data fetch(String song) throws Exception {
-        HttpURLConnection con = (HttpURLConnection) new URL(baseUrl + song).openConnection();
-        con.setRequestProperty("User-Agent", "Aliucord");
-
-        String ln;
-        StringBuilder res = new StringBuilder();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        while ((ln = reader.readLine()) != null) {
-            res.append(ln);
-        }
-        reader.close();
-
-        ResponseModel responseModel = Utils.fromJson(res.toString().trim(), ResponseModel.class);
-
+        ResponseModel responseModel = Http.simpleJsonGet(baseUrl + song, ResponseModel.class);
         return responseModel.data.get(0);
     }
 
@@ -113,6 +100,7 @@ public class Lyrics extends Plugin {
             private String lyrics;
             private String artist;
             private String album_year;
+            private String album_art;
             private String name;
             private String url;
         }
