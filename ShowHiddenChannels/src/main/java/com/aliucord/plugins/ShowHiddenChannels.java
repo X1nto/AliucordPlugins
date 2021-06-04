@@ -3,6 +3,8 @@ package com.aliucord.plugins;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
@@ -11,6 +13,7 @@ import com.aliucord.entities.Plugin;
 import com.discord.api.channel.Channel;
 import com.discord.databinding.WidgetChannelsListItemChannelBinding;
 import com.discord.databinding.WidgetChannelsListItemTextActionsBinding;
+import com.discord.utilities.SnowflakeUtils;
 import com.discord.utilities.permissions.PermissionUtils;
 import com.discord.widgets.channels.list.WidgetChannelListModel;
 import com.discord.widgets.channels.list.WidgetChannelListModel$Companion$guildListBuilder$$inlined$forEach$lambda$1;
@@ -18,11 +21,14 @@ import com.discord.widgets.channels.list.WidgetChannelListModel$Companion$guildL
 import com.discord.widgets.channels.list.WidgetChannelsListAdapter;
 import com.discord.widgets.channels.list.WidgetChannelsListItemChannelActions;
 import com.discord.widgets.channels.list.items.ChannelListItemTextChannel;
+import com.lytefast.flexinput.R$h;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,7 +63,7 @@ public class ShowHiddenChannels extends Plugin {
         Manifest manifest = new Manifest();
         manifest.authors = new Manifest.Author[] { new Manifest.Author("Xinto",423915768191647755L) };
         manifest.description = "Allows you to see hidden channels in servers.";
-        manifest.version = "1.0.0";
+        manifest.version = "1.1.0";
         manifest.updateUrl = "https://raw.githubusercontent.com/X1nto/AliucordPlugins/builds/updater.json";
         return manifest;
     }
@@ -143,6 +149,19 @@ public class ShowHiddenChannels extends Plugin {
                 WidgetChannelsListItemTextActionsBinding binding = (WidgetChannelsListItemTextActionsBinding) getBinding.invoke(_this);
 
                 assert binding != null;
+
+                String channelTopic = channel.y();
+                long lastSentMessageID = (long) Channel.class.getMethod("h").invoke(channel);
+
+                TextView channelTopicView = new TextView(binding.a.getContext(), null, 0, R$h.UiKit_Settings_Item_Header);
+                channelTopicView.setText(String.format("Topic: %s", channelTopic != null ? channelTopic : "none"));
+
+                TextView lastSendMessageView = new TextView(binding.a.getContext(), null, 0, R$h.UiKit_Settings_Item_Header);
+                lastSendMessageView.setText(String.format("Last sent message date: %s", SimpleDateFormat.getDateTimeInstance().format(new Date(SnowflakeUtils.toTimestamp(lastSentMessageID)))));
+
+                LinearLayout container = (LinearLayout) binding.a.getChildAt(0);
+                int childCount = container.getChildCount();
+
                 binding.b.setVisibility(View.GONE);
                 binding.c.setVisibility(View.GONE);
                 binding.h.setVisibility(View.GONE);
@@ -151,6 +170,8 @@ public class ShowHiddenChannels extends Plugin {
                 binding.g.setVisibility(View.GONE);
                 binding.i.setVisibility(View.GONE);
                 binding.e.setVisibility(View.GONE);
+                container.addView(channelTopicView, childCount - 3);
+                container.addView(lastSendMessageView, childCount - 4);
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
             }
