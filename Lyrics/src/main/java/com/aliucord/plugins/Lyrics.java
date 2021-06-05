@@ -8,13 +8,20 @@ import com.aliucord.Http;
 import com.aliucord.api.CommandsAPI;
 import com.aliucord.entities.MessageEmbedBuilder;
 import com.aliucord.entities.Plugin;
+import com.aliucord.utils.ReflectUtils;
+import com.discord.api.activity.Activity;
 import com.discord.api.commands.ApplicationCommandType;
 import com.discord.api.message.embed.MessageEmbed;
 import com.discord.models.commands.ApplicationCommandOption;
+import com.discord.models.presence.Presence;
+import com.discord.stores.StoreStream;
+import com.discord.stores.StoreUserPresence;
+import com.discord.utilities.presence.PresenceUtils;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("unused")
 public class Lyrics extends Plugin {
@@ -28,25 +35,41 @@ public class Lyrics extends Plugin {
         Manifest manifest = new Manifest();
         manifest.authors = new Manifest.Author[] { new Manifest.Author("Xinto",423915768191647755L) };
         manifest.description = "Get lyrics to a specific song.";
-        manifest.version = "1.1.0";
+        manifest.version = "1.2.0";
         manifest.updateUrl = "https://raw.githubusercontent.com/X1nto/AliucordPlugins/builds/updater.json";
         return manifest;
     }
 
     @Override
     public void start(Context context) {
-        ApplicationCommandOption songNameArg = new ApplicationCommandOption(ApplicationCommandType.STRING, "name", "The song name to search lyrics for", null, true, false, null, null);
+        ApplicationCommandOption songNameArg = new ApplicationCommandOption(ApplicationCommandType.STRING, "name", "The song name to search lyrics for", null, false, false, null, null);
         ApplicationCommandOption shouldSendArg = new ApplicationCommandOption(ApplicationCommandType.BOOLEAN, "send", "To send output in the chat or not", null, false, false, null, null);
         List<ApplicationCommandOption> arguments = Arrays.asList(songNameArg, shouldSendArg);
 
         commands.registerCommand("lyrics", "Grab a song lyrics", arguments, args -> {
             Boolean shouldSend = (Boolean) args.get("send");
+            String songName = (String) args.get("name");
 
             if (shouldSend == null) {
                 shouldSend = false;
             }
 
-            String songName = (String) args.get("name");
+            if (songName == null) {
+                try {
+                    StoreUserPresence userPresence = (StoreUserPresence) StoreStream.class.getMethod("getPresences").invoke(null);
+                    Map<Long, Presence> presences = (Map<Long, Presence>) ReflectUtils.getField(userPresence, "presencesSnapshot", true);
+                    Presence presence = presences.get(StoreStream.getUsers().getMe().getId());
+                    Activity spotifyActivity = PresenceUtils.INSTANCE.getSpotifyListeningActivity(presence);
+                    if (spotifyActivity == null) {
+                        return new CommandsAPI.CommandResult("You're not listening to anything right now!", null, false);
+                    }
+                    songName = String.format("%s %s", spotifyActivity.l(), spotifyActivity.e());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return new CommandsAPI.CommandResult("Failed to get current Spotify activity.", null, false);
+                }
+            }
+
             try {
                 ResponseModel.Data data = fetch(songName);
                 return shouldSend ? lyricsText(data) : lyricsEmbed(data);
