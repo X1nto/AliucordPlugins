@@ -14,7 +14,7 @@ Hides the invite button in the channel and member lists.
 Hides the search box in the DM list.
 
 ## [Lyrics](/Lyrics)
-Get lyrics to a specific song.
+Get lyrics to a song.
 
 ## [Nitrospoof](/NitroSpoof)
 Use nitro emotes without nitro.
