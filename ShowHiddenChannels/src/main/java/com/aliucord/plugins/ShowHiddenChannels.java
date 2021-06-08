@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.aliucord.entities.Plugin;
+import com.aliucord.patcher.PinePatchFn;
 import com.discord.api.channel.Channel;
 import com.discord.databinding.WidgetChannelsListItemChannelBinding;
 import com.discord.databinding.WidgetChannelsListItemTextActionsBinding;
@@ -20,6 +21,7 @@ import com.discord.widgets.channels.list.WidgetChannelListModel$Companion$guildL
 import com.discord.widgets.channels.list.WidgetChannelListModel$Companion$guildListBuilder$$inlined$forEach$lambda$3;
 import com.discord.widgets.channels.list.WidgetChannelsListAdapter;
 import com.discord.widgets.channels.list.WidgetChannelsListItemChannelActions;
+import com.discord.widgets.channels.list.items.ChannelListItem;
 import com.discord.widgets.channels.list.items.ChannelListItemTextChannel;
 import com.lytefast.flexinput.R$h;
 
@@ -27,11 +29,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @SuppressWarnings("unused")
 public class ShowHiddenChannels extends Plugin {
@@ -45,14 +43,6 @@ public class ShowHiddenChannels extends Plugin {
     private static final String channelActionsClass = "com.discord.widgets.channels.list.WidgetChannelsListItemChannelActions";
     private static final String channelActionsMethod = "configureUI";
 
-    public static Map<String, List<String>> getClassesToPatch() {
-        Map<String, List<String>> map = new HashMap<>();
-        map.put(channelListClass, Collections.singletonList(channelListMethod));
-        map.put(channelLayoutClass, Collections.singletonList(channelLayoutMethod));
-        map.put(channelActionsClass, Collections.singletonList(channelActionsMethod));
-        return map;
-    }
-
     public ShowHiddenChannels() {
         needsResources = true;
     }
@@ -63,7 +53,7 @@ public class ShowHiddenChannels extends Plugin {
         Manifest manifest = new Manifest();
         manifest.authors = new Manifest.Author[] { new Manifest.Author("Xinto",423915768191647755L) };
         manifest.description = "Allows you to see hidden channels in servers.";
-        manifest.version = "1.1.0";
+        manifest.version = "1.1.1";
         manifest.updateUrl = "https://raw.githubusercontent.com/X1nto/AliucordPlugins/builds/updater.json";
         return manifest;
     }
@@ -81,7 +71,9 @@ public class ShowHiddenChannels extends Plugin {
     }
 
     private void patchChannelList() {
-        patcher.patch(channelListClass, channelListMethod, (_this, args, ret) -> {
+        patcher.patch(channelListClass, channelListMethod, new Class[0], new PinePatchFn(callFrame -> {
+            Object _this = callFrame.thisObject;
+            Object ret = callFrame.getResult();
             WidgetChannelListModel$Companion$guildListBuilder$$inlined$forEach$lambda$3 lambda3 = (WidgetChannelListModel$Companion$guildListBuilder$$inlined$forEach$lambda$3) _this;
 
             Channel channel = lambda3.$channel;
@@ -94,31 +86,44 @@ public class ShowHiddenChannels extends Plugin {
                 if (!isChannelVisible(channelName)) {
                     renameChannel(channel, removeSuffix(channelName, suffix));
                 }
-                return ret;
+                callFrame.setResult(ret);
+                return;
             }
 
-            if (PermissionUtils.INSTANCE.hasAccess(lambda3.$channel, lambda3.$permissions)) return null;
+            if (PermissionUtils.INSTANCE.hasAccess(lambda3.$channel, lambda3.$permissions)){
+                callFrame.setResult(null);
+                return;
+            }
 
             WidgetChannelListModel.Companion.TextLikeChannelData textLikeChannelData = WidgetChannelListModel$Companion$guildListBuilder$$inlined$forEach$lambda$1.invoke$default(lambda3.$getTextLikeChannelData$1, lambda3.$channel, lambda3.$muted, null, 4, null);
 
             //Check if category is collapsed
-            if (textLikeChannelData == null || textLikeChannelData.getHide()) return null;
+            if (textLikeChannelData == null || textLikeChannelData.getHide()) {
+                callFrame.setResult(null);
+                return;
+            }
 
             if (isChannelVisible(channelName)) {
                 renameChannel(channel, channelName + suffix);
             }
-            return new ChannelListItemTextChannel(channel, textLikeChannelData.getSelected(), textLikeChannelData.getMentionCount(), textLikeChannelData.getUnread(), true, textLikeChannelData.getLocked(), lambda3.$channelsWithActiveThreads$inlined.contains(lambda3.$channel.g()));
-        });
+            callFrame.setResult(new ChannelListItemTextChannel(channel, textLikeChannelData.getSelected(), textLikeChannelData.getMentionCount(), textLikeChannelData.getUnread(), true, textLikeChannelData.getLocked(), lambda3.$channelsWithActiveThreads$inlined.contains(lambda3.$channel.g())));
+        }));
     }
 
     private void patchHiddenChannelLayout() {
-        patcher.patch(channelLayoutClass, channelLayoutMethod, (_this, args, ret) -> {
-            ChannelListItemTextChannel textChannel = (ChannelListItemTextChannel) args.get(1);
+        patcher.patch(channelLayoutClass, channelLayoutMethod, new Class[]{ int.class, ChannelListItem.class}, new PinePatchFn (callFrame -> {
+            Object ret = callFrame.thisObject;
+            Object _this = callFrame.thisObject;
+
+            ChannelListItemTextChannel textChannel = (ChannelListItemTextChannel) callFrame.args[1];
             WidgetChannelsListAdapter.ItemChannelText _itemChannelText = (WidgetChannelsListAdapter.ItemChannelText) _this;
             Channel channel = textChannel.getChannel();
             String channelName = channel.l();
 
-            if (isChannelVisible(channelName)) return null;
+            if (isChannelVisible(channelName)) {
+                callFrame.setResult(null);
+                return;
+            }
 
             try {
                 Field bindingField = _itemChannelText.getClass().getDeclaredField("binding");
@@ -132,16 +137,22 @@ public class ShowHiddenChannels extends Plugin {
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 e.printStackTrace();
             }
-            return ret;
-        });
+            callFrame.setResult(ret);
+        }));
     }
 
     private void patchHiddenChannelActions() {
-        patcher.patch(channelActionsClass, channelActionsMethod, (_this, args, ret) -> {
-            WidgetChannelsListItemChannelActions.Model model = (WidgetChannelsListItemChannelActions.Model) args.get(0);
+        patcher.patch(channelActionsClass, channelActionsMethod, new Class[] { WidgetChannelsListItemChannelActions.Model.class }, new PinePatchFn(callFrame -> {
+            Object ret = callFrame.getResult();
+            Object _this = callFrame.thisObject;
+
+            WidgetChannelsListItemChannelActions.Model model = (WidgetChannelsListItemChannelActions.Model) callFrame.args[0];
             Channel channel = model.getChannel();
 
-            if (isChannelVisible(channel.l())) return null;
+            if (isChannelVisible(channel.l())) {
+                callFrame.setResult(null);
+                return;
+            }
 
             try {
                 Method getBinding = _this.getClass().getDeclaredMethod("getBinding");
@@ -175,8 +186,8 @@ public class ShowHiddenChannels extends Plugin {
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
             }
-            return ret;
-        });
+            callFrame.setResult(ret);
+        }));
     }
 
     private void renameChannel(Channel channel, String newName) {

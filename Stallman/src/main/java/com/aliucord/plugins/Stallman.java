@@ -11,6 +11,7 @@ import com.discord.models.commands.ApplicationCommandOption;
 
 import java.util.*;
 
+@SuppressWarnings("unused")
 public class Stallman extends Plugin {
 
     @NonNull

@@ -11,6 +11,7 @@ import com.discord.models.commands.ApplicationCommandOption;
 
 import java.util.*;
 
+@SuppressWarnings("unused")
 public class Gnuify extends Plugin {
 
     private static final String prefix = "GNU/";
