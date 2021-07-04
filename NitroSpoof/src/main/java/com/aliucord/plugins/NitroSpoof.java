@@ -37,52 +37,54 @@ public class NitroSpoof extends Plugin {
         patcher.patch(modelEmojiCustom, getChatInputText, new Class[0], new PinePatchFn(callFrame -> {
             try {
                 Object _this = callFrame.thisObject;
+
                 Field isUsableField = _this.getClass().getDeclaredField("isUsable");
                 isUsableField.setAccessible(true);
                 boolean isUsable = isUsableField.getBoolean(_this);
 
-                if (!isUsable) {
-                    StringBuilder finalUrl = new StringBuilder();
-                    finalUrl.append("https://cdn.discordapp.com/emojis/");
-
-                    Field idStrField = _this.getClass().getDeclaredField("idStr");
-                    idStrField.setAccessible(true);
-                    String idStr = (String) idStrField.get(_this);
-
-                    Field isAnimatedField = _this.getClass().getDeclaredField("isAnimated");
-                    isAnimatedField.setAccessible(true);
-                    boolean isAnimated = isAnimatedField.getBoolean(_this);
-
-                    finalUrl.append(idStr);
-
-                    EmoteSize emoteValue = EmoteSize.valueOf(sets.getString("emotesize", EmoteSize.FORTY.name()));
-                    int emoteSize;
-
-                    switch (emoteValue) {
-                        case SIXTY_FOUR:
-                            emoteSize = 64;
-                            break;
-                        case FORTY:
-                            emoteSize = 40;
-                            break;
-                        default:
-                            emoteSize = 32;
-                            break;
-                    }
-
-                    if (isAnimated) {
-                        finalUrl.append(".gif");
-                    } else {
-                        finalUrl.append(".png");
-                    }
-                    finalUrl.append("?size=").append(emoteSize);
-                    callFrame.setResult(finalUrl.toString());
+                if (isUsable) {
+                    callFrame.setResult(callFrame.getResult());
                     return;
                 }
-            } catch (NoSuchFieldException | IllegalAccessException e) {
+
+                StringBuilder finalUrl = new StringBuilder();
+                finalUrl.append("https://cdn.discordapp.com/emojis/");
+
+                Field idStrField = _this.getClass().getDeclaredField("idStr");
+                idStrField.setAccessible(true);
+                String idStr = (String) idStrField.get(_this);
+
+                Field isAnimatedField = _this.getClass().getDeclaredField("isAnimated");
+                isAnimatedField.setAccessible(true);
+                boolean isAnimated = isAnimatedField.getBoolean(_this);
+
+                finalUrl.append(idStr);
+
+                EmoteSize emoteValue = EmoteSize.valueOf(sets.getString("emotesize", EmoteSize.FORTY.name()));
+                int emoteSize;
+
+                switch (emoteValue) {
+                    case SIXTY_FOUR:
+                        emoteSize = 64;
+                        break;
+                    case FORTY:
+                        emoteSize = 40;
+                        break;
+                    default:
+                        emoteSize = 32;
+                        break;
+                }
+
+                if (isAnimated) {
+                    finalUrl.append(".gif");
+                } else {
+                    finalUrl.append(".png");
+                }
+                finalUrl.append("?size=").append(emoteSize);
+                callFrame.setResult(finalUrl.toString());
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-            callFrame.setResult(callFrame.getResult());
         }));
         patcher.patch(modelEmojiCustom, isUsable, new Class[0], new PinePatchFn(callFrame -> callFrame.setResult(true)));
     }
