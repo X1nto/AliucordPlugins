@@ -9,12 +9,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.aliucord.Constants;
 import com.aliucord.entities.Plugin;
 import com.aliucord.patcher.PinePatchFn;
+import com.aliucord.wrappers.ChannelWrapper;
 import com.discord.api.channel.Channel;
 import com.discord.databinding.WidgetChannelsListItemChannelBinding;
 import com.discord.databinding.WidgetChannelsListItemTextActionsBinding;
 import com.discord.utilities.SnowflakeUtils;
+import com.discord.utilities.color.ColorCompat;
 import com.discord.utilities.permissions.PermissionUtils;
 import com.discord.widgets.channels.list.WidgetChannelListModel;
 import com.discord.widgets.channels.list.WidgetChannelListModel$Companion$guildListBuilder$$inlined$forEach$lambda$1;
@@ -23,10 +26,10 @@ import com.discord.widgets.channels.list.WidgetChannelsListAdapter;
 import com.discord.widgets.channels.list.WidgetChannelsListItemChannelActions;
 import com.discord.widgets.channels.list.items.ChannelListItem;
 import com.discord.widgets.channels.list.items.ChannelListItemTextChannel;
+import com.lytefast.flexinput.R$b;
 import com.lytefast.flexinput.R$h;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,7 +37,7 @@ import java.util.Date;
 @SuppressWarnings("unused")
 public class ShowHiddenChannels extends Plugin {
 
-    private static final String suffix = " ";
+    private static final String suffix = " (hidden)";
 
     private static final String channelListClass = "com.discord.widgets.channels.list.WidgetChannelListModel$Companion$guildListBuilder$$inlined$forEach$lambda$3";
     private static final String channelListMethod = "invoke";
@@ -53,7 +56,7 @@ public class ShowHiddenChannels extends Plugin {
         Manifest manifest = new Manifest();
         manifest.authors = new Manifest.Author[] { new Manifest.Author("Xinto",423915768191647755L) };
         manifest.description = "Allows you to see hidden channels in servers.";
-        manifest.version = "1.1.1";
+        manifest.version = "1.2.0";
         manifest.updateUrl = "https://raw.githubusercontent.com/X1nto/AliucordPlugins/builds/updater.json";
         return manifest;
     }
@@ -77,7 +80,7 @@ public class ShowHiddenChannels extends Plugin {
             WidgetChannelListModel$Companion$guildListBuilder$$inlined$forEach$lambda$3 lambda3 = (WidgetChannelListModel$Companion$guildListBuilder$$inlined$forEach$lambda$3) _this;
 
             Channel channel = lambda3.$channel;
-            String channelName = channel.l();
+            String channelName = ChannelWrapper.getName(channel);
 
             if (ret != null) {
                 //Rename back channel if it was previously hidden
@@ -106,7 +109,7 @@ public class ShowHiddenChannels extends Plugin {
             if (isChannelVisible(channelName)) {
                 renameChannel(channel, channelName + suffix);
             }
-            callFrame.setResult(new ChannelListItemTextChannel(channel, textLikeChannelData.getSelected(), textLikeChannelData.getMentionCount(), textLikeChannelData.getUnread(), true, textLikeChannelData.getLocked(), lambda3.$channelsWithActiveThreads$inlined.contains(lambda3.$channel.g())));
+            callFrame.setResult(new ChannelListItemTextChannel(channel, textLikeChannelData.getSelected(), textLikeChannelData.getMentionCount(), textLikeChannelData.getUnread(), true, textLikeChannelData.getLocked(), lambda3.$channelsWithActiveThreads$inlined.contains(ChannelWrapper.getId(lambda3.$channel))));
         }));
     }
 
@@ -118,7 +121,8 @@ public class ShowHiddenChannels extends Plugin {
             ChannelListItemTextChannel textChannel = (ChannelListItemTextChannel) callFrame.args[1];
             WidgetChannelsListAdapter.ItemChannelText _itemChannelText = (WidgetChannelsListAdapter.ItemChannelText) _this;
             Channel channel = textChannel.getChannel();
-            String channelName = channel.l();
+            assert channel != null;
+            String channelName = ChannelWrapper.getName(channel);
 
             if (isChannelVisible(channelName)) {
                 callFrame.setResult(null);
@@ -129,12 +133,12 @@ public class ShowHiddenChannels extends Plugin {
                 Field bindingField = _itemChannelText.getClass().getDeclaredField("binding");
                 bindingField.setAccessible(true);
                 WidgetChannelsListItemChannelBinding binding = (WidgetChannelsListItemChannelBinding) bindingField.get(_itemChannelText);
-                Drawable hiddenDrawable = ResourcesCompat.getDrawable(resources, resources.getIdentifier("ic_channel_hidden", "drawable", "com.aliucord.plugins"), null);
+                Drawable hiddenDrawable = ResourcesCompat.getDrawable(resources, resources.getIdentifier("ic_text_channel_hidden", "drawable", "com.aliucord.plugins"), null);
                 assert binding != null;
                 binding.b.setImageDrawable(hiddenDrawable);
                 binding.d.setText(channelName);
                 binding.a.setOnClickListener(null);
-            } catch (NoSuchFieldException | IllegalAccessException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             callFrame.setResult(ret);
@@ -148,8 +152,9 @@ public class ShowHiddenChannels extends Plugin {
 
             WidgetChannelsListItemChannelActions.Model model = (WidgetChannelsListItemChannelActions.Model) callFrame.args[0];
             Channel channel = model.getChannel();
+            ChannelWrapper channelWrapper = new ChannelWrapper(channel);
 
-            if (isChannelVisible(channel.l())) {
+            if (isChannelVisible(channelWrapper.getName())) {
                 callFrame.setResult(null);
                 return;
             }
@@ -161,13 +166,15 @@ public class ShowHiddenChannels extends Plugin {
 
                 assert binding != null;
 
-                String channelTopic = channel.y();
-                long lastSentMessageID = (long) Channel.class.getMethod("h").invoke(channel);
+                String channelTopic = channelWrapper.getTopic();
+                long lastSentMessageID = channelWrapper.getLastMessageId();
 
-                TextView channelTopicView = new TextView(binding.a.getContext(), null, 0, R$h.UiKit_Settings_Item_Header);
+                Context context = binding.a.getContext();
+
+                TextView channelTopicView = getThemedTextView(context);
                 channelTopicView.setText(String.format("Topic: %s", channelTopic != null ? channelTopic : "none"));
 
-                TextView lastSendMessageView = new TextView(binding.a.getContext(), null, 0, R$h.UiKit_Settings_Item_Header);
+                TextView lastSendMessageView = getThemedTextView(context);
                 lastSendMessageView.setText(String.format("Last sent message date: %s", SimpleDateFormat.getDateTimeInstance().format(new Date(SnowflakeUtils.toTimestamp(lastSentMessageID)))));
 
                 LinearLayout container = (LinearLayout) binding.a.getChildAt(0);
@@ -183,7 +190,7 @@ public class ShowHiddenChannels extends Plugin {
                 binding.e.setVisibility(View.GONE);
                 container.addView(channelTopicView, childCount - 3);
                 container.addView(lastSendMessageView, childCount - 4);
-            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             callFrame.setResult(ret);
@@ -195,9 +202,19 @@ public class ShowHiddenChannels extends Plugin {
             Field nameField = channel.getClass().getDeclaredField("name");
             nameField.setAccessible(true);
             nameField.set(channel, newName);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private TextView getThemedTextView(Context context) {
+        int paddingHorizontal = 36;
+        int paddingVertical = 8;
+        TextView textView = new TextView(context, null, 0, R$h.UiKit_TextView_Semibold);
+        textView.setTypeface(ResourcesCompat.getFont(context, Constants.Fonts.whitney_semibold));
+        textView.setTextColor(ColorCompat.getThemedColor(context, R$b.colorTextMuted));
+        textView.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical);
+        return textView;
     }
 
     private String removeSuffix(String sourceString, String suffix) {
