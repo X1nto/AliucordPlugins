@@ -1,6 +1,5 @@
 include ':Gnuify'
-include ':HideInviteButton'
-include ':HideSearchBox'
+include ':HideBloat'
 include ':Lyrics'
 include ':NitroSpoof'
 include ':ShowHiddenChannels'

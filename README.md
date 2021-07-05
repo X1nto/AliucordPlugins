@@ -7,11 +7,8 @@ Download from the build branch.
 ## [Gnuify](/Gnuify)
 Appends "GNU/" prefix to every word in the sentence.
 
-## [HideInviteButton](/HideInviteButton)
-Hides the invite button in the channel and member lists.
-
-## [HideSearchBox](/HideSearchBox)
-Hides the search box in the DM list.
+## [HideBloat](/HideBloat)
+Hides various discord bloat.
 
 ## [Lyrics](/Lyrics)
 Get lyrics to a song.
