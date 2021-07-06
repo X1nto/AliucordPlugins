@@ -16,7 +16,7 @@ public class ChannelsInviteButtonPatch extends BasePatcher {
     private static final String ON_CONFIGURE = "onConfigure";
 
     public ChannelsInviteButtonPatch() {
-        super(Const.SEARCH_BOX_KEY, WIDGET_CHANNELS_LIST_ADAPTER_ITEM_INVITE, ON_CONFIGURE, new Class[] { int.class, ChannelListItem.class });
+        super(Const.CHANNELS_INVITE_BUTTON_KEY, WIDGET_CHANNELS_LIST_ADAPTER_ITEM_INVITE, ON_CONFIGURE, new Class[] { int.class, ChannelListItem.class });
     }
 
     @Override
