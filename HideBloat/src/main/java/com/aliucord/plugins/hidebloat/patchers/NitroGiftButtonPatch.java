@@ -1,9 +1,9 @@
-package com.aliucord.plugins.hidebloat.views;
+package com.aliucord.plugins.hidebloat.patchers;
 
 import android.view.View;
 
 import com.aliucord.plugins.hidebloat.Const;
-import com.aliucord.plugins.hidebloat.views.base.BasePatcher;
+import com.aliucord.plugins.hidebloat.patchers.base.BasePatcher;
 import com.lytefast.flexinput.fragment.FlexInputFragment;
 
 import c.b.a.e.a;
@@ -15,7 +15,7 @@ public class NitroGiftButtonPatch extends BasePatcher {
     private static final String INVOKE = "invoke";
 
     public NitroGiftButtonPatch() {
-        super(Const.GIFT_BUTTON_KEY, FLEX_INPUT_FRAGMENT_D, INVOKE, new Class[] { Object.class });
+        super(Const.Key.GIFT_BUTTON_KEY, Const.ViewName.GIFT_BUTTON_NAME, FLEX_INPUT_FRAGMENT_D, INVOKE, new Class[] { Object.class });
     }
 
     @Override

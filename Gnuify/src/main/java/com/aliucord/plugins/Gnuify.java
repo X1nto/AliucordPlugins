@@ -22,7 +22,7 @@ public class Gnuify extends Plugin {
         Manifest manifest = new Manifest();
         manifest.authors = new Manifest.Author[] { new Manifest.Author("Xinto", 423915768191647755L) };
         manifest.description = String.format("Appends \"%s\" prefix to every word in the sentence.", prefix);
-        manifest.version = "1.0.0";
+        manifest.version = "1.0.1";
         manifest.updateUrl = "https://raw.githubusercontent.com/X1nto/AliucordPlugins/builds/updater.json";
         return manifest;
     }
@@ -34,8 +34,8 @@ public class Gnuify extends Plugin {
             "gnuify",
             String.format("Append \"%s\" prefix to every word in the sentence", prefix),
             Collections.singletonList(argument),
-            args -> {
-                String sentence = (String) args.get("sentence");
+            ctx -> {
+                String sentence = ctx.getRequiredString("sentence");
                 StringBuilder gnuifiedSentence = new StringBuilder();
                 for (String word : sentence.split("\\s+")) {
                     gnuifiedSentence.append(prefix).append(word).append(" ");

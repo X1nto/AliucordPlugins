@@ -1,10 +1,10 @@
-package com.aliucord.plugins.hidebloat.views;
+package com.aliucord.plugins.hidebloat.patchers;
 
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.aliucord.plugins.hidebloat.Const;
-import com.aliucord.plugins.hidebloat.views.base.BasePatcher;
+import com.aliucord.plugins.hidebloat.patchers.base.BasePatcher;
 import com.discord.databinding.WidgetChannelsListBinding;
 import com.discord.widgets.channels.list.WidgetChannelListModel;
 
@@ -18,7 +18,7 @@ public class DmSearchBoxPatch extends BasePatcher {
     private static final String CONFIGURE_UI = "configureUI";
 
     public DmSearchBoxPatch() {
-        super(Const.SEARCH_BOX_KEY, WIDGET_CHANNELS_LIST, CONFIGURE_UI, new Class[] { WidgetChannelListModel.class });
+        super(Const.Key.SEARCH_BOX_KEY, Const.ViewName.SEARCH_BOX_NAME, WIDGET_CHANNELS_LIST, CONFIGURE_UI, new Class[] { WidgetChannelListModel.class });
     }
 
     @Override

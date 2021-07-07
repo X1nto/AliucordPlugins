@@ -1,4 +1,4 @@
-package com.aliucord.plugins.hidebloat.views.base;
+package com.aliucord.plugins.hidebloat.patchers.base;
 
 import com.aliucord.api.PatcherAPI;
 import com.aliucord.api.SettingsAPI;
@@ -8,13 +8,16 @@ import top.canyie.pine.Pine;
 
 public abstract class BasePatcher {
 
-    private final String key;
+    public final String key;
+    public final String viewName;
+
     private final String className;
     private final String methodName;
     private final Class<?>[] args;
 
-    public BasePatcher(String key, String className, String methodName, Class<?>[] args) {
+    public BasePatcher(String key, String viewName, String className, String methodName, Class<?>[] args) {
         this.key = key;
+        this.viewName = viewName;
         this.className = className;
         this.methodName = methodName;
         this.args = args;

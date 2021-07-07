@@ -35,7 +35,7 @@ public class Lyrics extends Plugin {
         Manifest manifest = new Manifest();
         manifest.authors = new Manifest.Author[] { new Manifest.Author("Xinto",423915768191647755L) };
         manifest.description = "Get lyrics to a specific song.";
-        manifest.version = "1.2.0";
+        manifest.version = "1.2.1";
         manifest.updateUrl = "https://raw.githubusercontent.com/X1nto/AliucordPlugins/builds/updater.json";
         return manifest;
     }
@@ -46,9 +46,9 @@ public class Lyrics extends Plugin {
         ApplicationCommandOption shouldSendArg = new ApplicationCommandOption(ApplicationCommandType.BOOLEAN, "send", "To send output in the chat or not", null, false, false, null, null);
         List<ApplicationCommandOption> arguments = Arrays.asList(songNameArg, shouldSendArg);
 
-        commands.registerCommand("lyrics", "Grab a song lyrics", arguments, args -> {
-            Boolean shouldSend = (Boolean) args.get("send");
-            String songName = (String) args.get("name");
+        commands.registerCommand("lyrics", "Grab a song lyrics", arguments, ctx -> {
+            Boolean shouldSend = ctx.getBool("send");
+            String songName = ctx.getString("name");
 
             if (shouldSend == null) {
                 shouldSend = false;

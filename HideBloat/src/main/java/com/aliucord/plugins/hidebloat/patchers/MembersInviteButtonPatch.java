@@ -1,10 +1,10 @@
-package com.aliucord.plugins.hidebloat.views;
+package com.aliucord.plugins.hidebloat.patchers;
 
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.aliucord.plugins.hidebloat.Const;
-import com.aliucord.plugins.hidebloat.views.base.BasePatcher;
+import com.aliucord.plugins.hidebloat.patchers.base.BasePatcher;
 import com.discord.databinding.WidgetChannelMembersListItemAddBinding;
 
 import java.lang.reflect.Field;
@@ -18,7 +18,7 @@ public class MembersInviteButtonPatch extends BasePatcher {
     private static final String BIND = "bind";
 
     public MembersInviteButtonPatch() {
-        super(Const.MEMBERS_INVITE_BUTTON_KEY, CHANNEL_MEMBERS_LIST_VIEW_HOLDER_ADD, BIND, new Class[] { Function0.class, int.class });
+        super(Const.Key.MEMBERS_INVITE_BUTTON_KEY, Const.ViewName.MEMBERS_INVITE_BUTTON_NAME, CHANNEL_MEMBERS_LIST_VIEW_HOLDER_ADD, BIND, new Class[] { Function0.class, int.class });
     }
 
     @Override

@@ -1,51 +1,69 @@
 package com.aliucord.plugins.hidebloat;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.graphics.Color;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.view.View;
-import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.aliucord.PluginManager;
 import com.aliucord.Utils;
 import com.aliucord.api.SettingsAPI;
-import com.aliucord.widgets.LinearLayout;
-import com.discord.app.AppBottomSheet;
-import com.discord.utilities.color.ColorCompat;
-import com.discord.views.CheckedSetting;
-import com.lytefast.flexinput.R$b;
+import com.aliucord.fragments.SettingsPage;
+import com.aliucord.plugins.hidebloat.patchers.base.BasePatcher;
+import com.aliucord.plugins.hidebloat.widgets.SwitchItem;
 
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
-public class PluginSettings extends AppBottomSheet {
+public class PluginSettings extends SettingsPage {
 
-    @Override
-    public int getContentViewResId() {
-        return 0;
+    private final SettingsAPI settingsAPI;
+    private final BasePatcher[] patchers;
+
+    public PluginSettings(SettingsAPI settingsAPI, BasePatcher[] patchers){
+        this.settingsAPI = settingsAPI;
+        this.patchers = patchers;
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Context context = inflater.getContext();
-        LinearLayout layout = new LinearLayout(context);
-        layout.setBackgroundColor(ColorCompat.getThemedColor(context, R$b.colorBackgroundPrimary));
+    public void onViewBound(View view) {
+        super.onViewBound(view);
+        setActionBarTitle("Bloat");
+        Context context = requireContext();
 
-        SettingsAPI sets = Objects.requireNonNull(PluginManager.plugins.get("HideBloat")).sets;
+        Utils.threadPool.execute(() -> {
 
-        layout.addView(createSwitch(context, sets, Const.CHANNELS_INVITE_BUTTON_KEY, "Invite button in channels list"));
-        layout.addView(createSwitch(context, sets, Const.MEMBERS_INVITE_BUTTON_KEY, "Invite button in members list"));
-        layout.addView(createSwitch(context, sets, Const.GIFT_BUTTON_KEY, "Nitro Gift button"));
-        layout.addView(createSwitch(context, sets, Const.SEARCH_BOX_KEY, "Search box in DM list"));
-        return layout;
-    }
+            List<SwitchItem> list = new ArrayList<>();
 
-    private CheckedSetting createSwitch(Context context, SettingsAPI sets, String key, String viewName) {
-        CheckedSetting setting = Utils.createCheckedSetting(context, CheckedSetting.ViewType.SWITCH, "Hide " + viewName, null);
-        setting.setChecked(sets.getBool(key, true));
-        setting.setOnCheckedListener(v -> sets.setBool(key, v));
-        return setting;
+            for (BasePatcher patcher : patchers) {
+                list.add(new SwitchItem(context, settingsAPI, patcher.key, patcher.viewName));
+            }
+
+            list.sort(Comparator.comparing(switchItem -> switchItem.viewName));
+
+            Utils.mainThread.post(() -> {
+                RecyclerView recyclerView = new RecyclerView(context);
+                RecyclerAdapter adapter = new RecyclerAdapter(list);
+
+                ShapeDrawable shape = new ShapeDrawable(new RectShape());
+                shape.setTint(Color.TRANSPARENT);
+                shape.setIntrinsicHeight(Utils.getDefaultPadding());
+
+                DividerItemDecoration decoration = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
+                decoration.setDrawable(shape);
+
+                recyclerView.setAdapter(adapter);
+                recyclerView.addItemDecoration(decoration);
+                recyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
+
+                addView(recyclerView);
+            });
+        });
     }
 }

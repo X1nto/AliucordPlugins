@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.aliucord.PluginManager;
 import com.aliucord.Utils;
 import com.aliucord.api.SettingsAPI;
 import com.aliucord.widgets.LinearLayout;
@@ -22,7 +21,13 @@ import com.lytefast.flexinput.R$b;
 import java.util.Arrays;
 import java.util.List;
 
-public class Settings extends AppBottomSheet {
+public class PluginSettings extends AppBottomSheet {
+
+    private final SettingsAPI settingsAPI;
+
+    public PluginSettings(SettingsAPI settingsAPI) {
+        this.settingsAPI = settingsAPI;
+    }
 
     @Override
     public int getContentViewResId() {
@@ -43,15 +48,14 @@ public class Settings extends AppBottomSheet {
         );
 
         RadioManager radioManager = new RadioManager(radios);
-        SettingsAPI sets = PluginManager.plugins.get("NitroSpoof").sets;
-        EmoteSize emoteSize = EmoteSize.valueOf(sets.getString("emotesize", EmoteSize.FORTY.name()));
+        EmoteSize emoteSize = EmoteSize.valueOf(settingsAPI.getString("emotesize", EmoteSize.FORTY.name()));
 
         int radioSize = radios.size();
         for (int i = 0; i < radioSize; i++) {
             int finalSize = i;
             CheckedSetting radio = radios.get(i);
             radio.e(e -> {
-                sets.setString("emotesize", EmoteSize.values()[finalSize].name());
+                settingsAPI.setString("emotesize", EmoteSize.values()[finalSize].name());
                 radioManager.a(radio);
             });
             layout.addView(radio);

@@ -1,10 +1,10 @@
-package com.aliucord.plugins.hidebloat.views;
+package com.aliucord.plugins.hidebloat.patchers;
 
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.aliucord.plugins.hidebloat.Const;
-import com.aliucord.plugins.hidebloat.views.base.BasePatcher;
+import com.aliucord.plugins.hidebloat.patchers.base.BasePatcher;
 import com.discord.widgets.channels.list.WidgetChannelsListAdapter;
 import com.discord.widgets.channels.list.items.ChannelListItem;
 
@@ -16,7 +16,7 @@ public class ChannelsInviteButtonPatch extends BasePatcher {
     private static final String ON_CONFIGURE = "onConfigure";
 
     public ChannelsInviteButtonPatch() {
-        super(Const.CHANNELS_INVITE_BUTTON_KEY, WIDGET_CHANNELS_LIST_ADAPTER_ITEM_INVITE, ON_CONFIGURE, new Class[] { int.class, ChannelListItem.class });
+        super(Const.Key.CHANNELS_INVITE_BUTTON_KEY, Const.ViewName.CHANNELS_INVITE_BUTTON_NAME, WIDGET_CHANNELS_LIST_ADAPTER_ITEM_INVITE, ON_CONFIGURE, new Class[] { int.class, ChannelListItem.class });
     }
 
     @Override

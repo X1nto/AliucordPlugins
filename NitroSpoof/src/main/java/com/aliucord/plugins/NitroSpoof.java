@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.aliucord.entities.Plugin;
 import com.aliucord.patcher.PinePatchFn;
 import com.aliucord.plugins.nitrospoof.EmoteSize;
+import com.aliucord.plugins.nitrospoof.PluginSettings;
 
 import java.lang.reflect.Field;
 
@@ -18,7 +19,7 @@ public class NitroSpoof extends Plugin {
     private static final String isUsable = "isUsable";
 
     public NitroSpoof() {
-        settings = new Settings(com.aliucord.plugins.nitrospoof.Settings.class, Plugin.Settings.Type.BOTTOMSHEET);
+        settingsTab = new SettingsTab(PluginSettings.class, SettingsTab.Type.BOTTOM_SHEET).withArgs(settings);
     }
 
     @NonNull
@@ -27,7 +28,7 @@ public class NitroSpoof extends Plugin {
         Manifest manifest = new Manifest();
         manifest.authors = new Manifest.Author[] { new Manifest.Author("Xinto",423915768191647755L) };
         manifest.description = "Use all emotes in any server without Nitro.";
-        manifest.version = "1.0.2";
+        manifest.version = "1.0.3";
         manifest.updateUrl = "https://raw.githubusercontent.com/X1nto/AliucordPlugins/builds/updater.json";
         return manifest;
     }
@@ -60,7 +61,7 @@ public class NitroSpoof extends Plugin {
 
                 finalUrl.append(idStr);
 
-                EmoteSize emoteValue = EmoteSize.valueOf(sets.getString("emotesize", EmoteSize.FORTY.name()));
+                EmoteSize emoteValue = EmoteSize.valueOf(settings.getString("emotesize", EmoteSize.FORTY.name()));
                 int emoteSize;
 
                 switch (emoteValue) {
