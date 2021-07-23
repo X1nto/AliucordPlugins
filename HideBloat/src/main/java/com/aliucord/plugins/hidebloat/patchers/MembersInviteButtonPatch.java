@@ -1,9 +1,10 @@
 package com.aliucord.plugins.hidebloat.patchers;
 
-import com.aliucord.plugins.hidebloat.Const;
+import com.aliucord.plugins.hidebloat.util.Const;
 import com.aliucord.plugins.hidebloat.patchers.base.BasePatcher;
 import com.aliucord.plugins.hidebloat.util.Util;
 import com.discord.databinding.WidgetChannelMembersListItemAddBinding;
+import com.discord.widgets.channels.memberlist.adapter.ChannelMembersListViewHolderAdd;
 
 import java.lang.reflect.Field;
 
@@ -12,11 +13,8 @@ import top.canyie.pine.Pine;
 
 public class MembersInviteButtonPatch extends BasePatcher {
 
-    private static final String CHANNEL_MEMBERS_LIST_VIEW_HOLDER_ADD = "com.discord.widgets.channels.memberlist.adapter.ChannelMembersListViewHolderAdd";
-    private static final String BIND = "bind";
-
-    public MembersInviteButtonPatch() {
-        super(Const.Key.INVITE_BUTTON_MEMBERS_KEY, Const.ViewName.INVITE_BUTTON_MEMBERS_NAME, CHANNEL_MEMBERS_LIST_VIEW_HOLDER_ADD, BIND, new Class[] { Function0.class, int.class });
+    public MembersInviteButtonPatch() throws Exception {
+        super(Const.Key.INVITE_BUTTON_MEMBERS_KEY, Const.ViewName.INVITE_BUTTON_MEMBERS_NAME, ChannelMembersListViewHolderAdd.class.getDeclaredMethod("bind", Function0.class, int.class));
     }
 
     @Override
@@ -26,6 +24,8 @@ public class MembersInviteButtonPatch extends BasePatcher {
         _binding.setAccessible(true);
 
         WidgetChannelMembersListItemAddBinding binding = (WidgetChannelMembersListItemAddBinding) _binding.get(_this);
+
+        if (binding == null) return;
 
         Util.hideViewCompletely(binding.a);
 

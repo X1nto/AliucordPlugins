@@ -6,25 +6,15 @@ import androidx.annotation.NonNull;
 
 import com.aliucord.entities.Plugin;
 import com.aliucord.plugins.hidebloat.PluginSettings;
-import com.aliucord.plugins.hidebloat.patchers.CallButtonsPatch;
-import com.aliucord.plugins.hidebloat.patchers.ChannelsInviteButtonPatch;
-import com.aliucord.plugins.hidebloat.patchers.DmSearchBoxPatch;
-import com.aliucord.plugins.hidebloat.patchers.MembersInviteButtonPatch;
-import com.aliucord.plugins.hidebloat.patchers.NitroGiftButtonPatch;
 import com.aliucord.plugins.hidebloat.patchers.base.BasePatcher;
+import com.aliucord.plugins.hidebloat.util.Util;
 
 @SuppressWarnings("unused")
 public class HideBloat extends Plugin {
 
-    private final CallButtonsPatch callButtonsPatch = new CallButtonsPatch();
-    private final ChannelsInviteButtonPatch channelsInviteButtonPatch = new ChannelsInviteButtonPatch();
-    private final DmSearchBoxPatch dmSearchBoxPatch = new DmSearchBoxPatch();
-    private final MembersInviteButtonPatch membersInviteButtonPatch = new MembersInviteButtonPatch();
-    private final NitroGiftButtonPatch nitroGiftButtonPatch = new NitroGiftButtonPatch();
-
     public HideBloat() {
         settingsTab = new SettingsTab(PluginSettings.class, SettingsTab.Type.PAGE)
-                .withArgs(settings, new BasePatcher[] { callButtonsPatch, channelsInviteButtonPatch, dmSearchBoxPatch, membersInviteButtonPatch, nitroGiftButtonPatch } );
+                .withArgs(settings);
     }
 
     @NonNull
@@ -40,11 +30,9 @@ public class HideBloat extends Plugin {
 
     @Override
     public void start(Context context) {
-        callButtonsPatch.patch(patcher, settings);
-        channelsInviteButtonPatch.patch(patcher, settings);
-        dmSearchBoxPatch.patch(patcher, settings);
-        membersInviteButtonPatch.patch(patcher, settings);
-        nitroGiftButtonPatch.patch(patcher, settings);
+        for (BasePatcher bloatPatcher : Util.patches) {
+            bloatPatcher.patch(patcher, settings);
+        }
     }
 
     @Override

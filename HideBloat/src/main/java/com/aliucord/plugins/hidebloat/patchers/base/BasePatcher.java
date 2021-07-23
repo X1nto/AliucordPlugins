@@ -4,6 +4,8 @@ import com.aliucord.api.PatcherAPI;
 import com.aliucord.api.SettingsAPI;
 import com.aliucord.patcher.PinePatchFn;
 
+import java.lang.reflect.Member;
+
 import top.canyie.pine.Pine;
 
 public abstract class BasePatcher {
@@ -11,20 +13,16 @@ public abstract class BasePatcher {
     public final String key;
     public final String viewName;
 
-    private final String className;
-    private final String methodName;
-    private final Class<?>[] args;
+    private final Member classMember;
 
-    public BasePatcher(String key, String viewName, String className, String methodName, Class<?>[] args) {
+    public BasePatcher(String key, String viewName, Member classMember) {
         this.key = key;
         this.viewName = viewName;
-        this.className = className;
-        this.methodName = methodName;
-        this.args = args;
+        this.classMember = classMember;
     }
 
     public void patch(PatcherAPI patcher, SettingsAPI sets) {
-        patcher.patch(className, methodName, args, new PinePatchFn(callFrame -> {
+        patcher.patch(classMember, new PinePatchFn(callFrame -> {
             if (sets.getBool(key, true)) {
                 try {
                     patchBody(callFrame);

@@ -14,6 +14,7 @@ import com.aliucord.Utils;
 import com.aliucord.api.SettingsAPI;
 import com.aliucord.fragments.SettingsPage;
 import com.aliucord.plugins.hidebloat.patchers.base.BasePatcher;
+import com.aliucord.plugins.hidebloat.util.Util;
 import com.aliucord.plugins.hidebloat.widgets.SwitchItem;
 
 import java.util.ArrayList;
@@ -23,11 +24,9 @@ import java.util.List;
 public class PluginSettings extends SettingsPage {
 
     private final SettingsAPI settingsAPI;
-    private final BasePatcher[] patchers;
 
-    public PluginSettings(SettingsAPI settingsAPI, BasePatcher[] patchers){
+    public PluginSettings(SettingsAPI settingsAPI){
         this.settingsAPI = settingsAPI;
-        this.patchers = patchers;
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -41,7 +40,7 @@ public class PluginSettings extends SettingsPage {
 
             List<SwitchItem> list = new ArrayList<>();
 
-            for (BasePatcher patcher : patchers) {
+            for (BasePatcher patcher : Util.patches) {
                 list.add(new SwitchItem(context, settingsAPI, patcher.key, patcher.viewName));
             }
 

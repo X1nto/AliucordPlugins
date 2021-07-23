@@ -1,6 +1,6 @@
 package com.aliucord.plugins.hidebloat.patchers;
 
-import com.aliucord.plugins.hidebloat.Const;
+import com.aliucord.plugins.hidebloat.util.Const;
 import com.aliucord.plugins.hidebloat.patchers.base.BasePatcher;
 import com.aliucord.plugins.hidebloat.util.Util;
 import com.discord.databinding.WidgetUserSheetBinding;
@@ -13,11 +13,8 @@ import top.canyie.pine.Pine;
 
 public class CallButtonsPatch extends BasePatcher {
 
-    private static final String WIDGET_USER_SHEET = "com.discord.widgets.user.usersheet.WidgetUserSheet";
-    private static final String CONFIGURE_PROFILE_ACTION_BUTTONS = "configureProfileActionButtons";
-
-    public CallButtonsPatch() {
-        super(Const.Key.CALL_BUTTONS_KEY, Const.ViewName.CALL_BUTTONS_NAME, WIDGET_USER_SHEET, CONFIGURE_PROFILE_ACTION_BUTTONS, new Class[] { WidgetUserSheetViewModel.ViewState.Loaded.class });
+    public CallButtonsPatch() throws Exception{
+        super(Const.Key.CALL_BUTTONS_KEY, Const.ViewName.CALL_BUTTONS_NAME, WidgetUserSheet.class.getDeclaredMethod("configureProfileActionButtons", WidgetUserSheetViewModel.ViewState.Loaded.class));
     }
 
     @Override
@@ -28,6 +25,8 @@ public class CallButtonsPatch extends BasePatcher {
             Method _binding = _this.getClass().getDeclaredMethod("getBinding");
             _binding.setAccessible(true);
             WidgetUserSheetBinding binding = (WidgetUserSheetBinding) _binding.invoke(_this);
+
+            if (binding == null) return;
 
             Util.hideViewCompletely(binding.i);
             Util.hideViewCompletely(binding.J);
