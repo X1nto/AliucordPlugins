@@ -1,10 +1,8 @@
 package com.aliucord.plugins.hidebloat.patchers;
 
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.aliucord.plugins.hidebloat.Const;
 import com.aliucord.plugins.hidebloat.patchers.base.BasePatcher;
+import com.aliucord.plugins.hidebloat.util.Util;
 import com.discord.databinding.WidgetChannelMembersListItemAddBinding;
 
 import java.lang.reflect.Field;
@@ -18,21 +16,19 @@ public class MembersInviteButtonPatch extends BasePatcher {
     private static final String BIND = "bind";
 
     public MembersInviteButtonPatch() {
-        super(Const.Key.MEMBERS_INVITE_BUTTON_KEY, Const.ViewName.MEMBERS_INVITE_BUTTON_NAME, CHANNEL_MEMBERS_LIST_VIEW_HOLDER_ADD, BIND, new Class[] { Function0.class, int.class });
+        super(Const.Key.INVITE_BUTTON_MEMBERS_KEY, Const.ViewName.INVITE_BUTTON_MEMBERS_NAME, CHANNEL_MEMBERS_LIST_VIEW_HOLDER_ADD, BIND, new Class[] { Function0.class, int.class });
     }
 
     @Override
     public void patchBody(Pine.CallFrame callFrame) throws Exception {
         Object _this = callFrame.thisObject;
-        Field bindingField = _this.getClass().getDeclaredField("binding");
-        bindingField.setAccessible(true);
-        WidgetChannelMembersListItemAddBinding binding = (WidgetChannelMembersListItemAddBinding) bindingField.get(_this);
-        assert binding != null;
-        binding.a.setVisibility(View.GONE);
+        Field _binding = _this.getClass().getDeclaredField("binding");
+        _binding.setAccessible(true);
 
-        //Adjust LayoutParams, especially height, otherwise list
-        //will include padding of the button with it's original size
-        binding.a.setLayoutParams(new ViewGroup.LayoutParams(0, 0));
+        WidgetChannelMembersListItemAddBinding binding = (WidgetChannelMembersListItemAddBinding) _binding.get(_this);
+
+        Util.hideViewCompletely(binding.a);
+
         callFrame.setResult(callFrame.getResult());
     }
 }
