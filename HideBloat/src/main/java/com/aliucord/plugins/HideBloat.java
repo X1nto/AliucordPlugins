@@ -1,7 +1,6 @@
 package com.aliucord.plugins;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -13,8 +12,6 @@ import com.aliucord.plugins.hidebloat.patchers.MembersInviteButtonPatch;
 import com.aliucord.plugins.hidebloat.patchers.NitroGiftButtonPatch;
 import com.aliucord.plugins.hidebloat.patchers.base.BasePatcher;
 
-import java.util.Arrays;
-
 @SuppressWarnings("unused")
 public class HideBloat extends Plugin {
 
@@ -24,7 +21,6 @@ public class HideBloat extends Plugin {
     private final NitroGiftButtonPatch nitroGiftButtonPatch = new NitroGiftButtonPatch();
 
     public HideBloat() {
-        Log.d("test", Arrays.toString(PluginSettings.class.getConstructors()));
         settingsTab = new SettingsTab(PluginSettings.class, SettingsTab.Type.PAGE)
                 .withArgs(settings, new BasePatcher[] { channelsInviteButtonPatch, dmSearchBoxPatch, membersInviteButtonPatch, nitroGiftButtonPatch } );
     }
