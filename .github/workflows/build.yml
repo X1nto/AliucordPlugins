@@ -47,7 +47,7 @@ jobs:
         run: ~/bin/buildtool --config ~/config.json -p \*
 
       - name: Display folder content
-        run: ls /builds
+        run: ls ~/builds
 
       - name: Push builds
         run: |
