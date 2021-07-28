@@ -2,7 +2,7 @@
 Plugins for [Aliucord](https://github.com/Aliucord)
 
 ## Download
-Download from [here](/X1nto/AliucordPlugins/tree/builds)
+Download from [here](https://github.com/X1nto/AliucordPlugins/tree/builds)
 
 ## [Gnuify](/Gnuify)
 Appends "GNU/" prefix to every word in the sentence.
