@@ -23,7 +23,7 @@ public abstract class BasePatcher {
 
     public void patch(PatcherAPI patcher, SettingsAPI sets) {
         patcher.patch(classMember, new PinePatchFn(callFrame -> {
-            if (sets.getBool(key, true)) {
+            if (sets.getBool(key, false)) {
                 try {
                     patchBody(callFrame);
                 } catch (Exception e) {
