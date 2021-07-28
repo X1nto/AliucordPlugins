@@ -22,6 +22,8 @@ public class NitroGiftButtonPatch extends BasePatcher {
 
         if (binding == null) return;
 
+        binding.h.setVisibility(View.GONE);
         binding.m.setVisibility(View.GONE);
+        binding.l.setVisibility(View.VISIBLE);
     }
 }
