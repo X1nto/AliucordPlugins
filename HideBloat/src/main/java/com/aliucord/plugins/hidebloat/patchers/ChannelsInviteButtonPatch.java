@@ -18,7 +18,7 @@ public class ChannelsInviteButtonPatch extends BasePatcher {
 
     @Override
     public void patchBody(Pine.CallFrame callFrame) {
-        View itemView = ((WidgetChannelsListAdapter.ItemInvite) callFrame.thisObject).itemView;
+        var itemView = ((WidgetChannelsListAdapter.ItemInvite) callFrame.thisObject).itemView;
         Util.hideViewCompletely(itemView);
         callFrame.setResult(callFrame.getResult());
     }

@@ -6,7 +6,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:4.2.2")
+        classpath("com.android.tools.build:gradle:7.0.0")
     }
 }
 
@@ -27,22 +27,22 @@ subprojects {
             compileSdkVersion(30)
 
             defaultConfig {
-                minSdkVersion(24)
-                targetSdkVersion(30)
+                minSdk = 24
+                targetSdk= 30
                 versionCode = 1
                 versionName = "1.0"
             }
 
             compileOptions {
-                sourceCompatibility = JavaVersion.VERSION_1_8
-                targetCompatibility = JavaVersion.VERSION_1_8
+                sourceCompatibility = JavaVersion.VERSION_11
+                targetCompatibility = JavaVersion.VERSION_11
             }
         }
 
         dependencies {
             "implementation"(project(":Aliucord"))
 
-            "implementation"("androidx.appcompat:appcompat:1.3.0")
+            "implementation"("androidx.appcompat:appcompat:1.3.1")
             "implementation"("com.google.android.material:material:1.4.0")
         }
     }

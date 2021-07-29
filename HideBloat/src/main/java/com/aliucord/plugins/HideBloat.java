@@ -20,7 +20,7 @@ public class HideBloat extends Plugin {
     @NonNull
     @Override
     public Manifest getManifest() {
-        Manifest manifest = new Manifest();
+        var manifest = new Manifest();
         manifest.authors = new Manifest.Author[]{new Manifest.Author("Xinto", 423915768191647755L)};
         manifest.description = "Hides various discord bloat.";
         manifest.version = "1.1.2";

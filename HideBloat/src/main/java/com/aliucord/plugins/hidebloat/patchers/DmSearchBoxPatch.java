@@ -21,11 +21,11 @@ public class DmSearchBoxPatch extends BasePatcher {
 
     @Override
     public void patchBody(Pine.CallFrame callFrame) throws Exception {
-        Object _this = callFrame.thisObject;
-        Method bindingMethod = _this.getClass().getDeclaredMethod("getBinding");
-        bindingMethod.setAccessible(true);
+        var _this = callFrame.thisObject;
+        var _binding = _this.getClass().getDeclaredMethod("getBinding");
+        _binding.setAccessible(true);
 
-        WidgetChannelsListBinding binding = (WidgetChannelsListBinding) bindingMethod.invoke(_this);
+        var binding = (WidgetChannelsListBinding) _binding.invoke(_this);
 
         if (binding == null) return;
 

@@ -34,11 +34,11 @@ public class PluginSettings extends SettingsPage {
     public void onViewBound(View view) {
         super.onViewBound(view);
         setActionBarTitle("Bloat");
-        Context context = requireContext();
+        var context = requireContext();
 
         Utils.threadPool.execute(() -> {
 
-            List<SwitchItem> list = new ArrayList<>();
+            var list = new ArrayList<SwitchItem>();
 
             for (BasePatcher patcher : Util.patches) {
                 list.add(new SwitchItem(context, settingsAPI, patcher.key, patcher.viewName));
@@ -47,14 +47,14 @@ public class PluginSettings extends SettingsPage {
             list.sort(Comparator.comparing(switchItem -> switchItem.viewName));
 
             Utils.mainThread.post(() -> {
-                RecyclerView recyclerView = new RecyclerView(context);
-                RecyclerAdapter adapter = new RecyclerAdapter(list);
+                var recyclerView = new RecyclerView(context);
+                var adapter = new RecyclerAdapter(list);
 
-                ShapeDrawable shape = new ShapeDrawable(new RectShape());
+                var shape = new ShapeDrawable(new RectShape());
                 shape.setTint(Color.TRANSPARENT);
                 shape.setIntrinsicHeight(Utils.getDefaultPadding());
 
-                DividerItemDecoration decoration = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
+                var decoration = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
                 decoration.setDrawable(shape);
 
                 recyclerView.setAdapter(adapter);

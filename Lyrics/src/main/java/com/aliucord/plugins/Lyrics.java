@@ -9,9 +9,7 @@ import com.aliucord.api.CommandsAPI;
 import com.aliucord.entities.MessageEmbedBuilder;
 import com.aliucord.entities.Plugin;
 import com.aliucord.utils.ReflectUtils;
-import com.discord.api.activity.Activity;
 import com.discord.api.commands.ApplicationCommandType;
-import com.discord.api.message.embed.MessageEmbed;
 import com.discord.models.commands.ApplicationCommandOption;
 import com.discord.models.presence.Presence;
 import com.discord.stores.StoreStream;
@@ -32,7 +30,7 @@ public class Lyrics extends Plugin {
     @NonNull
     @Override
     public Manifest getManifest() {
-        Manifest manifest = new Manifest();
+        var manifest = new Manifest();
         manifest.authors = new Manifest.Author[] { new Manifest.Author("Xinto",423915768191647755L) };
         manifest.description = "Get lyrics to a specific song.";
         manifest.version = "1.2.1";
@@ -42,13 +40,13 @@ public class Lyrics extends Plugin {
 
     @Override
     public void start(Context context) {
-        ApplicationCommandOption songNameArg = new ApplicationCommandOption(ApplicationCommandType.STRING, "name", "The song name to search lyrics for", null, false, false, null, null);
-        ApplicationCommandOption shouldSendArg = new ApplicationCommandOption(ApplicationCommandType.BOOLEAN, "send", "To send output in the chat or not", null, false, false, null, null);
-        List<ApplicationCommandOption> arguments = Arrays.asList(songNameArg, shouldSendArg);
+        var songNameArg = new ApplicationCommandOption(ApplicationCommandType.STRING, "name", "The song name to search lyrics for", null, false, false, null, null);
+        var shouldSendArg = new ApplicationCommandOption(ApplicationCommandType.BOOLEAN, "send", "To send output in the chat or not", null, false, false, null, null);
+        var arguments = Arrays.asList(songNameArg, shouldSendArg);
 
         commands.registerCommand("lyrics", "Grab a song lyrics", arguments, ctx -> {
-            Boolean shouldSend = ctx.getBool("send");
-            String songName = ctx.getString("name");
+            var shouldSend = ctx.getBool("send");
+            var songName = ctx.getString("name");
 
             if (shouldSend == null) {
                 shouldSend = false;
@@ -56,10 +54,10 @@ public class Lyrics extends Plugin {
 
             if (songName == null) {
                 try {
-                    StoreUserPresence userPresence = (StoreUserPresence) StoreStream.class.getMethod("getPresences").invoke(null);
-                    Map<Long, Presence> presences = (Map<Long, Presence>) ReflectUtils.getField(userPresence, "presencesSnapshot", true);
-                    Presence presence = presences.get(StoreStream.getUsers().getMe().getId());
-                    Activity spotifyActivity = PresenceUtils.INSTANCE.getSpotifyListeningActivity(presence);
+                    var userPresence = (StoreUserPresence) StoreStream.class.getMethod("getPresences").invoke(null);
+                    var presences = (Map<Long, Presence>) ReflectUtils.getField(userPresence, "presencesSnapshot", true);
+                    var presence = presences.get(StoreStream.getUsers().getMe().getId());
+                    var spotifyActivity = PresenceUtils.INSTANCE.getSpotifyListeningActivity(presence);
                     if (spotifyActivity == null) {
                         return new CommandsAPI.CommandResult("You're not listening to anything right now!", null, false);
                     }
@@ -71,7 +69,7 @@ public class Lyrics extends Plugin {
             }
 
             try {
-                ResponseModel.Data data = fetch(songName);
+                var data = fetch(songName);
                 return shouldSend ? lyricsText(data) : lyricsEmbed(data);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -86,10 +84,10 @@ public class Lyrics extends Plugin {
     }
 
     private CommandsAPI.CommandResult lyricsText(ResponseModel.Data data) {
-        String lyrics = data.lyrics;
+        var lyrics = data.lyrics;
 
         if (lyrics.length() > MAX_MESSAGE_LENGTH) {
-            String fullLyricsText = String.format("\n\nFull Lyrics: %s", data.url);
+            var fullLyricsText = String.format("\n\nFull Lyrics: %s", data.url);
             lyrics = lyrics.substring(0, MAX_MESSAGE_LENGTH - fullLyricsText.length() - 3) + "..." + fullLyricsText;
         }
 
@@ -97,7 +95,7 @@ public class Lyrics extends Plugin {
     }
 
     private CommandsAPI.CommandResult lyricsEmbed(ResponseModel.Data data) {
-        MessageEmbed embed = new MessageEmbedBuilder()
+        var embed = new MessageEmbedBuilder()
                 .setAuthor(data.artist, null, null)
                 .setTitle(data.name)
                 .setDescription(data.lyrics)
@@ -110,7 +108,7 @@ public class Lyrics extends Plugin {
     }
 
     private ResponseModel.Data fetch(String song) throws Exception {
-        ResponseModel responseModel = Http.simpleJsonGet(baseUrl + song, ResponseModel.class);
+        var responseModel = (ResponseModel) Http.simpleJsonGet(baseUrl + song, ResponseModel.class);
         return responseModel.data.get(0);
     }
 

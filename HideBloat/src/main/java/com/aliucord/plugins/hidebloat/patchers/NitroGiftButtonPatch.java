@@ -17,8 +17,8 @@ public class NitroGiftButtonPatch extends BasePatcher {
 
     @Override
     public void patchBody(Pine.CallFrame callFrame) {
-        FlexInputFragment fragment = (FlexInputFragment) ((FlexInputFragment.d) callFrame.thisObject).receiver;
-        a binding = fragment.j();
+        var fragment = (FlexInputFragment) ((FlexInputFragment.d) callFrame.thisObject).receiver;
+        var binding = fragment.j();
 
         if (binding == null) return;
 

@@ -19,12 +19,12 @@ public class CallButtonsPatch extends BasePatcher {
 
     @Override
     public void patchBody(Pine.CallFrame callFrame) {
-        WidgetUserSheet _this = (WidgetUserSheet) callFrame.thisObject;
+        var _this = (WidgetUserSheet) callFrame.thisObject;
 
         try {
-            Method _binding = _this.getClass().getDeclaredMethod("getBinding");
+            var _binding = _this.getClass().getDeclaredMethod("getBinding");
             _binding.setAccessible(true);
-            WidgetUserSheetBinding binding = (WidgetUserSheetBinding) _binding.invoke(_this);
+            var binding = (WidgetUserSheetBinding) _binding.invoke(_this);
 
             if (binding == null) return;
 

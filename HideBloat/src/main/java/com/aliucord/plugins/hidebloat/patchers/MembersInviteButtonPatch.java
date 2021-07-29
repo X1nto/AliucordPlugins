@@ -19,11 +19,11 @@ public class MembersInviteButtonPatch extends BasePatcher {
 
     @Override
     public void patchBody(Pine.CallFrame callFrame) throws Exception {
-        Object _this = callFrame.thisObject;
-        Field _binding = _this.getClass().getDeclaredField("binding");
+        var _this = callFrame.thisObject;
+        var _binding = _this.getClass().getDeclaredField("binding");
         _binding.setAccessible(true);
 
-        WidgetChannelMembersListItemAddBinding binding = (WidgetChannelMembersListItemAddBinding) _binding.get(_this);
+        var binding = (WidgetChannelMembersListItemAddBinding) _binding.get(_this);
 
         if (binding == null) return;
 
