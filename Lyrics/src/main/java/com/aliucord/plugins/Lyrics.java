@@ -8,18 +8,19 @@ import com.aliucord.Http;
 import com.aliucord.api.CommandsAPI;
 import com.aliucord.entities.MessageEmbedBuilder;
 import com.aliucord.entities.Plugin;
-import com.aliucord.utils.ReflectUtils;
+import com.aliucord.plugins.lyrics.Data;
+import com.aliucord.plugins.lyrics.ResponseModel;
+import com.aliucord.utils.RxUtils;
 import com.discord.api.commands.ApplicationCommandType;
 import com.discord.models.commands.ApplicationCommandOption;
-import com.discord.models.presence.Presence;
+import com.discord.models.domain.spotify.ModelSpotifyTrack;
 import com.discord.stores.StoreStream;
-import com.discord.stores.StoreUserPresence;
-import com.discord.utilities.presence.PresenceUtils;
+import com.discord.utilities.spotify.SpotifyApiClient;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+
+import rx.Subscriber;
 
 @SuppressWarnings("unused")
 public class Lyrics extends Plugin {
@@ -46,30 +47,54 @@ public class Lyrics extends Plugin {
 
         commands.registerCommand("lyrics", "Grab a song lyrics", arguments, ctx -> {
             var shouldSend = ctx.getBool("send");
-            var songName = ctx.getString("name");
+            final String[] songName = { ctx.getString("name") };
 
             if (shouldSend == null) {
                 shouldSend = false;
             }
 
-            if (songName == null) {
+            if (songName[0] == null) {
                 try {
-                    var userPresence = (StoreUserPresence) StoreStream.class.getMethod("getPresences").invoke(null);
-                    var presences = (Map<Long, Presence>) ReflectUtils.getField(userPresence, "presencesSnapshot", true);
-                    var presence = presences.get(StoreStream.getUsers().getMe().getId());
-                    var spotifyActivity = PresenceUtils.INSTANCE.getSpotifyListeningActivity(presence);
-                    if (spotifyActivity == null) {
-                        return new CommandsAPI.CommandResult("You're not listening to anything right now!", null, false);
+                    var storeSpotify = StoreStream.getSpotify();
+
+                    var _spotifyApiClient = storeSpotify.getClass().getDeclaredField("spotifyApiClient");
+                    _spotifyApiClient.setAccessible(true);
+
+                    var spotifyApiClient = (SpotifyApiClient) _spotifyApiClient.get(storeSpotify);
+
+                    if (spotifyApiClient == null) {
+                        return new CommandsAPI.CommandResult("Failed to get current Spotify activity.", null, false);
                     }
-                    songName = String.format("%s %s", spotifyActivity.l(), spotifyActivity.e());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return new CommandsAPI.CommandResult("Failed to get current Spotify activity.", null, false);
-                }
+
+                    //This sucks so much
+                    RxUtils.subscribe(spotifyApiClient.getSpotifyTrack(), new Subscriber<>() {
+                        @Override
+                        public void onCompleted() {}
+
+                        @Override
+                        public void onError(Throwable th) {
+                            songName[0] = "";
+                        }
+
+                        @Override
+                        public void onNext(ModelSpotifyTrack modelSpotifyTrack) {
+                            songName[0] = String.format("%s %s", modelSpotifyTrack.getArtists().get(0).getName(), modelSpotifyTrack.getName());
+                        }
+                    });
+
+                } catch (Exception ignored) {}
+            }
+
+            //don't fetch anything until songName is not null
+            //noinspection StatementWithEmptyBody, LoopConditionNotUpdatedInsideLoop
+            while (songName[0] == null) {}
+
+            if (songName[0].equals("")) {
+                return new CommandsAPI.CommandResult("Failed to get current Spotify activity.", null, false);
             }
 
             try {
-                var data = fetch(songName);
+                var data = fetch(songName[0]);
                 return shouldSend ? lyricsText(data) : lyricsEmbed(data);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -83,7 +108,7 @@ public class Lyrics extends Plugin {
         commands.unregisterAll();
     }
 
-    private CommandsAPI.CommandResult lyricsText(ResponseModel.Data data) {
+    private CommandsAPI.CommandResult lyricsText(Data data) {
         var lyrics = data.lyrics;
 
         if (lyrics.length() > MAX_MESSAGE_LENGTH) {
@@ -94,38 +119,23 @@ public class Lyrics extends Plugin {
         return new CommandsAPI.CommandResult(lyrics);
     }
 
-    private CommandsAPI.CommandResult lyricsEmbed(ResponseModel.Data data) {
+    private CommandsAPI.CommandResult lyricsEmbed(Data data) {
         var embed = new MessageEmbedBuilder()
                 .setAuthor(data.artist, null, null)
                 .setTitle(data.name)
                 .setDescription(data.lyrics)
                 .setUrl(data.url)
+                .setThumbnail(data.album_art)
                 .setColor(0x209CEE)
                 .setFooter(String.format("Lyrics provided by KSoft.Si | © %s %s", data.artist, data.album_year.split(",")[0]), "https://external-content.duckduckgo.com/iu/?u=https://cdn.ksoft.si/images/Logo128.png")
                 .build();
 
-        return new CommandsAPI.CommandResult(null, Collections.singletonList(embed), false, "Lyrics", data.album_art);
+        return new CommandsAPI.CommandResult(null, Collections.singletonList(embed), false, "Lyrics");
     }
 
-    private ResponseModel.Data fetch(String song) throws Exception {
+    private Data fetch(String song) throws Exception {
         var responseModel = (ResponseModel) Http.simpleJsonGet(baseUrl + song, ResponseModel.class);
         return responseModel.data.get(0);
-    }
-
-    @SuppressWarnings({"UnusedDeclaration", "MismatchedQueryAndUpdateOfCollection"})
-    public static class ResponseModel {
-
-        private List<Data> data;
-
-        private static class Data {
-            private String lyrics;
-            private String artist;
-            private String album_year;
-            private String album_art;
-            private String name;
-            private String url;
-        }
-
     }
 
 }
