@@ -1,6 +1,8 @@
 package com.aliucord.plugins.hidebloat.util;
 
 public class Const {
+
+    public static final boolean PREFERENCE_DEFAULT_VALUE = false;
     
     public static class Key {
         public static final String CALL_BUTTONS_KEY = "callButtons";
