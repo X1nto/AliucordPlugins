@@ -23,7 +23,7 @@ public class HideBloat extends Plugin {
         var manifest = new Manifest();
         manifest.authors = new Manifest.Author[]{new Manifest.Author("Xinto", 423915768191647755L)};
         manifest.description = "Hides various discord bloat.";
-        manifest.version = "1.1.2";
+        manifest.version = "1.1.3";
         manifest.updateUrl = "https://raw.githubusercontent.com/X1nto/AliucordPlugins/builds/updater.json";
         return manifest;
     }
