@@ -25,7 +25,7 @@ public class SwitchItem extends MaterialCardView {
         setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
         CheckedSetting setting = Utils.createCheckedSetting(context, CheckedSetting.ViewType.SWITCH, "Hide " + viewName, null);
-        setting.setChecked(settingsAPI.getBool(key, true));
+        setting.setChecked(settingsAPI.getBool(key, false));
         setting.setOnCheckedListener(v -> settingsAPI.setBool(key, v));
 
         addView(setting);
