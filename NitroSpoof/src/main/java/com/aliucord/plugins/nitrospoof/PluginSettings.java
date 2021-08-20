@@ -16,7 +16,7 @@ import com.discord.app.AppBottomSheet;
 import com.discord.utilities.color.ColorCompat;
 import com.discord.views.CheckedSetting;
 import com.discord.views.RadioManager;
-import com.lytefast.flexinput.R$b;
+import com.lytefast.flexinput.R;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,7 +39,7 @@ public class PluginSettings extends AppBottomSheet {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Context context = inflater.getContext();
         LinearLayout layout = new LinearLayout(context);
-        layout.setBackgroundColor(ColorCompat.getThemedColor(context, R$b.colorBackgroundPrimary));
+        layout.setBackgroundColor(ColorCompat.getThemedColor(context, R.b.colorBackgroundPrimary));
 
         List<CheckedSetting> radios = Arrays.asList(
                 Utils.createCheckedSetting(context, CheckedSetting.ViewType.RADIO, "Big (64x64)", null),

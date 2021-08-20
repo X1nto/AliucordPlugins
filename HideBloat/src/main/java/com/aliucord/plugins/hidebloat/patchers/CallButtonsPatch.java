@@ -1,13 +1,11 @@
 package com.aliucord.plugins.hidebloat.patchers;
 
-import com.aliucord.plugins.hidebloat.util.Const;
 import com.aliucord.plugins.hidebloat.patchers.base.BasePatcher;
+import com.aliucord.plugins.hidebloat.util.Const;
 import com.aliucord.plugins.hidebloat.util.Util;
 import com.discord.databinding.WidgetUserSheetBinding;
 import com.discord.widgets.user.usersheet.WidgetUserSheet;
 import com.discord.widgets.user.usersheet.WidgetUserSheetViewModel;
-
-import java.lang.reflect.Method;
 
 import top.canyie.pine.Pine;
 

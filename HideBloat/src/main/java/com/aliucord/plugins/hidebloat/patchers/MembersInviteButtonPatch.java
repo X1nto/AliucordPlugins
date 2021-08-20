@@ -1,12 +1,10 @@
 package com.aliucord.plugins.hidebloat.patchers;
 
-import com.aliucord.plugins.hidebloat.util.Const;
 import com.aliucord.plugins.hidebloat.patchers.base.BasePatcher;
+import com.aliucord.plugins.hidebloat.util.Const;
 import com.aliucord.plugins.hidebloat.util.Util;
 import com.discord.databinding.WidgetChannelMembersListItemAddBinding;
 import com.discord.widgets.channels.memberlist.adapter.ChannelMembersListViewHolderAdd;
-
-import java.lang.reflect.Field;
 
 import kotlin.jvm.functions.Function0;
 import top.canyie.pine.Pine;

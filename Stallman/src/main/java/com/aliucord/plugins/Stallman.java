@@ -4,12 +4,12 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.aliucord.entities.Plugin;
 import com.aliucord.api.CommandsAPI;
+import com.aliucord.entities.Plugin;
 import com.discord.api.commands.ApplicationCommandType;
 import com.discord.models.commands.ApplicationCommandOption;
 
-import java.util.*;
+import java.util.Collections;
 
 @SuppressWarnings("unused")
 public class Stallman extends Plugin {

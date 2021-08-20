@@ -24,8 +24,7 @@ import com.discord.widgets.channels.list.WidgetChannelsListAdapter;
 import com.discord.widgets.channels.list.WidgetChannelsListItemChannelActions;
 import com.discord.widgets.channels.list.items.ChannelListItem;
 import com.discord.widgets.channels.list.items.ChannelListItemTextChannel;
-import com.lytefast.flexinput.R$b;
-import com.lytefast.flexinput.R$h;
+import com.lytefast.flexinput.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -210,9 +209,9 @@ public class ShowHiddenChannels extends Plugin {
     private TextView getThemedTextView(Context context) {
         int paddingHorizontal = 36;
         int paddingVertical = 8;
-        var textView = new TextView(context, null, 0, R$h.UiKit_TextView_Semibold);
+        var textView = new TextView(context, null, 0, R.h.UiKit_TextView_Semibold);
         textView.setTypeface(ResourcesCompat.getFont(context, Constants.Fonts.whitney_semibold));
-        textView.setTextColor(ColorCompat.getThemedColor(context, R$b.colorTextMuted));
+        textView.setTextColor(ColorCompat.getThemedColor(context, R.b.colorTextMuted));
         textView.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical);
         return textView;
     }

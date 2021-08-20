@@ -1,9 +1,7 @@
 package com.aliucord.plugins.hidebloat.patchers;
 
-import android.view.View;
-
-import com.aliucord.plugins.hidebloat.util.Const;
 import com.aliucord.plugins.hidebloat.patchers.base.BasePatcher;
+import com.aliucord.plugins.hidebloat.util.Const;
 import com.aliucord.plugins.hidebloat.util.Util;
 import com.discord.widgets.channels.list.WidgetChannelsListAdapter;
 import com.discord.widgets.channels.list.items.ChannelListItem;

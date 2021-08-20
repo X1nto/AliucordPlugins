@@ -5,10 +5,11 @@ import android.content.Context;
 
 import com.aliucord.Utils;
 import com.aliucord.api.SettingsAPI;
+import com.aliucord.utils.DimenUtils;
 import com.discord.utilities.color.ColorCompat;
 import com.discord.views.CheckedSetting;
 import com.google.android.material.card.MaterialCardView;
-import com.lytefast.flexinput.R$b;
+import com.lytefast.flexinput.R;
 
 @SuppressLint("ViewConstructor")
 public class SwitchItem extends MaterialCardView {
@@ -20,8 +21,8 @@ public class SwitchItem extends MaterialCardView {
 
         this.viewName = viewName;
 
-        setRadius(Utils.getDefaultCardRadius());
-        setCardBackgroundColor(ColorCompat.getThemedColor(context, R$b.colorBackgroundSecondary));
+        setRadius(DimenUtils.getDefaultCardRadius());
+        setCardBackgroundColor(ColorCompat.getThemedColor(context, R.b.colorBackgroundSecondary));
         setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
         CheckedSetting setting = Utils.createCheckedSetting(context, CheckedSetting.ViewType.SWITCH, "Hide " + viewName, null);

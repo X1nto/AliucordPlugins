@@ -1,6 +1,5 @@
 package com.aliucord.plugins.hidebloat;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
@@ -19,7 +18,6 @@ import com.aliucord.plugins.hidebloat.widgets.SwitchItem;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 
 public class PluginSettings extends SettingsPage {
 
@@ -29,7 +27,6 @@ public class PluginSettings extends SettingsPage {
         this.settingsAPI = settingsAPI;
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public void onViewBound(View view) {
         super.onViewBound(view);
