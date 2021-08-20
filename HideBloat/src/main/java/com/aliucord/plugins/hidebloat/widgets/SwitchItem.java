@@ -6,6 +6,7 @@ import android.content.Context;
 import com.aliucord.Utils;
 import com.aliucord.api.SettingsAPI;
 import com.aliucord.utils.DimenUtils;
+import com.aliucord.plugins.hidebloat.util.Const;
 import com.discord.utilities.color.ColorCompat;
 import com.discord.views.CheckedSetting;
 import com.google.android.material.card.MaterialCardView;
@@ -26,7 +27,7 @@ public class SwitchItem extends MaterialCardView {
         setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
         CheckedSetting setting = Utils.createCheckedSetting(context, CheckedSetting.ViewType.SWITCH, "Hide " + viewName, null);
-        setting.setChecked(settingsAPI.getBool(key, true));
+        setting.setChecked(settingsAPI.getBool(key, Const.PREFERENCE_DEFAULT_VALUE));
         setting.setOnCheckedListener(v -> settingsAPI.setBool(key, v));
 
         addView(setting);

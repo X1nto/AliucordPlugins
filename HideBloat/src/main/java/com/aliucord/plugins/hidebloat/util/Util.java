@@ -8,6 +8,8 @@ import com.aliucord.plugins.hidebloat.patchers.ChannelsInviteButtonPatch;
 import com.aliucord.plugins.hidebloat.patchers.DmSearchBoxPatch;
 import com.aliucord.plugins.hidebloat.patchers.MembersInviteButtonPatch;
 import com.aliucord.plugins.hidebloat.patchers.NitroGiftButtonPatch;
+import com.aliucord.plugins.hidebloat.patchers.NotesPatch;
+import com.aliucord.plugins.hidebloat.patchers.UntrustedDomainPatch;
 import com.aliucord.plugins.hidebloat.patchers.base.BasePatcher;
 
 public class Util {
@@ -21,7 +23,9 @@ public class Util {
                     new ChannelsInviteButtonPatch(),
                     new DmSearchBoxPatch(),
                     new MembersInviteButtonPatch(),
-                    new NitroGiftButtonPatch()
+                    new NitroGiftButtonPatch(),
+                    new NotesPatch(),
+                    new UntrustedDomainPatch()
             };
         } catch (Exception ignored) {}
     }
