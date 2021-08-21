@@ -26,8 +26,8 @@ public class CallButtonsPatch extends BasePatcher {
 
             if (binding == null) return;
 
-            Util.hideViewCompletely(binding.i);
-            Util.hideViewCompletely(binding.J);
+            Util.hideViewCompletely(binding.i); //Voice call button
+            Util.hideViewCompletely(binding.K); //Video call button
         } catch (Throwable ignored) {}
 
         callFrame.setResult(callFrame.getResult());
