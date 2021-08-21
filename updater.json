@@ -14,8 +14,8 @@
   "Gnuify": {
     "version": "1.0.1"
   },
-  "HideBloat": {
-    "version": "1.2.0"
+  "LayoutController": {
+    "version": "1.0.0"
   },
   "default": {
     "version": "1.0.0",
