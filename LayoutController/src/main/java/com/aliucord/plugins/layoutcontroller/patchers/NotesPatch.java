@@ -12,7 +12,7 @@ import top.canyie.pine.Pine;
 public class NotesPatch extends BasePatcher {
 
     public NotesPatch() throws Exception {
-        super(Const.Key.NOTES_KEY, Const.ViewName.NOTES_NAME, WidgetUserSheet.class.getDeclaredMethod("configureNote", WidgetUserSheetViewModel.ViewState.Loaded.class));
+        super(Const.Key.NOTES_KEY, Const.Description.NOTES_DESCRIPTION, WidgetUserSheet.class.getDeclaredMethod("configureNote", WidgetUserSheetViewModel.ViewState.Loaded.class));
     }
 
     @Override

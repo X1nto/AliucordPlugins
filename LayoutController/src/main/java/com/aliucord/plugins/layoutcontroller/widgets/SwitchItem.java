@@ -15,18 +15,18 @@ import com.lytefast.flexinput.R;
 @SuppressLint("ViewConstructor")
 public class SwitchItem extends MaterialCardView {
 
-    public final String viewName;
+    public final String description;
 
-    public SwitchItem(Context context, SettingsAPI settingsAPI, String key, String viewName) {
+    public SwitchItem(Context context, SettingsAPI settingsAPI, String key, String description) {
         super(context);
 
-        this.viewName = viewName;
+        this.description = description;
 
         setRadius(DimenUtils.getDefaultCardRadius());
         setCardBackgroundColor(ColorCompat.getThemedColor(context, R.b.colorBackgroundSecondary));
         setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
-        CheckedSetting setting = Utils.createCheckedSetting(context, CheckedSetting.ViewType.SWITCH, "Hide " + viewName, null);
+        CheckedSetting setting = Utils.createCheckedSetting(context, CheckedSetting.ViewType.SWITCH, description, null);
         setting.setChecked(settingsAPI.getBool(key, Const.PREFERENCE_DEFAULT_VALUE));
         setting.setOnCheckedListener(v -> settingsAPI.setBool(key, v));
 

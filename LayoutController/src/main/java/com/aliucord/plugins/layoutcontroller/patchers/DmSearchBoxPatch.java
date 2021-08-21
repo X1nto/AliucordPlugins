@@ -14,7 +14,7 @@ import top.canyie.pine.Pine;
 public class DmSearchBoxPatch extends BasePatcher {
 
     public DmSearchBoxPatch() throws Exception {
-        super(Const.Key.SEARCH_BOX_KEY, Const.ViewName.SEARCH_BOX_NAME, WidgetChannelsList.class.getDeclaredMethod("configureUI", WidgetChannelListModel.class));
+        super(Const.Key.SEARCH_BOX_KEY, Const.Description.SEARCH_BOX_DESCRIPTION, WidgetChannelsList.class.getDeclaredMethod("configureUI", WidgetChannelListModel.class));
     }
 
     @Override

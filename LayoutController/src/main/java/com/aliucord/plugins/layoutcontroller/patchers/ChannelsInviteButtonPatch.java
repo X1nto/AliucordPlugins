@@ -11,7 +11,7 @@ import top.canyie.pine.Pine;
 public class ChannelsInviteButtonPatch extends BasePatcher {
 
     public ChannelsInviteButtonPatch() throws Exception {
-        super(Const.Key.INVITE_BUTTON_CHANNELS_KEY, Const.ViewName.INVITE_BUTTON_CHANNELS_NAME, WidgetChannelsListAdapter.ItemInvite.class.getDeclaredMethod("onConfigure", int.class, ChannelListItem.class));
+        super(Const.Key.INVITE_BUTTON_CHANNELS_KEY, Const.Description.INVITE_BUTTON_CHANNELS_DESCRIPTION, WidgetChannelsListAdapter.ItemInvite.class.getDeclaredMethod("onConfigure", int.class, ChannelListItem.class));
     }
 
     @Override

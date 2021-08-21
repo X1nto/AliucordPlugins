@@ -12,7 +12,7 @@ import top.canyie.pine.Pine;
 public class NitroGiftButtonPatch extends BasePatcher {
 
     public NitroGiftButtonPatch() throws Exception {
-        super(Const.Key.GIFT_BUTTON_KEY, Const.ViewName.GIFT_BUTTON_NAME, FlexInputFragment$d.class.getDeclaredMethod("invoke", Object.class));
+        super(Const.Key.GIFT_BUTTON_KEY, Const.Description.GIFT_BUTTON_DESCRIPTION, FlexInputFragment$d.class.getDeclaredMethod("invoke", Object.class));
     }
 
     @Override

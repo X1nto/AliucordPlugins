@@ -12,7 +12,7 @@ import top.canyie.pine.Pine;
 public class MembersInviteButtonPatch extends BasePatcher {
 
     public MembersInviteButtonPatch() throws Exception {
-        super(Const.Key.INVITE_BUTTON_MEMBERS_KEY, Const.ViewName.INVITE_BUTTON_MEMBERS_NAME, ChannelMembersListViewHolderAdd.class.getDeclaredMethod("bind", Function0.class, int.class));
+        super(Const.Key.INVITE_BUTTON_MEMBERS_KEY, Const.Description.INVITE_BUTTON_MEMBERS_DESCRIPTION, ChannelMembersListViewHolderAdd.class.getDeclaredMethod("bind", Function0.class, int.class));
     }
 
     @Override

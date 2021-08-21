@@ -15,6 +15,7 @@ import com.aliucord.fragments.SettingsPage;
 import com.aliucord.plugins.layoutcontroller.patchers.base.BasePatcher;
 import com.aliucord.plugins.layoutcontroller.util.Util;
 import com.aliucord.plugins.layoutcontroller.widgets.SwitchItem;
+import com.aliucord.utils.DimenUtils;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -30,7 +31,7 @@ public class PluginSettings extends SettingsPage {
     @Override
     public void onViewBound(View view) {
         super.onViewBound(view);
-        setActionBarTitle("Bloat");
+        setActionBarTitle("LayoutController");
         var context = requireContext();
 
         Utils.threadPool.execute(() -> {
@@ -41,7 +42,7 @@ public class PluginSettings extends SettingsPage {
                 list.add(new SwitchItem(context, settingsAPI, patcher.key, patcher.viewName));
             }
 
-            list.sort(Comparator.comparing(switchItem -> switchItem.viewName));
+            list.sort(Comparator.comparing(switchItem -> switchItem.description));
 
             Utils.mainThread.post(() -> {
                 var recyclerView = new RecyclerView(context);
@@ -49,7 +50,7 @@ public class PluginSettings extends SettingsPage {
 
                 var shape = new ShapeDrawable(new RectShape());
                 shape.setTint(Color.TRANSPARENT);
-                shape.setIntrinsicHeight(Utils.getDefaultPadding());
+                shape.setIntrinsicHeight(DimenUtils.getDefaultPadding());
 
                 var decoration = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
                 decoration.setDrawable(shape);

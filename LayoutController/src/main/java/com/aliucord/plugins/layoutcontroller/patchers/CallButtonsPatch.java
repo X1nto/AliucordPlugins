@@ -12,7 +12,7 @@ import top.canyie.pine.Pine;
 public class CallButtonsPatch extends BasePatcher {
 
     public CallButtonsPatch() throws Exception {
-        super(Const.Key.CALL_BUTTONS_KEY, Const.ViewName.CALL_BUTTONS_NAME, WidgetUserSheet.class.getDeclaredMethod("configureProfileActionButtons", WidgetUserSheetViewModel.ViewState.Loaded.class));
+        super(Const.Key.CALL_BUTTONS_KEY, Const.Description.CALL_BUTTONS_DESCRIPTION, WidgetUserSheet.class.getDeclaredMethod("configureProfileActionButtons", WidgetUserSheetViewModel.ViewState.Loaded.class));
     }
 
     @Override
