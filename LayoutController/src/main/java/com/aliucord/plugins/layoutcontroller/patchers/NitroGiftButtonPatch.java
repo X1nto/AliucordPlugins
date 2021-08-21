@@ -1,9 +1,9 @@
-package com.aliucord.plugins.hidebloat.patchers;
+package com.aliucord.plugins.layoutcontroller.patchers;
 
 import android.view.View;
 
-import com.aliucord.plugins.hidebloat.patchers.base.BasePatcher;
-import com.aliucord.plugins.hidebloat.util.Const;
+import com.aliucord.plugins.layoutcontroller.patchers.base.BasePatcher;
+import com.aliucord.plugins.layoutcontroller.util.Const;
 import com.lytefast.flexinput.fragment.FlexInputFragment;
 import com.lytefast.flexinput.fragment.FlexInputFragment$d;
 

@@ -1,4 +1,4 @@
-package com.aliucord.plugins.hidebloat;
+package com.aliucord.plugins.layoutcontroller;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,7 +7,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.aliucord.plugins.hidebloat.widgets.SwitchItem;
+import com.aliucord.plugins.layoutcontroller.widgets.SwitchItem;
 
 import java.util.List;
 

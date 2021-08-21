@@ -1,8 +1,8 @@
-package com.aliucord.plugins.hidebloat.patchers;
+package com.aliucord.plugins.layoutcontroller.patchers;
 
-import com.aliucord.plugins.hidebloat.patchers.base.BasePatcher;
-import com.aliucord.plugins.hidebloat.util.Const;
-import com.aliucord.plugins.hidebloat.util.Util;
+import com.aliucord.plugins.layoutcontroller.patchers.base.BasePatcher;
+import com.aliucord.plugins.layoutcontroller.util.Const;
+import com.aliucord.plugins.layoutcontroller.util.Util;
 import com.discord.databinding.WidgetChannelMembersListItemAddBinding;
 import com.discord.widgets.channels.memberlist.adapter.ChannelMembersListViewHolderAdd;
 

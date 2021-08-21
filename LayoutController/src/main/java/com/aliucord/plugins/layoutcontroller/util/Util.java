@@ -1,16 +1,16 @@
-package com.aliucord.plugins.hidebloat.util;
+package com.aliucord.plugins.layoutcontroller.util;
 
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.aliucord.plugins.hidebloat.patchers.CallButtonsPatch;
-import com.aliucord.plugins.hidebloat.patchers.ChannelsInviteButtonPatch;
-import com.aliucord.plugins.hidebloat.patchers.DmSearchBoxPatch;
-import com.aliucord.plugins.hidebloat.patchers.MembersInviteButtonPatch;
-import com.aliucord.plugins.hidebloat.patchers.NitroGiftButtonPatch;
-import com.aliucord.plugins.hidebloat.patchers.NotesPatch;
-import com.aliucord.plugins.hidebloat.patchers.UntrustedDomainPatch;
-import com.aliucord.plugins.hidebloat.patchers.base.BasePatcher;
+import com.aliucord.plugins.layoutcontroller.patchers.CallButtonsPatch;
+import com.aliucord.plugins.layoutcontroller.patchers.ChannelsInviteButtonPatch;
+import com.aliucord.plugins.layoutcontroller.patchers.DmSearchBoxPatch;
+import com.aliucord.plugins.layoutcontroller.patchers.MembersInviteButtonPatch;
+import com.aliucord.plugins.layoutcontroller.patchers.NitroGiftButtonPatch;
+import com.aliucord.plugins.layoutcontroller.patchers.NotesPatch;
+import com.aliucord.plugins.layoutcontroller.patchers.UntrustedDomainPatch;
+import com.aliucord.plugins.layoutcontroller.patchers.base.BasePatcher;
 
 public class Util {
 

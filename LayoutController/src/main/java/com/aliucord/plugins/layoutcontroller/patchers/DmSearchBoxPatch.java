@@ -1,10 +1,10 @@
-package com.aliucord.plugins.hidebloat.patchers;
+package com.aliucord.plugins.layoutcontroller.patchers;
 
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.aliucord.plugins.hidebloat.patchers.base.BasePatcher;
-import com.aliucord.plugins.hidebloat.util.Const;
+import com.aliucord.plugins.layoutcontroller.patchers.base.BasePatcher;
+import com.aliucord.plugins.layoutcontroller.util.Const;
 import com.discord.databinding.WidgetChannelsListBinding;
 import com.discord.widgets.channels.list.WidgetChannelListModel;
 import com.discord.widgets.channels.list.WidgetChannelsList;

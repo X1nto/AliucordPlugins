@@ -1,5 +1,5 @@
 include(":Gnuify")
-include(":HideBloat")
+include(":LayoutController")
 include(":Lyrics")
 include(":NitroSpoof")
 include(":ShowHiddenChannels")

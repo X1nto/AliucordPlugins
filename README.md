@@ -7,8 +7,8 @@ Download from [here](https://github.com/X1nto/AliucordPlugins/tree/builds)
 ## [Gnuify](/Gnuify)
 Appends "GNU/" prefix to every word in the sentence.
 
-## [HideBloat](/HideBloat)
-Hides various discord bloat.
+## [LayoutController](/LayoutController)
+Lets you control the discord mobile layout.
 
 ## [Lyrics](/Lyrics)
 Get lyrics to a song.

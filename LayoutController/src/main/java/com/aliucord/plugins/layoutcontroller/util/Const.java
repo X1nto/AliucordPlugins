@@ -1,4 +1,4 @@
-package com.aliucord.plugins.hidebloat.util;
+package com.aliucord.plugins.layoutcontroller.util;
 
 public class Const {
 

@@ -1,9 +1,9 @@
-package com.aliucord.plugins.hidebloat.patchers.base;
+package com.aliucord.plugins.layoutcontroller.patchers.base;
 
 import com.aliucord.api.PatcherAPI;
 import com.aliucord.api.SettingsAPI;
 import com.aliucord.patcher.PinePatchFn;
-import com.aliucord.plugins.hidebloat.util.Const;
+import com.aliucord.plugins.layoutcontroller.util.Const;
 
 import java.lang.reflect.Member;
 

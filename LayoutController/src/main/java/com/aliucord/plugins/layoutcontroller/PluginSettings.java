@@ -1,4 +1,4 @@
-package com.aliucord.plugins.hidebloat;
+package com.aliucord.plugins.layoutcontroller;
 
 import android.graphics.Color;
 import android.graphics.drawable.ShapeDrawable;
@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.aliucord.Utils;
 import com.aliucord.api.SettingsAPI;
 import com.aliucord.fragments.SettingsPage;
-import com.aliucord.plugins.hidebloat.patchers.base.BasePatcher;
-import com.aliucord.plugins.hidebloat.util.Util;
-import com.aliucord.plugins.hidebloat.widgets.SwitchItem;
+import com.aliucord.plugins.layoutcontroller.patchers.base.BasePatcher;
+import com.aliucord.plugins.layoutcontroller.util.Util;
+import com.aliucord.plugins.layoutcontroller.widgets.SwitchItem;
 
 import java.util.ArrayList;
 import java.util.Comparator;

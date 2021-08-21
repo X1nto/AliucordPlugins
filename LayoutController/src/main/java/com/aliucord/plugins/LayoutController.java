@@ -5,14 +5,14 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.aliucord.entities.Plugin;
-import com.aliucord.plugins.hidebloat.PluginSettings;
-import com.aliucord.plugins.hidebloat.patchers.base.BasePatcher;
-import com.aliucord.plugins.hidebloat.util.Util;
+import com.aliucord.plugins.layoutcontroller.PluginSettings;
+import com.aliucord.plugins.layoutcontroller.patchers.base.BasePatcher;
+import com.aliucord.plugins.layoutcontroller.util.Util;
 
 @SuppressWarnings("unused")
-public class HideBloat extends Plugin {
+public class LayoutController extends Plugin {
 
-    public HideBloat() {
+    public LayoutController() {
         settingsTab = new SettingsTab(PluginSettings.class, SettingsTab.Type.PAGE)
                 .withArgs(settings);
     }
@@ -22,8 +22,8 @@ public class HideBloat extends Plugin {
     public Manifest getManifest() {
         var manifest = new Manifest();
         manifest.authors = new Manifest.Author[]{new Manifest.Author("Xinto", 423915768191647755L)};
-        manifest.description = "Hides various discord bloat.";
-        manifest.version = "1.2.0";
+        manifest.description = "Lets you control the discord mobile layout.";
+        manifest.version = "1.0.0";
         manifest.updateUrl = "https://raw.githubusercontent.com/X1nto/AliucordPlugins/builds/updater.json";
         return manifest;
     }

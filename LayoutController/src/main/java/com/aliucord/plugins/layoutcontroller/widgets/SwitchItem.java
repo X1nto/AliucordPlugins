@@ -1,4 +1,4 @@
-package com.aliucord.plugins.hidebloat.widgets;
+package com.aliucord.plugins.layoutcontroller.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.content.Context;
 import com.aliucord.Utils;
 import com.aliucord.api.SettingsAPI;
 import com.aliucord.utils.DimenUtils;
-import com.aliucord.plugins.hidebloat.util.Const;
+import com.aliucord.plugins.layoutcontroller.util.Const;
 import com.discord.utilities.color.ColorCompat;
 import com.discord.views.CheckedSetting;
 import com.google.android.material.card.MaterialCardView;
