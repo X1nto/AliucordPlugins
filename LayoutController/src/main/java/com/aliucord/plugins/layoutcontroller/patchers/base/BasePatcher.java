@@ -12,13 +12,13 @@ import top.canyie.pine.Pine;
 public abstract class BasePatcher {
 
     public final String key;
-    public final String viewName;
+    public final String description;
 
     private final Member classMember;
 
-    public BasePatcher(String key, String viewName, Member classMember) {
+    public BasePatcher(String key, String description, Member classMember) {
         this.key = key;
-        this.viewName = viewName;
+        this.description = description;
         this.classMember = classMember;
     }
 

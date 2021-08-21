@@ -39,7 +39,7 @@ public class PluginSettings extends SettingsPage {
             var list = new ArrayList<SwitchItem>();
 
             for (BasePatcher patcher : Util.patches) {
-                list.add(new SwitchItem(context, settingsAPI, patcher.key, patcher.viewName));
+                list.add(new SwitchItem(context, settingsAPI, patcher.key, patcher.description));
             }
 
             list.sort(Comparator.comparing(switchItem -> switchItem.description));
