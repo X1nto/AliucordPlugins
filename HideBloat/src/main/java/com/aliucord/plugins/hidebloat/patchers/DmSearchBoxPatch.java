@@ -13,7 +13,7 @@ import top.canyie.pine.Pine;
 
 public class DmSearchBoxPatch extends BasePatcher {
 
-    public DmSearchBoxPatch() throws Exception{
+    public DmSearchBoxPatch() throws Exception {
         super(Const.Key.SEARCH_BOX_KEY, Const.ViewName.SEARCH_BOX_NAME, WidgetChannelsList.class.getDeclaredMethod("configureUI", WidgetChannelListModel.class));
     }
 
