@@ -4,20 +4,20 @@ Plugins for [Aliucord](https://github.com/Aliucord)
 ## Download
 Download from [here](https://github.com/X1nto/AliucordPlugins/tree/builds)
 
-## [Gnuify](/Gnuify)
+## [Gnuify](/plugins/Gnuify)
 Appends "GNU/" prefix to every word in the sentence.
 
-## [LayoutController](/LayoutController)
+## [LayoutController](/plugins/LayoutController)
 Lets you control the discord mobile layout.
 
-## [Lyrics](/Lyrics)
+## [Lyrics](/plugins/Lyrics)
 Get lyrics to a song.
 
-## [Nitrospoof](/NitroSpoof)
+## [Nitrospoof](/plugins/NitroSpoof)
 Use nitro emotes without nitro.
 
-## [ShowHiddenChannels](/ShowHiddenChannels)
+## [ShowHiddenChannels](/plugins/ShowHiddenChannels)
 Allows you to see hidden channels in servers.
 
-## [Stallman](/Stallman)
+## [Stallman](/plugins/Stallman)
 Replace "Linux" in the GNU/Linux copypasta with your desired phrase.

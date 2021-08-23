@@ -1,11 +1,19 @@
-include(":Gnuify")
-include(":LayoutController")
-include(":Lyrics")
-include(":NitroSpoof")
-include(":ShowHiddenChannels")
-include(":Stallman")
-
 rootProject.name = "AliucordPlugins"
 
-include(":Aliucord")
-project(":Aliucord").projectDir = File("../repo/Aliucord")
+include(":Gnuify")
+project(":Gnuify").projectDir = File("./plugins/Gnuify")
+
+include(":LayoutController")
+project(":LayoutController").projectDir = File("./plugins/LayoutController")
+
+include(":Lyrics")
+project(":Lyrics").projectDir = File("./plugins/Lyrics")
+
+include(":NitroSpoof")
+project(":NitroSpoof").projectDir = File("./plugins/NitroSpoof")
+
+include(":ShowHiddenChannels")
+project(":ShowHiddenChannels").projectDir = File("./plugins/ShowHiddenChannels")
+
+include(":Stallman")
+project(":Stallman").projectDir = File("./plugins/Stallman")
