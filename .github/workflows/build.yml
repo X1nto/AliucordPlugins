@@ -39,7 +39,7 @@ jobs:
           cd $GITHUB_WORKSPACE/src
           chmod +x gradlew
           ./gradlew make
-          cp **/build/*.zip $GITHUB_WORKSPACE/builds
+          cp plugins/**/build/*.zip $GITHUB_WORKSPACE/builds
 
       - name: Push builds
         run: |
