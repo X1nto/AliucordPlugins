@@ -4,6 +4,9 @@ Plugins for [Aliucord](https://github.com/Aliucord)
 ## Download
 Download from [here](https://github.com/X1nto/AliucordPlugins/tree/builds)
 
+## [AttachmentUtils](/plugins/AttachmentUtils)
+Adds a context menu to attachments.
+
 ## [Gnuify](/plugins/Gnuify)
 Appends "GNU/" prefix to every word in the sentence.
 

@@ -17,7 +17,7 @@ class AttachmentUtils : Plugin() {
     override fun getManifest() =
         Manifest().apply {
             authors = arrayOf(Manifest.Author("Xinto", 423915768191647755L))
-            description = "Adds a context menu to attachments"
+            description = "Adds a context menu to attachments."
             version = "1.0.0"
             updateUrl = "https://raw.githubusercontent.com/X1nto/AliucordPlugins/builds/updater.json"
         }
