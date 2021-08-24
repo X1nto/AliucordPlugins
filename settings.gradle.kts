@@ -1,22 +1,14 @@
 rootProject.name = "AliucordPlugins"
 
-include(":Gnuify")
-project(":Gnuify").projectDir = File("./plugins/Gnuify")
-
-include(":LayoutController")
-project(":LayoutController").projectDir = File("./plugins/LayoutController")
-
-include(":Lyrics")
-project(":Lyrics").projectDir = File("./plugins/Lyrics")
-
-include(":NitroSpoof")
-project(":NitroSpoof").projectDir = File("./plugins/NitroSpoof")
-
-include(":ShowHiddenChannels")
-project(":ShowHiddenChannels").projectDir = File("./plugins/ShowHiddenChannels")
-
-include(":Stallman")
-project(":Stallman").projectDir = File("./plugins/Stallman")
-
-include(":AttachmentUtils")
-project(":AttachmentUtils").projectDir = File("./plugins/AttachmentUtils")
+listOf(
+    "AttachmentUtils",
+    "Gnuify",
+    "LayoutController",
+    "Lyrics",
+    "NitroSpoof",
+    "ShowHiddenChannels",
+    "Stallman"
+).forEach { plugin ->
+    include(":$plugin")
+    project(":$plugin").projectDir = File("./plugins/$plugin")
+}
