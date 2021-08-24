@@ -17,3 +17,6 @@ project(":ShowHiddenChannels").projectDir = File("./plugins/ShowHiddenChannels")
 
 include(":Stallman")
 project(":Stallman").projectDir = File("./plugins/Stallman")
+
+include(":AttachmentUtils")
+project(":AttachmentUtils").projectDir = File("./plugins/AttachmentUtils")
