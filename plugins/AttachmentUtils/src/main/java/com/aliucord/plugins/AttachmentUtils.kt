@@ -1,7 +1,6 @@
 package com.aliucord.plugins
 
 import android.content.Context
-import android.util.Log
 import android.view.View
 import com.aliucord.Utils
 import com.aliucord.entities.Plugin
