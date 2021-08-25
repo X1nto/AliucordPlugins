@@ -1,6 +1,7 @@
 package com.aliucord.plugins
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import com.aliucord.Utils
 import com.aliucord.entities.Plugin
@@ -49,7 +50,7 @@ class AttachmentUtils : Plugin() {
         patcher.unpatchAll()
     }
 
-    fun View.setCopyUrlSheetListener(url: String) {
+    private fun View.setCopyUrlSheetListener(url: String) {
         setOnLongClickListener {
             AttachmentContextMenu
                 .newInstance(url)
