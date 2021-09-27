@@ -1,18 +1,19 @@
 package com.aliucord.plugins
 
 import android.content.Context
-import com.aliucord.entities.Plugin
-import com.aliucord.entities.Plugin.Manifest.Author
-import com.aliucord.patcher.PinePatchFn
-import top.canyie.pine.Pine.CallFrame
-import com.aliucord.wrappers.ChannelWrapper
 import android.view.View
 import android.widget.LinearLayout
-import androidx.core.content.res.ResourcesCompat
-import com.discord.databinding.WidgetChannelsListItemTextActionsBinding
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import com.aliucord.Constants
+import com.aliucord.annotations.AliucordPlugin
+import com.aliucord.entities.Plugin
+import com.aliucord.patcher.PinePatchFn
+import com.aliucord.wrappers.ChannelWrapper
+import com.aliucord.wrappers.ChannelWrapper.Companion.id
+import com.aliucord.wrappers.ChannelWrapper.Companion.name
 import com.discord.api.channel.Channel
+import com.discord.databinding.WidgetChannelsListItemActionsBinding
 import com.discord.databinding.WidgetChannelsListItemChannelBinding
 import com.discord.utilities.SnowflakeUtils
 import com.discord.utilities.color.ColorCompat
@@ -24,26 +25,13 @@ import com.discord.widgets.channels.list.`WidgetChannelListModel$Companion$guild
 import com.discord.widgets.channels.list.items.ChannelListItem
 import com.discord.widgets.channels.list.items.ChannelListItemTextChannel
 import com.lytefast.flexinput.R
-import java.lang.Exception
+import top.canyie.pine.Pine.CallFrame
 import java.text.SimpleDateFormat
 import java.util.*
 
+@AliucordPlugin
 class ShowHiddenChannels : Plugin() {
-    private val suffix = " (hidden)"
-    private val channelListClass = "com.discord.widgets.channels.list.WidgetChannelListModel\$Companion\$guildListBuilder$\$inlined\$forEach\$lambda$3"
-    private val channelListMethod = "invoke"
-    private val channelLayoutClass = "com.discord.widgets.channels.list.WidgetChannelsListAdapter\$ItemChannelText"
-    private val channelLayoutMethod = "onConfigure"
-    private val channelActionsClass = "com.discord.widgets.channels.list.WidgetChannelsListItemChannelActions"
-    private val channelActionsMethod = "configureUI"
-
-    override fun getManifest() =
-        Manifest().apply {
-            authors = arrayOf(Author("Xinto", 423915768191647755L))
-            description = "Allows you to see hidden channels in servers."
-            version = "1.2.0"
-            updateUrl ="https://raw.githubusercontent.com/X1nto/AliucordPlugins/builds/updater.json"
-        }
+    private val suffix = "\u200B"
 
     override fun start(context: Context) {
         patchChannelList()
@@ -57,22 +45,21 @@ class ShowHiddenChannels : Plugin() {
 
     private fun patchChannelList() {
         patcher.patch(
-            channelListClass,
-            channelListMethod,
-            arrayOfNulls(0),
+            `WidgetChannelListModel$Companion$guildListBuilder$$inlined$forEach$lambda$3`::class.java
+                .getDeclaredMethod("invoke"),
             PinePatchFn { callFrame: CallFrame ->
                 val thisObject = callFrame.thisObject
                 val ret = callFrame.result
                 val guildListBuilder = thisObject as `WidgetChannelListModel$Companion$guildListBuilder$$inlined$forEach$lambda$3`
                 val channel = guildListBuilder.`$channel`
-                val channelName = ChannelWrapper.getName(channel)
+                val channelName = channel.name
 
                 if (ret != null) {
                     //Rename back channel if it was previously hidden
                     //in order to let user see the channel after permission
                     //was granted.
                     if (!isChannelVisible(channelName)) {
-                        renameChannel(channel, removeSuffix(channelName, suffix))
+                        renameChannel(channel, channelName.removeSuffix(suffix))
                     }
                     callFrame.result = ret
                     return@PinePatchFn
@@ -109,7 +96,7 @@ class ShowHiddenChannels : Plugin() {
                     true,
                     textLikeChannelData.locked,
                     guildListBuilder.`$channelsWithActiveThreads$inlined`.contains(
-                        ChannelWrapper.getId(guildListBuilder.`$channel`)
+                        guildListBuilder.`$channel`.id
                     )
                 )
             }
@@ -118,44 +105,42 @@ class ShowHiddenChannels : Plugin() {
 
     private fun patchHiddenChannelLayout() {
         patcher.patch(
-            channelLayoutClass,
-            channelLayoutMethod,
-            arrayOf(Int::class.javaPrimitiveType, ChannelListItem::class.java),
+            WidgetChannelsListAdapter.ItemChannelText::class.java
+                .getDeclaredMethod(
+                    "onConfigure",
+                    Int::class.javaPrimitiveType,
+                    ChannelListItem::class.java
+                ),
             PinePatchFn { callFrame: CallFrame ->
                 val thisObject = callFrame.thisObject as WidgetChannelsListAdapter.ItemChannelText
                 val textChannel = callFrame.args[1] as ChannelListItemTextChannel
-                val channel = textChannel.channel ?: return@PinePatchFn
-                val channelName = ChannelWrapper.getName(channel)
+                val channel = textChannel.channel
+                val channelName = channel.name
 
                 if (isChannelVisible(channelName)) {
                     callFrame.result = null
                     return@PinePatchFn
                 }
 
-                try {
-                    val binding = thisObject.javaClass
-                        .getDeclaredField("binding")
-                        .let {
-                            it.isAccessible = true
-                            it.get(thisObject) as WidgetChannelsListItemChannelBinding
-                        }
+                val binding = thisObject.javaClass
+                    .getDeclaredField("binding")
+                    .let {
+                        it.isAccessible = true
+                        it.get(thisObject) as WidgetChannelsListItemChannelBinding
+                    }
 
-                    val hiddenDrawable = ResourcesCompat.getDrawable(
-                        resources,
-                        resources.getIdentifier(
-                            "ic_text_channel_hidden",
-                            "drawable",
-                            "com.aliucord.plugins"
-                        ),
-                        null
-                    )
+                val hiddenDrawable = ResourcesCompat.getDrawable(
+                    resources,
+                    resources.getIdentifier(
+                        "ic_text_channel_hidden",
+                        "drawable",
+                        "com.aliucord.plugins"
+                    ),
+                    null
+                )
 
-                    binding.b.setImageDrawable(hiddenDrawable)
-                    binding.d.text = channelName
-                    binding.a.setOnClickListener(null)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
+                binding.b.setImageDrawable(hiddenDrawable)
+                binding.a.setOnClickListener(null)
                 callFrame.result = callFrame.result
             }
         )
@@ -163,9 +148,11 @@ class ShowHiddenChannels : Plugin() {
 
     private fun patchHiddenChannelActions() {
         patcher.patch(
-            channelActionsClass,
-            channelActionsMethod,
-            arrayOf<Class<*>>(WidgetChannelsListItemChannelActions.Model::class.java),
+            WidgetChannelsListItemChannelActions::class.java
+                .getDeclaredMethod(
+                    "configureUI",
+                    WidgetChannelsListItemChannelActions.Model::class.java
+                ),
             PinePatchFn { callFrame: CallFrame ->
                 val thisObject = callFrame.thisObject
                 val model = callFrame.args[0] as WidgetChannelsListItemChannelActions.Model
@@ -181,7 +168,7 @@ class ShowHiddenChannels : Plugin() {
                     .getDeclaredMethod("getBinding")
                     .let {
                         it.isAccessible = true
-                        it.invoke(thisObject) as WidgetChannelsListItemTextActionsBinding
+                        it.invoke(thisObject) as WidgetChannelsListItemActionsBinding
                     }
 
                 val channelTopic = channelWrapper.topic
@@ -197,16 +184,12 @@ class ShowHiddenChannels : Plugin() {
                 )
                 val container = binding.a.getChildAt(0) as LinearLayout
                 val childCount = container.childCount
-                binding.b.visibility = View.GONE
-                binding.c.visibility = View.GONE
-                binding.h.visibility = View.GONE
-                binding.j.visibility = View.GONE
-                binding.k.visibility = View.GONE
-                binding.g.visibility = View.GONE
-                binding.i.visibility = View.GONE
-                binding.e.visibility = View.GONE
-                container.addView(channelTopicView, childCount - 3)
-                container.addView(lastSendMessageView, childCount - 4)
+                for (childIndex in 1 until childCount - 2) {
+                    val child = container.getChildAt(childIndex)
+                    child.visibility = View.GONE
+                }
+                container.addView(channelTopicView, 2)
+                container.addView(lastSendMessageView, 3)
 
                 callFrame.result = callFrame.result
             }
@@ -214,29 +197,19 @@ class ShowHiddenChannels : Plugin() {
     }
 
     private fun renameChannel(channel: Channel, newName: String) {
-        try {
-            val nameField = channel.javaClass.getDeclaredField("name")
-            nameField.isAccessible = true
-            nameField[channel] = newName
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        val nameField = channel.javaClass.getDeclaredField("name")
+        nameField.isAccessible = true
+        nameField[channel] = newName
     }
 
     private fun getThemedTextView(context: Context): TextView {
         val paddingHorizontal = 36
         val paddingVertical = 8
-        val textView = TextView(context, null, 0, R.h.UiKit_TextView_Semibold)
-        textView.typeface = ResourcesCompat.getFont(context, Constants.Fonts.whitney_semibold)
-        textView.setTextColor(ColorCompat.getThemedColor(context, R.b.colorTextMuted))
-        textView.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical)
-        return textView
-    }
-
-    private fun removeSuffix(sourceString: String, suffix: String): String {
-        return if (sourceString.endsWith(suffix)) {
-            sourceString.substring(0, sourceString.length - suffix.length)
-        } else sourceString
+        return TextView(context, null, 0, R.h.UiKit_TextView_Semibold).apply {
+            typeface = ResourcesCompat.getFont(context, Constants.Fonts.whitney_semibold)
+            setTextColor(ColorCompat.getThemedColor(context, R.b.colorTextMuted))
+            setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical)
+        }
     }
 
     private fun isChannelVisible(channelName: String): Boolean {
