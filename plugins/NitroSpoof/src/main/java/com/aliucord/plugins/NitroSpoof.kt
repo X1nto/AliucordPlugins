@@ -1,68 +1,51 @@
 package com.aliucord.plugins
 
 import android.content.Context
-import com.aliucord.plugins.nitrospoof.EmoteSize
+import com.aliucord.annotations.AliucordPlugin
 import com.aliucord.entities.Plugin
 import com.aliucord.entities.Plugin.Manifest.Author
-import com.aliucord.patcher.PinePatchFn
+import com.aliucord.patcher.PineInsteadFn
+import com.aliucord.plugins.nitrospoof.EMOTE_SIZE_DEFAULT
+import com.aliucord.plugins.nitrospoof.EMOTE_SIZE_KEY
 import com.aliucord.plugins.nitrospoof.PluginSettings
 import com.discord.models.domain.emoji.ModelEmojiCustom
+import java.lang.reflect.Field
 
+@AliucordPlugin
 class NitroSpoof : Plugin() {
 
-    override fun getManifest() =
-        Manifest().apply {
-            authors = arrayOf(Author("Xinto", 423915768191647755L))
-            description = "Use all emotes in any server without Nitro."
-            version = "1.0.3"
-            updateUrl = "https://raw.githubusercontent.com/X1nto/AliucordPlugins/builds/updater.json"
-        }
+    private val reflectionCache = HashMap<String, Field>()
 
     override fun start(context: Context) {
         patcher.patch(
             ModelEmojiCustom::class.java.getDeclaredMethod("getChatInputText"),
-            PinePatchFn { callFrame ->
+            PineInsteadFn { callFrame ->
                 val thisObject = callFrame.thisObject
-                val isUsable = thisObject.javaClass
-                    .getDeclaredField("isUsable")
-                    .let {
-                        it.isAccessible = true
-                        it.getBoolean(thisObject)
-                    }
+                val isUsable = thisObject.getCachedField<Boolean>("isUsable")
 
                 if (isUsable) {
-                    callFrame.result = callFrame.result
-                    return@PinePatchFn
+                    return@PineInsteadFn callFrame.result
                 }
 
                 var finalUrl = "https://cdn.discordapp.com/emojis/"
 
-                val idStr = thisObject.javaClass
-                    .getDeclaredField("idStr")
-                    .let {
-                        it.isAccessible = true
-                        it.get(thisObject) as String
-                    }
-
-                val isAnimated = thisObject.javaClass
-                    .getDeclaredField("isAnimated")
-                    .let {
-                        it.isAccessible = true
-                        it.getBoolean(thisObject)
-                    }
+                val idStr = thisObject.getCachedField<String>("idStr")
+                val isAnimated = thisObject.getCachedField<Boolean>("isAnimated")
 
                 finalUrl += idStr
-                val emoteSize = settings.getInt("emoteSize", EmoteSize.FORTY.size)
+                val emoteSize = settings.getString(EMOTE_SIZE_KEY, EMOTE_SIZE_DEFAULT).toIntOrNull()
 
                 finalUrl += if (isAnimated) ".gif" else ".png"
 
-                finalUrl += "?size=${emoteSize}"
-                callFrame.result = finalUrl
+                if (emoteSize != null) {
+                    finalUrl += "?size=${emoteSize}"
+                }
+                finalUrl
             }
         )
         patcher.patch(
             ModelEmojiCustom::class.java.getDeclaredMethod("isUsable"),
-            PinePatchFn { callFrame -> callFrame.result = true }
+            PineInsteadFn { true }
         )
     }
 
@@ -70,10 +53,26 @@ class NitroSpoof : Plugin() {
         patcher.unpatchAll()
     }
 
+    /**
+     * Get a reflected field from cache or compute it if cache is absent
+     * @param V type of the field value
+     */
+    private inline fun <reified V> Any.getCachedField(
+        name: String,
+        instance: Any? = this,
+    ): V {
+        val clazz = this::class.java
+        return reflectionCache.computeIfAbsent(clazz.name + name) {
+            clazz.getField(name).also {
+                it.isAccessible = true
+            }
+        }.get(instance) as V
+    }
+
     init {
         settingsTab = SettingsTab(
             PluginSettings::class.java,
-            SettingsTab.Type.BOTTOM_SHEET
+            SettingsTab.Type.PAGE
         ).withArgs(settings)
     }
 }

@@ -1,56 +1,43 @@
 package com.aliucord.plugins.nitrospoof
 
-import android.os.Bundle
-import android.view.LayoutInflater
+import android.annotation.SuppressLint
+import android.text.InputType
 import android.view.View
-import android.view.ViewGroup
 import com.aliucord.Utils
 import com.aliucord.api.SettingsAPI
-import com.aliucord.widgets.LinearLayout
-import com.discord.app.AppBottomSheet
-import com.discord.utilities.color.ColorCompat
-import com.discord.views.CheckedSetting
-import com.discord.views.RadioManager
-import com.lytefast.flexinput.R
+import com.aliucord.fragments.SettingsPage
+import com.aliucord.views.Button
+import com.aliucord.views.TextInput
 
-class PluginSettings(private val settingsAPI: SettingsAPI) : AppBottomSheet() {
+class PluginSettings(
+    private val settingsAPI: SettingsAPI
+) : SettingsPage() {
 
-    override fun getContentViewResId() = 0
+    @SuppressLint("SetTextI18n")
+    override fun onViewBound(view: View) {
+        super.onViewBound(view)
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val context = inflater.context
+        val context = requireContext()
 
-        val layout = LinearLayout(context).apply {
-            setBackgroundColor(ColorCompat.getThemedColor(context, R.b.colorBackgroundPrimary))
+        setActionBarTitle("NitroSpoof")
+
+        val textInput = TextInput(context).apply {
+            hint = "Emote Size (leave empty for discord default)"
+            editText?.setText(settingsAPI.getString(EMOTE_SIZE_KEY, EMOTE_SIZE_DEFAULT).toString())
+            editText?.inputType = InputType.TYPE_CLASS_NUMBER
+            editText?.maxLines = 1
         }
 
-        val radios = listOf(
-            "Big (64x64)",
-            "Medium (40x40)",
-            "Small (32x32)",
-        ).map {
-            Utils.createCheckedSetting(context, CheckedSetting.ViewType.RADIO, it, null)
-        }
-
-        val key = "emoteSize"
-        val radioManager = RadioManager(radios)
-        val radioSize = radios.size
-        val savedSize = settingsAPI.getInt(key, EmoteSize.FORTY.size)
-        for (i in 0 until radioSize) {
-            val radio = radios[i]
-            radio.e {
-                settingsAPI.setInt(key, EmoteSize.values()[i].size)
-                radioManager.a(radio)
-            }
-            layout.addView(radio)
-            if (radio.k.a().text.contains(savedSize.toString())) {
-                radioManager.a(radio)
+        val saveButton = Button(context).apply {
+            text = "Save"
+            setOnClickListener {
+                settingsAPI.setString(EMOTE_SIZE_KEY, textInput.editText?.text.toString())
+                Utils.showToast(context, "Successfully saved!")
+                close()
             }
         }
-        return layout
+
+        addView(textInput)
+        addView(saveButton)
     }
 }
