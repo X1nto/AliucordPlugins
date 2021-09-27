@@ -3,6 +3,7 @@ package com.aliucord.plugins
 import android.content.Context
 import android.view.View
 import com.aliucord.Utils
+import com.aliucord.annotations.AliucordPlugin
 import com.aliucord.entities.Plugin
 import com.aliucord.patcher.PinePatchFn
 import com.aliucord.plugins.attachmentutils.AttachmentContextMenu
@@ -12,15 +13,8 @@ import com.discord.databinding.WidgetChatListAdapterItemAttachmentBinding
 import com.discord.utilities.textprocessing.MessageRenderContext
 import com.discord.widgets.chat.list.adapter.WidgetChatListAdapterItemAttachment
 
+@AliucordPlugin
 class AttachmentUtils : Plugin() {
-
-    override fun getManifest() =
-        Manifest().apply {
-            authors = arrayOf(Manifest.Author("Xinto", 423915768191647755L))
-            description = "Adds a context menu to attachments."
-            version = "1.0.0"
-            updateUrl = "https://raw.githubusercontent.com/X1nto/AliucordPlugins/builds/updater.json"
-        }
 
     override fun start(context: Context?) {
         patcher.patch(

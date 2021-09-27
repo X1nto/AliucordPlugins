@@ -2,14 +2,14 @@ package com.aliucord.plugins
 
 import android.content.Context
 import com.aliucord.Http
+import com.aliucord.annotations.AliucordPlugin
 import com.aliucord.api.CommandsAPI.CommandResult
 import com.aliucord.entities.CommandContext
 import com.aliucord.entities.MessageEmbedBuilder
 import com.aliucord.entities.Plugin
-import com.aliucord.entities.Plugin.Manifest.Author
 import com.aliucord.plugins.lyrics.Data
 import com.aliucord.plugins.lyrics.ResponseModel
-import com.aliucord.utils.RxUtils
+import com.aliucord.utils.RxUtils.subscribe
 import com.discord.api.commands.ApplicationCommandType
 import com.discord.models.commands.ApplicationCommandOption
 import com.discord.models.domain.spotify.ModelSpotifyTrack
@@ -18,19 +18,11 @@ import com.discord.utilities.spotify.SpotifyApiClient
 import rx.Subscriber
 import java.util.*
 
+@AliucordPlugin
 class Lyrics : Plugin() {
 
     private val baseUrl = "https://lyrics-api.powercord.dev/lyrics?input="
     private val maxMessageLength = 2000
-
-    override fun getManifest() =
-        Manifest().apply {
-            authors = arrayOf(Author("Xinto", 423915768191647755L))
-            description = "Get lyrics to a specific song."
-            version = "1.3.0"
-            updateUrl ="https://raw.githubusercontent.com/X1nto/AliucordPlugins/builds/updater.json"
-        }
-
 
     override fun start(context: Context) {
         val songNameArg = ApplicationCommandOption(
@@ -73,8 +65,7 @@ class Lyrics : Plugin() {
                     }
 
                 //This sucks so much
-                RxUtils.subscribe(
-                    spotifyApiClient.spotifyTrack,
+                spotifyApiClient.spotifyTrack.subscribe(
                     object : Subscriber<ModelSpotifyTrack?>() {
                         override fun onCompleted() {}
                         override fun onError(th: Throwable) {
@@ -85,7 +76,8 @@ class Lyrics : Plugin() {
                             if (modelSpotifyTrack == null) return
                             songName = "${modelSpotifyTrack.artists[0].name} ${modelSpotifyTrack.name}"
                         }
-                    })
+                    }
+                )
             }
 
             //don't fetch anything until songName is not null

@@ -1,3 +1,4 @@
+import com.aliucord.gradle.AliucordExtension
 import com.android.build.gradle.BaseExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -8,8 +9,8 @@ buildscript {
         maven("https://jitpack.io")
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:7.0.1")
-        classpath("com.github.Aliucord:gradle:main-SNAPSHOT")
+        classpath("com.android.tools.build:gradle:7.0.2")
+        classpath("com.github.Aliucord:gradle:resources-SNAPSHOT")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.30")
     }
 }
@@ -22,12 +23,25 @@ allprojects {
     }
 }
 
-fun Project.android(configuration: BaseExtension.() -> Unit) = extensions.getByName<BaseExtension>("android").configuration()
+fun Project.aliucord(
+    configuration: AliucordExtension.() -> Unit
+) = extensions.getByName<AliucordExtension>("aliucord").configuration()
+
+fun Project.android(
+    configuration: BaseExtension.() -> Unit
+) = extensions.getByName<BaseExtension>("android").configuration()
 
 subprojects {
     apply(plugin = "com.android.library")
     apply(plugin = "com.aliucord.gradle")
     apply(plugin = "kotlin-android")
+
+    aliucord {
+        val baseGithubUrl = "https://raw.githubusercontent.com/X1nto/AliucordPlugins"
+        author("Xinto", 423915768191647755L)
+        updateUrl.set("$baseGithubUrl/builds/updater.json")
+        buildUrl.set("$baseGithubUrl/builds/%s.zip")
+    }
 
     android {
         compileSdkVersion(30)
