@@ -4,7 +4,7 @@ import com.aliucord.plugins.layoutcontroller.patchers.base.BasePatcher
 import com.aliucord.plugins.layoutcontroller.util.Description
 import com.aliucord.plugins.layoutcontroller.util.Key
 import com.aliucord.plugins.layoutcontroller.util.hideCompletely
-import com.discord.databinding.WidgetChannelMembersListItemAddBinding
+import com.discord.databinding.WidgetChannelMembersListItemAddOrLeaveBinding
 import com.discord.widgets.channels.memberlist.adapter.ChannelMembersListViewHolderAdd
 import top.canyie.pine.Pine.CallFrame
 
@@ -25,7 +25,7 @@ class MembersInviteButtonPatch : BasePatcher(
             .getDeclaredField("binding")
             .let {
                 it.isAccessible = true
-                it.get(thisObject) as WidgetChannelMembersListItemAddBinding
+                it.get(thisObject) as WidgetChannelMembersListItemAddOrLeaveBinding
             }
 
         binding.a.hideCompletely()
