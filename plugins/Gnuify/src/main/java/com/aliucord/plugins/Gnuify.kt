@@ -1,12 +1,11 @@
 package com.aliucord.plugins
 
 import android.content.Context
+import com.aliucord.Utils
 import com.aliucord.annotations.AliucordPlugin
 import com.aliucord.entities.Plugin
-import com.aliucord.entities.Plugin.Manifest.Author
 import com.aliucord.api.CommandsAPI.CommandResult
 import com.discord.api.commands.ApplicationCommandType
-import com.discord.models.commands.ApplicationCommandOption
 import java.lang.StringBuilder
 
 @AliucordPlugin
@@ -15,15 +14,11 @@ class Gnuify : Plugin() {
     private val prefix = "GNU/"
 
     override fun start(context: Context) {
-        val argument = ApplicationCommandOption(
-            ApplicationCommandType.STRING,
-            "sentence",
-            "A sentence to Gnuify",
-            null,
-            true,
-            true,
-            null,
-            null
+        val argument = Utils.createCommandOption(
+            type = ApplicationCommandType.STRING,
+            name = "sentence",
+            description = "Sentence to GNUify",
+            required = true,
         )
         commands.registerCommand(
             "gnuify",

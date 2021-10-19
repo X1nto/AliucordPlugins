@@ -2,6 +2,7 @@ package com.aliucord.plugins
 
 import android.content.Context
 import com.aliucord.Http
+import com.aliucord.Utils
 import com.aliucord.annotations.AliucordPlugin
 import com.aliucord.api.CommandsAPI.CommandResult
 import com.aliucord.entities.CommandContext
@@ -11,7 +12,6 @@ import com.aliucord.plugins.lyrics.Data
 import com.aliucord.plugins.lyrics.ResponseModel
 import com.aliucord.utils.RxUtils.subscribe
 import com.discord.api.commands.ApplicationCommandType
-import com.discord.models.commands.ApplicationCommandOption
 import com.discord.models.domain.spotify.ModelSpotifyTrack
 import com.discord.stores.StoreStream
 import com.discord.utilities.spotify.SpotifyApiClient
@@ -25,26 +25,16 @@ class Lyrics : Plugin() {
     private val maxMessageLength = 2000
 
     override fun start(context: Context) {
-        val songNameArg = ApplicationCommandOption(
-            ApplicationCommandType.STRING,
-            "name",
-            "The song name to search lyrics for",
-            null,
-            false,
-            false,
-            null,
-            null
+        val songNameArg = Utils.createCommandOption(
+            type = ApplicationCommandType.STRING,
+            name = "name",
+            description = "The song name to search lyrics for",
         )
 
-        val shouldSendArg = ApplicationCommandOption(
-            ApplicationCommandType.BOOLEAN,
-            "send",
-            "To send output in the chat or not",
-            null,
-            false,
-            false,
-            null,
-            null
+        val shouldSendArg = Utils.createCommandOption(
+            type = ApplicationCommandType.STRING,
+            name = "send",
+            description = "Whether to send the lyrics to chat",
         )
 
         commands.registerCommand(

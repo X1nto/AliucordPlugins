@@ -1,26 +1,21 @@
 package com.aliucord.plugins
 
 import android.content.Context
+import com.aliucord.Utils
 import com.aliucord.annotations.AliucordPlugin
 import com.aliucord.entities.Plugin
-import com.aliucord.entities.Plugin.Manifest.Author
 import com.aliucord.api.CommandsAPI.CommandResult
 import com.discord.api.commands.ApplicationCommandType
-import com.discord.models.commands.ApplicationCommandOption
 
 @AliucordPlugin
 class Stallman : Plugin() {
 
     override fun start(context: Context) {
-        val argument = ApplicationCommandOption(
-            ApplicationCommandType.STRING,
-            "phrase",
-            "The phrase to replace \"Linux\" with",
-            null,
-            true,
-            true,
-            null,
-            null
+        val argument = Utils.createCommandOption(
+            type = ApplicationCommandType.STRING,
+            name = "phrase",
+            description = "The phrase to replace \"Linux\" with",
+            required = true,
         )
         commands.registerCommand(
             "stallman",
