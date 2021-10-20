@@ -11,7 +11,8 @@ val patches = arrayOf(
     MembersInviteButtonPatch(),
     NitroGiftButtonPatch(),
     NotesPatch(),
-    UntrustedDomainPatch()
+    UntrustedDomainPatch(),
+    WelcomeButtonPatch()
 )
 
 fun View.hideCompletely() {
