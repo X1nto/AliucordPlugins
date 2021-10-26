@@ -4,6 +4,7 @@ import com.aliucord.plugins.layoutcontroller.patchers.base.BasePatcher
 import com.aliucord.plugins.layoutcontroller.util.Description
 import com.aliucord.plugins.layoutcontroller.util.Key
 import com.discord.stores.StoreMaskedLinks
+import de.robv.android.xposed.XC_MethodHook
 import top.canyie.pine.Pine.CallFrame
 
 class UntrustedDomainPatch : BasePatcher(
@@ -15,7 +16,7 @@ class UntrustedDomainPatch : BasePatcher(
         String::class.java
     )
 ) {
-    override fun patchBody(callFrame: CallFrame) {
+    override fun patchBody(callFrame: XC_MethodHook.MethodHookParam) {
         callFrame.result = true
     }
 }

@@ -1,5 +1,7 @@
 package com.aliucord.plugins.layoutcontroller.patchers
 
+import android.widget.Button
+import com.aliucord.Utils
 import com.aliucord.plugins.layoutcontroller.patchers.base.BasePatcher
 import com.aliucord.plugins.layoutcontroller.util.Description
 import com.aliucord.plugins.layoutcontroller.util.Key
@@ -7,6 +9,7 @@ import com.aliucord.plugins.layoutcontroller.util.hideCompletely
 import com.discord.databinding.WidgetUserSheetBinding
 import com.discord.widgets.user.usersheet.WidgetUserSheet
 import com.discord.widgets.user.usersheet.WidgetUserSheetViewModel
+import de.robv.android.xposed.XC_MethodHook
 import top.canyie.pine.Pine.CallFrame
 
 class CallButtonsPatch : BasePatcher(
@@ -17,18 +20,21 @@ class CallButtonsPatch : BasePatcher(
         WidgetUserSheetViewModel.ViewState.Loaded::class.java
     )
 ) {
-    override fun patchBody(callFrame: CallFrame) {
+    private val callButtonId = Utils.getResId("user_sheet_call_action_button", "id")
+    private val videoButtonId = Utils.getResId("user_sheet_video_action_button", "id")
+
+    override fun patchBody(callFrame: XC_MethodHook.MethodHookParam) {
         val thisObject = callFrame.thisObject as WidgetUserSheet
 
-        val binding = thisObject.javaClass
+        val root = thisObject.javaClass
             .getDeclaredMethod("getBinding")
             .let {
                 it.isAccessible = true
                 it.invoke(thisObject) as WidgetUserSheetBinding
-            }
+            }.root
 
-        binding.i.hideCompletely() //Voice call button
-        binding.K.hideCompletely() //Video call button
+        root.findViewById<Button>(callButtonId).hideCompletely()
+        root.findViewById<Button>(videoButtonId).hideCompletely()
         callFrame.result = callFrame.result
     }
 }

@@ -6,6 +6,7 @@ import com.aliucord.plugins.layoutcontroller.util.Key
 import com.aliucord.plugins.layoutcontroller.util.hideCompletely
 import com.discord.widgets.channels.list.WidgetChannelsListAdapter
 import com.discord.widgets.channels.list.items.ChannelListItem
+import de.robv.android.xposed.XC_MethodHook
 import top.canyie.pine.Pine.CallFrame
 
 class ChannelsInviteButtonPatch : BasePatcher(
@@ -17,7 +18,7 @@ class ChannelsInviteButtonPatch : BasePatcher(
         ChannelListItem::class.java
     )
 ) {
-    override fun patchBody(callFrame: CallFrame) {
+    override fun patchBody(callFrame: XC_MethodHook.MethodHookParam) {
         val itemView = (callFrame.thisObject as WidgetChannelsListAdapter.ItemInvite).itemView
         itemView.hideCompletely()
         callFrame.result = callFrame.result
