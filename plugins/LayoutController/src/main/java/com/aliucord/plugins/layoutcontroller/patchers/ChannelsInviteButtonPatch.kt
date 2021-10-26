@@ -7,7 +7,6 @@ import com.aliucord.plugins.layoutcontroller.util.hideCompletely
 import com.discord.widgets.channels.list.WidgetChannelsListAdapter
 import com.discord.widgets.channels.list.items.ChannelListItem
 import de.robv.android.xposed.XC_MethodHook
-import top.canyie.pine.Pine.CallFrame
 
 class ChannelsInviteButtonPatch : BasePatcher(
     key = Key.INVITE_BUTTON_CHANNELS_KEY,

@@ -7,7 +7,6 @@ import com.aliucord.plugins.layoutcontroller.util.hideCompletely
 import com.discord.databinding.WidgetChannelMembersListItemAddOrLeaveBinding
 import com.discord.widgets.channels.memberlist.adapter.ChannelMembersListViewHolderAdd
 import de.robv.android.xposed.XC_MethodHook
-import top.canyie.pine.Pine.CallFrame
 
 class MembersInviteButtonPatch : BasePatcher(
     key = Key.INVITE_BUTTON_MEMBERS_KEY,

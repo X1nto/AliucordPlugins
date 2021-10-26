@@ -5,7 +5,6 @@ import com.aliucord.plugins.layoutcontroller.util.Description
 import com.aliucord.plugins.layoutcontroller.util.Key
 import com.discord.stores.StoreMaskedLinks
 import de.robv.android.xposed.XC_MethodHook
-import top.canyie.pine.Pine.CallFrame
 
 class UntrustedDomainPatch : BasePatcher(
     key = Key.UNTRUSTED_DOMAINS_KEY,

@@ -7,7 +7,6 @@ import com.aliucord.plugins.layoutcontroller.util.Key
 import com.lytefast.flexinput.fragment.FlexInputFragment
 import com.lytefast.flexinput.fragment.`FlexInputFragment$d`
 import de.robv.android.xposed.XC_MethodHook
-import top.canyie.pine.Pine.CallFrame
 
 class NitroGiftButtonPatch : BasePatcher(
     key = Key.GIFT_BUTTON_KEY,

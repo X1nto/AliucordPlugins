@@ -5,7 +5,6 @@ import com.aliucord.plugins.layoutcontroller.util.*
 import com.discord.widgets.user.usersheet.WidgetUserSheet
 import com.discord.widgets.user.usersheet.WidgetUserSheetViewModel
 import de.robv.android.xposed.XC_MethodHook
-import top.canyie.pine.Pine.CallFrame
 
 class NotesPatch : BasePatcher(
     key = Key.NOTES_KEY,
