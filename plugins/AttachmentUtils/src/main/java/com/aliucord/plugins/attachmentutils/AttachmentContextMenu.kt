@@ -29,7 +29,7 @@ class AttachmentContextMenu : BottomSheet() {
             setCompoundDrawablesRelativeWithIntrinsicBounds(iconDrawable, null, null, null)
             setOnClickListener {
                 Utils.setClipboard(attachmentProxyUrl, attachmentProxyUrl)
-                Utils.showToast(context, "Copied the URL to clipboard")
+                Utils.showToast("Copied the URL to clipboard")
             }
         }
         linearLayout.addView(textView)

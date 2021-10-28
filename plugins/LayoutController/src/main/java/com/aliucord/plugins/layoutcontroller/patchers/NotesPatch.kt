@@ -1,10 +1,12 @@
 package com.aliucord.plugins.layoutcontroller.patchers
 
 import com.aliucord.plugins.layoutcontroller.patchers.base.BasePatcher
-import com.aliucord.plugins.layoutcontroller.util.*
+import com.aliucord.plugins.layoutcontroller.util.Description
+import com.aliucord.plugins.layoutcontroller.util.Key
+import com.aliucord.plugins.layoutcontroller.util.hideCompletely
 import com.discord.widgets.user.usersheet.WidgetUserSheet
 import com.discord.widgets.user.usersheet.WidgetUserSheetViewModel
-import top.canyie.pine.Pine.CallFrame
+import de.robv.android.xposed.XC_MethodHook
 
 class NotesPatch : BasePatcher(
     key = Key.NOTES_KEY,
@@ -14,7 +16,7 @@ class NotesPatch : BasePatcher(
         WidgetUserSheetViewModel.ViewState.Loaded::class.java
     )
 ) {
-    override fun patchBody(callFrame: CallFrame) {
+    override fun patchBody(callFrame: XC_MethodHook.MethodHookParam) {
         val binding = WidgetUserSheet.`access$getBinding$p`(callFrame.thisObject as WidgetUserSheet)
         
         binding.w.hideCompletely()

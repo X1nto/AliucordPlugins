@@ -32,7 +32,7 @@ class PluginSettings(
             text = "Save"
             setOnClickListener {
                 settingsAPI.setString(EMOTE_SIZE_KEY, textInput.editText?.text.toString())
-                Utils.showToast(context, "Successfully saved!")
+                Utils.showToast("Successfully saved!")
                 close()
             }
         }

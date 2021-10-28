@@ -8,7 +8,7 @@ import com.aliucord.plugins.layoutcontroller.util.Key
 import com.discord.databinding.WidgetChannelsListBinding
 import com.discord.widgets.channels.list.WidgetChannelListModel
 import com.discord.widgets.channels.list.WidgetChannelsList
-import top.canyie.pine.Pine.CallFrame
+import de.robv.android.xposed.XC_MethodHook
 
 class DmSearchBoxPatch : BasePatcher(
     key = Key.SEARCH_BOX_KEY,
@@ -19,7 +19,7 @@ class DmSearchBoxPatch : BasePatcher(
     )
 ) {
 
-    override fun patchBody(callFrame: CallFrame) {
+    override fun patchBody(callFrame: XC_MethodHook.MethodHookParam) {
         val thisObject = callFrame.thisObject
         val binding = thisObject.javaClass
             .getDeclaredMethod("getBinding")

@@ -3,8 +3,8 @@ package com.aliucord.plugins
 import android.content.Context
 import com.aliucord.annotations.AliucordPlugin
 import com.aliucord.entities.Plugin
-import com.aliucord.patcher.PineInsteadFn
-import com.aliucord.patcher.PinePatchFn
+import com.aliucord.patcher.Hook
+import com.aliucord.patcher.InsteadHook
 import com.aliucord.plugins.nitrospoof.EMOTE_SIZE_DEFAULT
 import com.aliucord.plugins.nitrospoof.EMOTE_SIZE_KEY
 import com.aliucord.plugins.nitrospoof.PluginSettings
@@ -13,7 +13,7 @@ import com.discord.models.domain.emoji.ModelEmojiCustom
 import com.discord.utilities.mg_recycler.MGRecyclerDataPayload
 import com.discord.widgets.chat.input.emoji.EmojiPickerViewModel
 import com.discord.widgets.chat.input.emoji.WidgetEmojiAdapter
-import top.canyie.pine.Pine
+import de.robv.android.xposed.XC_MethodHook
 import java.lang.reflect.Field
 
 @AliucordPlugin
@@ -24,19 +24,19 @@ class NitroSpoof : Plugin() {
     override fun start(context: Context) {
         patcher.patch(
             ModelEmojiCustom::class.java.getDeclaredMethod("getChatInputText"),
-            PinePatchFn { getChatReplacement(it) }
+            Hook { getChatReplacement(it) }
         )
         patcher.patch(
             ModelEmojiCustom::class.java.getDeclaredMethod("getMessageContentReplacement"),
-            PinePatchFn { getChatReplacement(it) }
+            Hook { getChatReplacement(it) }
         )
         patcher.patch(
             ModelEmojiCustom::class.java.getDeclaredMethod("isUsable"),
-            PineInsteadFn { true }
+            InsteadHook { true }
         )
         patcher.patch(
             ModelEmojiCustom::class.java.getDeclaredMethod("isAvailable"),
-            PineInsteadFn { true }
+            InsteadHook { true }
         )
 
         //TL;DR: THIS IS INTENTIONAL!!!!
@@ -46,13 +46,13 @@ class NitroSpoof : Plugin() {
         //Hence we apply an "empty patch" so that NitroSpoof works again. :P
         patcher.patch(
             WidgetEmojiAdapter.EmojiViewHolder::class.java.getDeclaredMethod("onConfigure", Int::class.javaPrimitiveType, MGRecyclerDataPayload::class.java),
-            PinePatchFn { callFrame ->
+            Hook { callFrame ->
                 callFrame.result = callFrame.result
             }
         )
         patcher.patch(
             EmojiPickerViewModel::class.java.getDeclaredMethod("onEmojiSelected", Emoji::class.java, Function1::class.java),
-            PinePatchFn { callFrame ->
+            Hook { callFrame ->
                 callFrame.result = callFrame.result
             }
         )
@@ -62,7 +62,7 @@ class NitroSpoof : Plugin() {
         patcher.unpatchAll()
     }
 
-    private fun getChatReplacement(callFrame: Pine.CallFrame) {
+    private fun getChatReplacement(callFrame: XC_MethodHook.MethodHookParam) {
         val thisObject = callFrame.thisObject
         val isUsable = thisObject.getCachedField<Boolean>("isUsable")
 

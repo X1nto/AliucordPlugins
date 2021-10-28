@@ -1,2 +1,2 @@
 description = "Lets you control the discord mobile layout."
-version = "1.0.0"
+version = "1.0.1"

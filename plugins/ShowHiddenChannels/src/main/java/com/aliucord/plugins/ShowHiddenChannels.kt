@@ -8,7 +8,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.aliucord.Constants
 import com.aliucord.annotations.AliucordPlugin
 import com.aliucord.entities.Plugin
-import com.aliucord.patcher.PinePatchFn
+import com.aliucord.patcher.Hook
 import com.aliucord.wrappers.ChannelWrapper
 import com.aliucord.wrappers.ChannelWrapper.Companion.id
 import com.aliucord.wrappers.ChannelWrapper.Companion.name
@@ -25,7 +25,7 @@ import com.discord.widgets.channels.list.`WidgetChannelListModel$Companion$guild
 import com.discord.widgets.channels.list.items.ChannelListItem
 import com.discord.widgets.channels.list.items.ChannelListItemTextChannel
 import com.lytefast.flexinput.R
-import top.canyie.pine.Pine.CallFrame
+import de.robv.android.xposed.XC_MethodHook
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -47,10 +47,11 @@ class ShowHiddenChannels : Plugin() {
         patcher.patch(
             `WidgetChannelListModel$Companion$guildListBuilder$$inlined$forEach$lambda$3`::class.java
                 .getDeclaredMethod("invoke"),
-            PinePatchFn { callFrame: CallFrame ->
+            Hook { callFrame: XC_MethodHook.MethodHookParam ->
                 val thisObject = callFrame.thisObject
                 val ret = callFrame.result
-                val guildListBuilder = thisObject as `WidgetChannelListModel$Companion$guildListBuilder$$inlined$forEach$lambda$3`
+                val guildListBuilder =
+                    thisObject as `WidgetChannelListModel$Companion$guildListBuilder$$inlined$forEach$lambda$3`
                 val channel = guildListBuilder.`$channel`
                 val channelName = channel.name
 
@@ -62,12 +63,16 @@ class ShowHiddenChannels : Plugin() {
                         renameChannel(channel, channelName.removeSuffix(suffix))
                     }
                     callFrame.result = ret
-                    return@PinePatchFn
+                    return@Hook
                 }
 
-                if (PermissionUtils.INSTANCE.hasAccess(guildListBuilder.`$channel`, guildListBuilder.`$permissions`)) {
+                if (PermissionUtils.INSTANCE.hasAccess(
+                        guildListBuilder.`$channel`,
+                        guildListBuilder.`$permissions`
+                    )
+                ) {
                     callFrame.result = null
-                    return@PinePatchFn
+                    return@Hook
                 }
 
                 val textLikeChannelData =
@@ -83,7 +88,7 @@ class ShowHiddenChannels : Plugin() {
                 //Check if category is collapsed
                 if (textLikeChannelData == null || textLikeChannelData.hide) {
                     callFrame.result = null
-                    return@PinePatchFn
+                    return@Hook
                 }
                 if (isChannelVisible(channelName)) {
                     renameChannel(channel, channelName + suffix)
@@ -111,7 +116,7 @@ class ShowHiddenChannels : Plugin() {
                     Int::class.javaPrimitiveType,
                     ChannelListItem::class.java
                 ),
-            PinePatchFn { callFrame: CallFrame ->
+            Hook { callFrame: XC_MethodHook.MethodHookParam ->
                 val thisObject = callFrame.thisObject as WidgetChannelsListAdapter.ItemChannelText
                 val textChannel = callFrame.args[1] as ChannelListItemTextChannel
                 val channel = textChannel.channel
@@ -119,7 +124,7 @@ class ShowHiddenChannels : Plugin() {
 
                 if (isChannelVisible(channelName)) {
                     callFrame.result = null
-                    return@PinePatchFn
+                    return@Hook
                 }
 
                 val binding = thisObject.javaClass
@@ -153,7 +158,7 @@ class ShowHiddenChannels : Plugin() {
                     "configureUI",
                     WidgetChannelsListItemChannelActions.Model::class.java
                 ),
-            PinePatchFn { callFrame: CallFrame ->
+            Hook { callFrame: XC_MethodHook.MethodHookParam ->
                 val thisObject = callFrame.thisObject
                 val model = callFrame.args[0] as WidgetChannelsListItemChannelActions.Model
                 val channel = model.channel
@@ -161,7 +166,7 @@ class ShowHiddenChannels : Plugin() {
 
                 if (isChannelVisible(channelWrapper.name)) {
                     callFrame.result = null
-                    return@PinePatchFn
+                    return@Hook
                 }
 
                 val binding = thisObject.javaClass

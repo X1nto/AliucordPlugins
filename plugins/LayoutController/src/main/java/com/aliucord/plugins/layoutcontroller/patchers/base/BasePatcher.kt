@@ -2,9 +2,9 @@ package com.aliucord.plugins.layoutcontroller.patchers.base
 
 import com.aliucord.api.PatcherAPI
 import com.aliucord.api.SettingsAPI
-import com.aliucord.patcher.PinePatchFn
+import com.aliucord.patcher.Hook
 import com.aliucord.plugins.layoutcontroller.util.PREFERENCE_DEFAULT_VALUE
-import top.canyie.pine.Pine.CallFrame
+import de.robv.android.xposed.XC_MethodHook
 import java.lang.reflect.Member
 
 abstract class BasePatcher(
@@ -14,7 +14,7 @@ abstract class BasePatcher(
 ) {
 
     fun patch(patcher: PatcherAPI, sets: SettingsAPI) {
-        patcher.patch(classMember, PinePatchFn { callFrame ->
+        patcher.patch(classMember, Hook { callFrame ->
             if (sets.getBool(key, PREFERENCE_DEFAULT_VALUE)) {
                 patchBody(callFrame)
             } else {
@@ -23,5 +23,5 @@ abstract class BasePatcher(
         })
     }
 
-    abstract fun patchBody(callFrame: CallFrame)
+    abstract fun patchBody(callFrame: XC_MethodHook.MethodHookParam)
 }

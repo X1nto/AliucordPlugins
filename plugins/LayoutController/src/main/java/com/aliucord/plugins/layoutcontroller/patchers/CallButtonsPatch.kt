@@ -1,5 +1,6 @@
 package com.aliucord.plugins.layoutcontroller.patchers
 
+import android.annotation.SuppressLint
 import com.aliucord.plugins.layoutcontroller.patchers.base.BasePatcher
 import com.aliucord.plugins.layoutcontroller.util.Description
 import com.aliucord.plugins.layoutcontroller.util.Key
@@ -7,7 +8,7 @@ import com.aliucord.plugins.layoutcontroller.util.hideCompletely
 import com.discord.databinding.WidgetUserSheetBinding
 import com.discord.widgets.user.usersheet.WidgetUserSheet
 import com.discord.widgets.user.usersheet.WidgetUserSheetViewModel
-import top.canyie.pine.Pine.CallFrame
+import de.robv.android.xposed.XC_MethodHook
 
 class CallButtonsPatch : BasePatcher(
     key = Key.CALL_BUTTONS_KEY,
@@ -17,7 +18,8 @@ class CallButtonsPatch : BasePatcher(
         WidgetUserSheetViewModel.ViewState.Loaded::class.java
     )
 ) {
-    override fun patchBody(callFrame: CallFrame) {
+    @SuppressLint("SetTextI18n")
+    override fun patchBody(callFrame: XC_MethodHook.MethodHookParam) {
         val thisObject = callFrame.thisObject as WidgetUserSheet
 
         val binding = thisObject.javaClass
@@ -28,7 +30,7 @@ class CallButtonsPatch : BasePatcher(
             }
 
         binding.i.hideCompletely() //Voice call button
-        binding.K.hideCompletely() //Video call button
+        binding.L.hideCompletely() // Video call button
         callFrame.result = callFrame.result
     }
 }

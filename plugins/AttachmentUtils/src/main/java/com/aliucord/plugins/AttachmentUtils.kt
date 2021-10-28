@@ -5,7 +5,7 @@ import android.view.View
 import com.aliucord.Utils
 import com.aliucord.annotations.AliucordPlugin
 import com.aliucord.entities.Plugin
-import com.aliucord.patcher.PinePatchFn
+import com.aliucord.patcher.Hook
 import com.aliucord.plugins.attachmentutils.AttachmentContextMenu
 import com.aliucord.wrappers.messages.AttachmentWrapper
 import com.discord.api.message.attachment.MessageAttachment
@@ -23,7 +23,7 @@ class AttachmentUtils : Plugin() {
                 MessageAttachment::class.java,
                 MessageRenderContext::class.java
             ),
-            PinePatchFn { callFrame ->
+            Hook { callFrame ->
                 val thisObject = callFrame.thisObject as WidgetChatListAdapterItemAttachment
                 val binding = thisObject::class.java
                     .getDeclaredField("binding")

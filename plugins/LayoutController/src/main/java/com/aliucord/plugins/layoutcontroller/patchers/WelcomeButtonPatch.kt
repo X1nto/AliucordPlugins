@@ -7,7 +7,7 @@ import com.aliucord.plugins.layoutcontroller.util.Key
 import com.discord.databinding.WidgetChatListAdapterItemSystemBinding
 import com.discord.widgets.chat.list.adapter.WidgetChatListAdapterItemSystemMessage
 import com.discord.widgets.chat.list.entries.ChatListEntry
-import top.canyie.pine.Pine.CallFrame
+import de.robv.android.xposed.XC_MethodHook
 
 class WelcomeButtonPatch : BasePatcher(
     key = Key.WELCOME_BUTTON_KEY,
@@ -18,7 +18,7 @@ class WelcomeButtonPatch : BasePatcher(
         ChatListEntry::class.java
     ),
 ) {
-    override fun patchBody(callFrame: CallFrame) {
+    override fun patchBody(callFrame: XC_MethodHook.MethodHookParam) {
         val thisObject = callFrame.thisObject as WidgetChatListAdapterItemSystemMessage
         thisObject.javaClass
             .getDeclaredField("binding")

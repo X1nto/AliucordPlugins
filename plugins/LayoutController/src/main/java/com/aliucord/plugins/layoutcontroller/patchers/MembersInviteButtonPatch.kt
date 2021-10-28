@@ -6,7 +6,7 @@ import com.aliucord.plugins.layoutcontroller.util.Key
 import com.aliucord.plugins.layoutcontroller.util.hideCompletely
 import com.discord.databinding.WidgetChannelMembersListItemAddOrLeaveBinding
 import com.discord.widgets.channels.memberlist.adapter.ChannelMembersListViewHolderAdd
-import top.canyie.pine.Pine.CallFrame
+import de.robv.android.xposed.XC_MethodHook
 
 class MembersInviteButtonPatch : BasePatcher(
     key = Key.INVITE_BUTTON_MEMBERS_KEY,
@@ -18,7 +18,7 @@ class MembersInviteButtonPatch : BasePatcher(
     )
 ) {
 
-    override fun patchBody(callFrame: CallFrame) {
+    override fun patchBody(callFrame: XC_MethodHook.MethodHookParam) {
         val thisObject = callFrame.thisObject
 
         val binding = thisObject.javaClass
