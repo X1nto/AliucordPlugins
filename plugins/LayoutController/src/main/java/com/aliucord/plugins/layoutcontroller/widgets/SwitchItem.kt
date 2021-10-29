@@ -2,6 +2,7 @@ package com.aliucord.plugins.layoutcontroller.widgets
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.widget.LinearLayout
 import com.aliucord.Utils
 import com.aliucord.api.SettingsAPI
 import com.aliucord.plugins.layoutcontroller.util.PREFERENCE_DEFAULT_VALUE
@@ -22,7 +23,7 @@ class SwitchItem(
     init {
         radius = DimenUtils.defaultPadding.toFloat()
         setCardBackgroundColor(ColorCompat.getThemedColor(context, R.b.colorBackgroundSecondary))
-        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+        layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
 
         Utils.createCheckedSetting(context, CheckedSetting.ViewType.SWITCH, description, null)
             .apply {

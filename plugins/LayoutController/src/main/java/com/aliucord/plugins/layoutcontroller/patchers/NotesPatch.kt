@@ -1,7 +1,9 @@
 package com.aliucord.plugins.layoutcontroller.patchers
 
 import com.aliucord.plugins.layoutcontroller.patchers.base.BasePatcher
-import com.aliucord.plugins.layoutcontroller.util.*
+import com.aliucord.plugins.layoutcontroller.util.Description
+import com.aliucord.plugins.layoutcontroller.util.Key
+import com.aliucord.plugins.layoutcontroller.util.hideCompletely
 import com.discord.widgets.user.usersheet.WidgetUserSheet
 import com.discord.widgets.user.usersheet.WidgetUserSheetViewModel
 import de.robv.android.xposed.XC_MethodHook

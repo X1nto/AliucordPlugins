@@ -18,7 +18,7 @@ class CallButtonsPatch : BasePatcher(
 ) {
     private val callButtonId = Utils.getResId("user_sheet_call_action_button", "id")
     private val videoButtonId = Utils.getResId("user_sheet_video_action_button", "id")
-
+    
     override fun patchBody(callFrame: XC_MethodHook.MethodHookParam) {
         val thisObject = callFrame.thisObject as WidgetUserSheet
 

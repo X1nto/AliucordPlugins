@@ -1,7 +1,7 @@
 package com.aliucord.plugins.layoutcontroller.util
 
 import android.view.View
-import android.view.ViewGroup
+import android.widget.LinearLayout
 import com.aliucord.plugins.layoutcontroller.patchers.*
 
 val patches = arrayOf(
@@ -12,10 +12,10 @@ val patches = arrayOf(
     NitroGiftButtonPatch(),
     NotesPatch(),
     UntrustedDomainPatch(),
-    WelcomeButtonPatch()
+    WelcomeButtonPatch(),
 )
 
 fun View.hideCompletely() {
     visibility = View.GONE
-    layoutParams = ViewGroup.LayoutParams(0, 0)
+    layoutParams = LinearLayout.LayoutParams(0, 0)
 }
