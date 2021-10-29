@@ -21,7 +21,7 @@ class SwitchItem(
 ) : MaterialCardView(context) {
 
     init {
-        radius = DimenUtils.defaultCardRadius.toFloat()
+        radius = DimenUtils.defaultPadding.toFloat()
         setCardBackgroundColor(ColorCompat.getThemedColor(context, R.b.colorBackgroundSecondary))
         layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
 

@@ -8,9 +8,7 @@ import de.robv.android.xposed.XC_MethodHook
 import java.lang.reflect.Member
 
 abstract class BasePatcher(
-    val key: String,
-    val description: String,
-    private val classMember: Member
+    val key: String, val description: String, private val classMember: Member
 ) {
 
     fun patch(patcher: PatcherAPI, sets: SettingsAPI) {

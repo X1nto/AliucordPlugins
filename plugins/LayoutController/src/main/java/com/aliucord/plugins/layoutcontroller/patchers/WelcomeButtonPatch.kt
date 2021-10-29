@@ -13,16 +13,12 @@ class WelcomeButtonPatch : BasePatcher(
     key = Key.WELCOME_BUTTON_KEY,
     description = Description.WELCOME_BUTTON_DESCRIPTION,
     classMember = WidgetChatListAdapterItemSystemMessage::class.java.getDeclaredMethod(
-        "onConfigure",
-        Int::class.javaPrimitiveType,
-        ChatListEntry::class.java
+        "onConfigure", Int::class.javaPrimitiveType, ChatListEntry::class.java
     ),
 ) {
     override fun patchBody(callFrame: XC_MethodHook.MethodHookParam) {
         val thisObject = callFrame.thisObject as WidgetChatListAdapterItemSystemMessage
-        thisObject.javaClass
-            .getDeclaredField("binding")
-            .let { f ->
+        callFrame.thisObject.javaClass.getDeclaredField("binding").let { f ->
                 f.isAccessible = true
                 val binding = f.get(thisObject) as WidgetChatListAdapterItemSystemBinding
                 binding.h.visibility = View.GONE // LinearLayout @id/system_welcome_cta_button
