@@ -8,22 +8,17 @@ import com.aliucord.plugins.layoutcontroller.util.Key
 import com.discord.databinding.WidgetChannelsListBinding
 import com.discord.widgets.channels.list.WidgetChannelListModel
 import com.discord.widgets.channels.list.WidgetChannelsList
-import top.canyie.pine.Pine.CallFrame
+import de.robv.android.xposed.XC_MethodHook
 
 class DmSearchBoxPatch : BasePatcher(
     key = Key.SEARCH_BOX_KEY,
     description = Description.SEARCH_BOX_DESCRIPTION,
-    classMember = WidgetChannelsList::class.java.getDeclaredMethod(
-        "configureUI",
-        WidgetChannelListModel::class.java
-    )
+    classMember = WidgetChannelsList::class.java.getDeclaredMethod("configureUI", WidgetChannelListModel::class.java)
 ) {
 
-    override fun patchBody(callFrame: CallFrame) {
+    override fun patchBody(callFrame: XC_MethodHook.MethodHookParam) {
         val thisObject = callFrame.thisObject
-        val binding = thisObject.javaClass
-            .getDeclaredMethod("getBinding")
-            .let {
+        val binding = thisObject.javaClass.getDeclaredMethod("getBinding").let {
                 it.isAccessible = true
                 it.invoke(thisObject) as WidgetChannelsListBinding
             }

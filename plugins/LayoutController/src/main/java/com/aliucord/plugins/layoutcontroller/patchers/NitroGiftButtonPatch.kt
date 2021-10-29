@@ -6,7 +6,7 @@ import com.aliucord.plugins.layoutcontroller.util.Description
 import com.aliucord.plugins.layoutcontroller.util.Key
 import com.lytefast.flexinput.fragment.FlexInputFragment
 import com.lytefast.flexinput.fragment.`FlexInputFragment$d`
-import top.canyie.pine.Pine.CallFrame
+import de.robv.android.xposed.XC_MethodHook
 
 class NitroGiftButtonPatch : BasePatcher(
     key = Key.GIFT_BUTTON_KEY,
@@ -16,7 +16,7 @@ class NitroGiftButtonPatch : BasePatcher(
         Any::class.java
     )
 ) {
-    override fun patchBody(callFrame: CallFrame) {
+    override fun patchBody(callFrame: XC_MethodHook.MethodHookParam) {
         val fragment = (callFrame.thisObject as `FlexInputFragment$d`).receiver as FlexInputFragment
         val binding = fragment.j() ?: return
         binding.h.visibility = View.GONE

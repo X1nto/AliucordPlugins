@@ -36,7 +36,7 @@ class PluginSettings(
                 val shape = ShapeDrawable(RectShape())
                     .apply {
                         setTint(Color.TRANSPARENT)
-                        intrinsicHeight = DimenUtils.getDefaultPadding()
+                        intrinsicHeight = DimenUtils.defaultPadding
                     }
 
                 val decoration = DividerItemDecoration(
