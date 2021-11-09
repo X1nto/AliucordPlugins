@@ -102,7 +102,9 @@ class ShowHiddenChannels : Plugin() {
                     textLikeChannelData.locked,
                     guildListBuilder.`$channelsWithActiveThreads$inlined`.contains(
                         guildListBuilder.`$channel`.id
-                    )
+                    ),
+                    false,
+                    false
                 )
             }
         )
@@ -210,7 +212,7 @@ class ShowHiddenChannels : Plugin() {
     private fun getThemedTextView(context: Context): TextView {
         val paddingHorizontal = 36
         val paddingVertical = 8
-        return TextView(context, null, 0, R.h.UiKit_TextView_Semibold).apply {
+        return TextView(context, null, 0, R.i.UiKit_TextView_Semibold).apply {
             typeface = ResourcesCompat.getFont(context, Constants.Fonts.whitney_semibold)
             setTextColor(ColorCompat.getThemedColor(context, R.b.colorTextMuted))
             setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical)
