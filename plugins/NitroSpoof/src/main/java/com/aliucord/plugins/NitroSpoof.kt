@@ -8,11 +8,7 @@ import com.aliucord.patcher.InsteadHook
 import com.aliucord.plugins.nitrospoof.EMOTE_SIZE_DEFAULT
 import com.aliucord.plugins.nitrospoof.EMOTE_SIZE_KEY
 import com.aliucord.plugins.nitrospoof.PluginSettings
-import com.discord.models.domain.emoji.Emoji
 import com.discord.models.domain.emoji.ModelEmojiCustom
-import com.discord.utilities.mg_recycler.MGRecyclerDataPayload
-import com.discord.widgets.chat.input.emoji.EmojiPickerViewModel
-import com.discord.widgets.chat.input.emoji.WidgetEmojiAdapter
 import de.robv.android.xposed.XC_MethodHook
 import java.lang.reflect.Field
 
@@ -37,24 +33,6 @@ class NitroSpoof : Plugin() {
         patcher.patch(
             ModelEmojiCustom::class.java.getDeclaredMethod("isAvailable"),
             InsteadHook { true }
-        )
-
-        //TL;DR: THIS IS INTENTIONAL!!!!
-        //
-        //There's a bug in Aliucord/Pine that causes caller code to call
-        //unpatched methods unless caller code is patched too.
-        //Hence we apply an "empty patch" so that NitroSpoof works again. :P
-        patcher.patch(
-            WidgetEmojiAdapter.EmojiViewHolder::class.java.getDeclaredMethod("onConfigure", Int::class.javaPrimitiveType, MGRecyclerDataPayload::class.java),
-            Hook { callFrame ->
-                callFrame.result = callFrame.result
-            }
-        )
-        patcher.patch(
-            EmojiPickerViewModel::class.java.getDeclaredMethod("onEmojiSelected", Emoji::class.java, Function1::class.java),
-            Hook { callFrame ->
-                callFrame.result = callFrame.result
-            }
         )
     }
 
