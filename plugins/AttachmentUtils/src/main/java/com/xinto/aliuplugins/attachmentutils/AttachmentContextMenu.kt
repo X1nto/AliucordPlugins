@@ -17,7 +17,7 @@ class AttachmentContextMenu : BottomSheet() {
 
         val context = view.context
         val attachmentProxyUrl = arguments?.getString(ARGUMENT_KEY) ?: ""
-        val textView = TextView(context, null, 0, R.h.UiKit_Settings_Item_Icon).apply {
+        val textView = TextView(context, null, 0, R.i.UiKit_Settings_Item_Icon).apply {
             val copyUrlIconResId = Utils.getResId("ic_copy_24dp", "drawable")
             val iconDrawable = ResourcesCompat
                 .getDrawable(resources, copyUrlIconResId, null)
