@@ -22,16 +22,16 @@ class PluginSettings(
         setActionBarTitle("NitroSpoof")
 
         val textInput = TextInput(context).apply {
-            hint = "Emote Size (leave empty for discord default)"
-            editText?.setText(settingsAPI.getString(EMOTE_SIZE_KEY, EMOTE_SIZE_DEFAULT).toString())
-            editText?.inputType = InputType.TYPE_CLASS_NUMBER
-            editText?.maxLines = 1
+            setHint("Emote Size (leave empty for discord default)")
+            editText.setText(settingsAPI.getString(EMOTE_SIZE_KEY, EMOTE_SIZE_DEFAULT).toString())
+            editText.inputType = InputType.TYPE_CLASS_NUMBER
+            editText.maxLines = 1
         }
 
         val saveButton = Button(context).apply {
             text = "Save"
             setOnClickListener {
-                settingsAPI.setString(EMOTE_SIZE_KEY, textInput.editText?.text.toString())
+                settingsAPI.setString(EMOTE_SIZE_KEY, textInput.editText.text.toString())
                 Utils.showToast("Successfully saved!")
                 close()
             }
