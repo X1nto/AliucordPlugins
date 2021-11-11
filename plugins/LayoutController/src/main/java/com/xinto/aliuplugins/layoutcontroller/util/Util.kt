@@ -13,6 +13,7 @@ val patches = arrayOf(
     NotesPatch(),
     UntrustedDomainPatch(),
     WelcomeButtonPatch(),
+    DMWavePatch(),
 )
 
 fun View.hideCompletely() {

@@ -11,6 +11,7 @@ object Key {
     const val NOTES_KEY = "notes"
     const val UNTRUSTED_DOMAINS_KEY = "untrustedDomains"
     const val WELCOME_BUTTON_KEY = "welcomeButton"
+    const val DM_WAVE_KEY = "dmWelcomeButton"
 }
 
 object Description {
@@ -22,4 +23,5 @@ object Description {
     const val NOTES_DESCRIPTION = "Remove the notes box from the user sheet"
     const val UNTRUSTED_DOMAINS_DESCRIPTION = "Remove the untrusted domain dialog"
     const val WELCOME_BUTTON_DESCRIPTION = "Remove the welcome button on join messages"
+    const val DM_WAVE_DESCRIPTION = "Remove the Wave button in blank DMs"
 }
