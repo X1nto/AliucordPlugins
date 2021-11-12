@@ -14,6 +14,7 @@ val patches = arrayOf(
     UntrustedDomainPatch(),
     WelcomeButtonPatch(),
     DMWavePatch(),
+    CrownsPatch(),
 )
 
 fun View.hideCompletely() {
