@@ -22,6 +22,9 @@ class AttachmentContextMenu : BottomSheet() {
         val textView = TextView(context, null, 0, R.i.UiKit_Settings_Item_Icon).apply {
             val iconDrawable = ResourcesCompat
                 .getDrawable(resources, copyUrlIconResId, null)
+                ?.apply {
+                    mutate().setTint(currentTextColor)
+                }
             text = "Copy URL"
             setCompoundDrawablesRelativeWithIntrinsicBounds(iconDrawable, null, null, null)
             setOnClickListener {
