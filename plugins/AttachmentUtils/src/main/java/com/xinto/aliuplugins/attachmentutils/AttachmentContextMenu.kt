@@ -11,24 +11,21 @@ import com.lytefast.flexinput.R
 
 class AttachmentContextMenu : BottomSheet() {
 
+    private val copyUrlIconResId = Utils.getResId("ic_copy_24dp", "drawable")
+
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, bundle: Bundle?) {
         super.onViewCreated(view, bundle)
 
         val context = view.context
-        val attachmentProxyUrl = arguments?.getString(ARGUMENT_KEY) ?: ""
+        val attachmentUrl = arguments?.getString(ATTACHMENT_URL)!!
         val textView = TextView(context, null, 0, R.i.UiKit_Settings_Item_Icon).apply {
-            val copyUrlIconResId = Utils.getResId("ic_copy_24dp", "drawable")
             val iconDrawable = ResourcesCompat
                 .getDrawable(resources, copyUrlIconResId, null)
-                ?.apply {
-                    val white = 0xFFFFFFFF
-                    mutate().setTint(white.toInt())
-                }
             text = "Copy URL"
             setCompoundDrawablesRelativeWithIntrinsicBounds(iconDrawable, null, null, null)
             setOnClickListener {
-                Utils.setClipboard(attachmentProxyUrl, attachmentProxyUrl)
+                Utils.setClipboard(attachmentUrl, attachmentUrl)
                 Utils.showToast("Copied the URL to clipboard")
             }
         }
@@ -37,13 +34,13 @@ class AttachmentContextMenu : BottomSheet() {
 
     companion object {
 
-        const val ARGUMENT_KEY = "attachmentProxyUrl"
+        const val ATTACHMENT_URL = "ATTACHMENT_URL"
 
         fun newInstance(
-            attachmentProxyUrl: String
+            attachmentUrl: String
         ) = AttachmentContextMenu().apply {
             arguments = Bundle().apply {
-                putString(ARGUMENT_KEY, attachmentProxyUrl)
+                putString(ATTACHMENT_URL, attachmentUrl)
             }
         }
 
