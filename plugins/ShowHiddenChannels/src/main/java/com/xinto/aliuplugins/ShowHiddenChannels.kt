@@ -141,12 +141,12 @@ class ShowHiddenChannels : Plugin() {
                     resources.getIdentifier(
                         "ic_text_channel_hidden",
                         "drawable",
-                        "com.aliucord.plugins"
+                        "com.xinto.aliuplugins"
                     ),
                     null
                 )
 
-                binding.b.setImageDrawable(hiddenDrawable)
+                binding.c.setImageDrawable(hiddenDrawable)
                 binding.a.setOnClickListener(null)
                 callFrame.result = callFrame.result
             }
