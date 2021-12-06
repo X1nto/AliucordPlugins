@@ -1,14 +1,9 @@
 rootProject.name = "AliucordPlugins"
 
-listOf(
-    "AttachmentUtils",
-    "Gnuify",
-    "LayoutController",
-    "Lyrics",
-    "NitroSpoof",
-    "ShowHiddenChannels",
-    "Stallman"
-).forEach { plugin ->
-    include(":$plugin")
-    project(":$plugin").projectDir = File("./plugins/$plugin")
-}
+File("./plugins/")
+    .listFiles()
+    ?.forEach { plugin ->
+        val pluginName = plugin.name
+        include(":$pluginName")
+        project(":$pluginName").projectDir = plugin
+    }
