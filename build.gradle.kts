@@ -69,7 +69,7 @@ subprojects {
         "discord"("com.discord:discord:aliucord-SNAPSHOT")
         "implementation"("com.github.Aliucord:Aliucord:main-SNAPSHOT")
 
-        "implementation"("androidx.appcompat:appcompat:1.3.1")
+        "implementation"("androidx.appcompat:appcompat:1.4.0")
         "implementation"("com.google.android.material:material:1.4.0")
     }
 }
