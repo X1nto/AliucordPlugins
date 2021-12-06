@@ -16,6 +16,9 @@ Lets you control the discord mobile layout.
 ## [Lyrics](/plugins/Lyrics)
 Get lyrics to a song.
 
+## [NanomachinesSon](/plugins/NanomachinesSon)
+Returns a copypasta of Senator Armstrong's political speech.
+
 ## [Nitrospoof](/plugins/NitroSpoof)
 Use nitro emotes without nitro.
 
