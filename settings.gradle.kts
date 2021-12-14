@@ -1,6 +1,6 @@
 rootProject.name = "AliucordPlugins"
 
-File("./plugins/")
+File(rootDir.path + "/plugins")
     .listFiles()
     ?.forEach { plugin ->
         val pluginName = plugin.name
