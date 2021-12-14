@@ -13,6 +13,7 @@ object Key {
     const val WELCOME_BUTTON_KEY = "welcomeButton"
     const val DM_WAVE_KEY = "dmWelcomeButton"
     const val CROWNS_KEY = "crowns"
+    const val STUDENT_HUBS_BUTTON = "studentHubButton"
 }
 
 object Description {
@@ -26,4 +27,5 @@ object Description {
     const val WELCOME_BUTTON_DESCRIPTION = "Remove the welcome button on join messages"
     const val DM_WAVE_DESCRIPTION = "Remove the Wave button in blank DMs"
     const val CROWNS_DESCRIPTION = "Remove the crown from server owners"
+    const val STUDENT_HUBS_BUTTON_DESCRIPTION = "Remove the student hubs button in the server list"
 }
