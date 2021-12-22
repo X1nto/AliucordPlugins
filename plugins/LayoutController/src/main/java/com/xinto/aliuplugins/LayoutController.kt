@@ -6,7 +6,7 @@ import com.aliucord.entities.Plugin
 import com.xinto.aliuplugins.layoutcontroller.PluginSettings
 import com.xinto.aliuplugins.layoutcontroller.util.patches
 
-@AliucordPlugin
+@AliucordPlugin(requiresRestart = true)
 class LayoutController : Plugin() {
 
     override fun start(context: Context) {
