@@ -11,29 +11,28 @@ import com.discord.utilities.color.ColorCompat
 import com.discord.views.CheckedSetting
 import com.google.android.material.card.MaterialCardView
 import com.lytefast.flexinput.R
+import com.xinto.aliuplugins.layoutcontroller.patchers.base.BasePatcher
 
 @SuppressLint("ViewConstructor")
 class SwitchItem(
     context: Context,
     settingsAPI: SettingsAPI,
-    key: String,
-    val description: String
+    val patch: BasePatcher
 ) : MaterialCardView(context) {
-
     init {
         radius = DimenUtils.defaultPadding.toFloat()
         setCardBackgroundColor(ColorCompat.getThemedColor(context, R.b.colorBackgroundSecondary))
         layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
 
-        Utils.createCheckedSetting(context, CheckedSetting.ViewType.SWITCH, description, null)
+        Utils.createCheckedSetting(context, CheckedSetting.ViewType.SWITCH, patch.description, null)
             .apply {
-                isChecked = settingsAPI.getBool(key, PREFERENCE_DEFAULT_VALUE)
+                isChecked = settingsAPI.getBool(patch.key, PREFERENCE_DEFAULT_VALUE)
                 setOnCheckedListener {
-                    settingsAPI.setBool(key, it)
-                    Utils.promptRestart()
+                    settingsAPI.setBool(patch.key, it)
+                    if (patch.requiresRestart)
+                        Utils.promptRestart()
                 }
                 this@SwitchItem.addView(this)
             }
     }
-
 }

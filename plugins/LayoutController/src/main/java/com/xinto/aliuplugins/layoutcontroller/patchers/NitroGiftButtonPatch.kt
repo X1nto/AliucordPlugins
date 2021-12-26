@@ -11,6 +11,7 @@ import de.robv.android.xposed.XC_MethodHook
 class NitroGiftButtonPatch : BasePatcher(
     key = Key.GIFT_BUTTON_KEY,
     description = Description.GIFT_BUTTON_DESCRIPTION,
+    requiresRestart = true,
     classMember = `FlexInputFragment$d`::class.java.getDeclaredMethod(
         "invoke",
         Any::class.java

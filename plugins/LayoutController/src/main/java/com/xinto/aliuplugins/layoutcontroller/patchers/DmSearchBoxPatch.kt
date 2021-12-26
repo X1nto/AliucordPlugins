@@ -13,6 +13,7 @@ import de.robv.android.xposed.XC_MethodHook
 class DmSearchBoxPatch : BasePatcher(
     key = Key.SEARCH_BOX_KEY,
     description = Description.SEARCH_BOX_DESCRIPTION,
+    requiresRestart = false,
     classMember = WidgetChannelsList::class.java.getDeclaredMethod("configureUI", WidgetChannelListModel::class.java)
 ) {
 

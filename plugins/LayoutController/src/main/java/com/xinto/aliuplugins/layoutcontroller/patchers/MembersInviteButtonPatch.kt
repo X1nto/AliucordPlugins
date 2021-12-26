@@ -11,6 +11,7 @@ import de.robv.android.xposed.XC_MethodHook
 class MembersInviteButtonPatch : BasePatcher(
     key = Key.INVITE_BUTTON_MEMBERS_KEY,
     description = Description.INVITE_BUTTON_MEMBERS_DESCRIPTION,
+    requiresRestart = false,
     classMember = ChannelMembersListViewHolderAdd::class.java.getDeclaredMethod(
         "bind",
         Function0::class.java,

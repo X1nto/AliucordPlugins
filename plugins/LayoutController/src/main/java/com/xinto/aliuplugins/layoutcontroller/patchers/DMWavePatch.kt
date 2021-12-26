@@ -11,6 +11,7 @@ import de.robv.android.xposed.XC_MethodHook
 class DMWavePatch : BasePatcher(
     key = Key.DM_WAVE_KEY,
     description = Description.DM_WAVE_DESCRIPTION,
+    requiresRestart = false,
     classMember = WidgetChatListAdapterItemStickerGreet::class.java.getDeclaredMethod(
         "onConfigure",
         Int::class.javaPrimitiveType,
