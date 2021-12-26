@@ -1,5 +1,6 @@
 package com.xinto.aliuplugins.layoutcontroller.patchers
 
+import com.discord.widgets.guilds.list.GuildListItem
 import com.discord.widgets.guilds.list.WidgetGuildsListViewModel
 import com.xinto.aliuplugins.layoutcontroller.patchers.base.BasePatcher
 import com.xinto.aliuplugins.layoutcontroller.util.Description
@@ -13,7 +14,9 @@ class StudentHubsButtonPatch : BasePatcher(
 ) {
     override fun patchBody(callFrame: XC_MethodHook.MethodHookParam) {
         val items = (callFrame.result as ArrayList<*>)
-        items.removeAt(items.size - 2)
-        callFrame.result = items
+        if (items[items.size - 2] is GuildListItem.HubItem) {
+            items.removeAt(items.size - 2)
+            callFrame.result = items
+        }
     }
 }
