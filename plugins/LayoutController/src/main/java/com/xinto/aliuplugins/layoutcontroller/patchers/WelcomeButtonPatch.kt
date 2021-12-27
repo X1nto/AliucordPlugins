@@ -13,6 +13,7 @@ import de.robv.android.xposed.XC_MethodHook
 class WelcomeButtonPatch : BasePatcher(
     key = Key.WELCOME_BUTTON_KEY,
     description = Description.WELCOME_BUTTON_DESCRIPTION,
+    requiresRestart = false,
     classMember = WidgetChatListAdapterItemSystemMessage::class.java.getDeclaredMethod(
         "onConfigure", Int::class.javaPrimitiveType, ChatListEntry::class.java
     ),

@@ -9,6 +9,7 @@ import de.robv.android.xposed.XC_MethodHook
 class UntrustedDomainPatch : BasePatcher(
     key = Key.UNTRUSTED_DOMAINS_KEY,
     description = Description.UNTRUSTED_DOMAINS_DESCRIPTION,
+    requiresRestart = false,
     classMember = StoreMaskedLinks::class.java.getDeclaredMethod(
         "isTrustedDomain",
         String::class.java,

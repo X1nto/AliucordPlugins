@@ -26,9 +26,9 @@ class PluginSettings(
         Utils.threadPool.execute {
             val list = listOf(
                 *patches.map {
-                    SwitchItem(context, settingsAPI, it.key, it.description)
+                    SwitchItem(context, settingsAPI, it)
                 }.sortedBy {
-                    it.description
+                    it.patch.description
                 }.toTypedArray()
             )
 

@@ -11,6 +11,7 @@ import de.robv.android.xposed.XC_MethodHook
 class NotesPatch : BasePatcher(
     key = Key.NOTES_KEY,
     description = Description.NOTES_DESCRIPTION,
+    requiresRestart = false,
     classMember = WidgetUserSheet::class.java.getDeclaredMethod(
         "configureNote",
         WidgetUserSheetViewModel.ViewState.Loaded::class.java

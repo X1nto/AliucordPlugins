@@ -10,6 +10,7 @@ import de.robv.android.xposed.XC_MethodHook
 class StudentHubsButtonPatch : BasePatcher(
     key = Key.STUDENT_HUBS_BUTTON,
     description = Description.STUDENT_HUBS_BUTTON_DESCRIPTION,
+    requiresRestart = false,
     classMember = WidgetGuildsListViewModel.ViewState.Loaded::class.java.getDeclaredMethod("getItems")
 ) {
     override fun patchBody(callFrame: XC_MethodHook.MethodHookParam) {

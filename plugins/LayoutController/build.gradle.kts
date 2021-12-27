@@ -1,5 +1,5 @@
 description = "Lets you control the discord mobile layout."
-version = "1.0.6"
+version = "1.0.7"
 
 aliucord {
     author("zt", 289556910426816513L)

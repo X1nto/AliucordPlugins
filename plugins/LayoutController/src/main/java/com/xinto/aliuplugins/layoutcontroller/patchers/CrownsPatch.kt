@@ -13,6 +13,7 @@ import de.robv.android.xposed.XC_MethodHook
 class CrownsPatch : BasePatcher(
     key = Key.CROWNS_KEY,
     description = Description.CROWNS_DESCRIPTION,
+    requiresRestart = false,
     classMember = ChannelMembersListViewHolderMember::class.java.getDeclaredMethod(
         "bind",
         ChannelMembersListAdapter.Item.Member::class.java,

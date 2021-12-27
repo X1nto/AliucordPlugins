@@ -11,6 +11,7 @@ import de.robv.android.xposed.XC_MethodHook
 class ChannelsInviteButtonPatch : BasePatcher(
     key = Key.INVITE_BUTTON_CHANNELS_KEY,
     description = Description.INVITE_BUTTON_CHANNELS_DESCRIPTION,
+    requiresRestart = false,
     classMember = WidgetChannelsListAdapter.ItemInvite::class.java.getDeclaredMethod(
         "onConfigure",
         Int::class.javaPrimitiveType,

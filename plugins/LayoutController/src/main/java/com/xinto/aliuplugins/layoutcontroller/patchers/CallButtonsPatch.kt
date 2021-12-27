@@ -12,8 +12,12 @@ import com.discord.widgets.user.usersheet.WidgetUserSheetViewModel
 import de.robv.android.xposed.XC_MethodHook
 
 class CallButtonsPatch : BasePatcher(
-    key = Key.CALL_BUTTONS_KEY, description = Description.CALL_BUTTONS_DESCRIPTION, classMember = WidgetUserSheet::class.java.getDeclaredMethod(
-        "configureProfileActionButtons", WidgetUserSheetViewModel.ViewState.Loaded::class.java
+    key = Key.CALL_BUTTONS_KEY,
+    description = Description.CALL_BUTTONS_DESCRIPTION,
+    requiresRestart = false,
+    classMember = WidgetUserSheet::class.java.getDeclaredMethod(
+        "configureProfileActionButtons",
+        WidgetUserSheetViewModel.ViewState.Loaded::class.java
     )
 ) {
     private val callButtonId = Utils.getResId("user_sheet_call_action_button", "id")
