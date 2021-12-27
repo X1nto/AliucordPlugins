@@ -28,7 +28,10 @@ class SwitchItem(
         Utils.createCheckedSetting(context, CheckedSetting.ViewType.SWITCH, description, null)
             .apply {
                 isChecked = settingsAPI.getBool(key, PREFERENCE_DEFAULT_VALUE)
-                setOnCheckedListener { settingsAPI.setBool(key, it) }
+                setOnCheckedListener {
+                    settingsAPI.setBool(key, it)
+                    Utils.promptRestart()
+                }
                 this@SwitchItem.addView(this)
             }
     }

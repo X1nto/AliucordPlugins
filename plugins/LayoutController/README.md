@@ -10,4 +10,5 @@ Lets you control the discord mobile layout.
 - Hide the call buttons in the user sheet
 - Remove the "Untrusted Domain" dialog
 - Remove the welcome sticker button on join messages
-- Remove the Wave button in blank DMs
+- Remove the wave button in blank DMs
+- Remove the student hubs button in the server list

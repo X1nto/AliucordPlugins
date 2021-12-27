@@ -15,6 +15,7 @@ val patches = arrayOf(
     WelcomeButtonPatch(),
     DMWavePatch(),
     CrownsPatch(),
+    StudentHubsButtonPatch(),
 )
 
 fun View.hideCompletely() {
