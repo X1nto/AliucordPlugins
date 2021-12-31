@@ -19,9 +19,6 @@ Get lyrics to a song.
 ## [NanomachinesSon](/plugins/NanomachinesSon)
 Returns a copypasta of Senator Armstrong's political speech.
 
-## [Nitrospoof](/plugins/NitroSpoof)
-Use nitro emotes without nitro.
-
 ## [ShowHiddenChannels](/plugins/ShowHiddenChannels)
 Allows you to see hidden channels in servers.
 
