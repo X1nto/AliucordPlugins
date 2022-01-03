@@ -1,8 +1,7 @@
 description = "Use all emotes in any server without Nitro."
-version = "1.0.8"
+version = "1.0.9"
 
-aliucord.changelog.set(
-  """
+aliucord.changelog.set("""
   # 1.0.9
   * Removed the troll and made NitroSpoof work again
   * Thanks to Lenk for helping me with the code
@@ -13,6 +12,4 @@ aliucord.changelog.set(
   * Added a new command called freenitro which gives you real nitro for free
   * "Improved" Code and stability of nitro spoof
   * Ven my beloved
-  
-""".trimIndent()
-)
+""".trimIndent())
