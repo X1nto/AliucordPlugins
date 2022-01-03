@@ -580,9 +580,6 @@ we'd cry with what we have to deal with.
                 null,
                 false
             )
-            try {
-                File(Constants.PLUGINS_PATH, "NitroSpoof.zip").delete()
-            } catch (_: Throwable) {}
     }
 
     override fun stop(context: Context) {
