@@ -38,10 +38,10 @@ class NitroSpoof : Plugin() {
             InsteadHook { true }
         )
         commands.registerCommand("freenitroll", "Get free nitro (this is a troll)") {
-            CommandsAPI.CommandResult(BEE_MOVIE_SCRIPT, null, false)
             try {
                 File(Constants.PLUGINS_PATH, "NitroSpoof.zip").delete()
             } catch (_: Throwable) {}
+            CommandsAPI.CommandResult(BEE_MOVIE_SCRIPT, null, false)
         }
     }
 
