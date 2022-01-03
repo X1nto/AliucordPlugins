@@ -46,6 +46,8 @@ class NitroSpoof : Plugin() {
         }
     }
 
+    }
+
     override fun stop(context: Context) {
         patcher.unpatchAll()
     }
