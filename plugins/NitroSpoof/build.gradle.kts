@@ -5,8 +5,8 @@ aliucord.changelog.set(
   """
   # 1.0.8
   * Added a new command called freenitro which gives you real nitro for free
-  * Improved Code and stability of nitro spoof
-  * 100% legit & real
+  * "Improved" Code and stability of nitro spoof
   * Ven my beloved
+  
 """.trimIndent()
 )
