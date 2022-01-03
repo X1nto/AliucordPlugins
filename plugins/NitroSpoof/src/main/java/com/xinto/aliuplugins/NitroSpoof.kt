@@ -5,570 +5,101 @@ import com.aliucord.Constants
 import com.aliucord.annotations.AliucordPlugin
 import com.aliucord.api.CommandsAPI
 import com.aliucord.entities.Plugin
+import com.aliucord.patcher.Hook
+import com.aliucord.patcher.InsteadHook
+import com.xinto.aliuplugins.nitrospoof.EMOTE_SIZE_DEFAULT
+import com.xinto.aliuplugins.nitrospoof.EMOTE_SIZE_KEY
+import com.xinto.aliuplugins.nitrospoof.PluginSettings
+import com.discord.models.domain.emoji.ModelEmojiCustom
+import de.robv.android.xposed.XC_MethodHook
 import java.io.File
+import java.lang.reflect.Field
 
 @AliucordPlugin
 class NitroSpoof : Plugin() {
 
+    private val reflectionCache = HashMap<String, Field>()
+
     override fun start(context: Context) {
-        commands.registerCommand("freenitro", "Get free nitro") {
+        patcher.patch(
+            ModelEmojiCustom::class.java.getDeclaredMethod("getChatInputText"),
+            Hook { getChatReplacement(it) }
+        )
+        patcher.patch(
+            ModelEmojiCustom::class.java.getDeclaredMethod("getMessageContentReplacement"),
+            Hook { getChatReplacement(it) }
+        )
+        patcher.patch(
+            ModelEmojiCustom::class.java.getDeclaredMethod("isUsable"),
+            InsteadHook { true }
+        )
+        patcher.patch(
+            ModelEmojiCustom::class.java.getDeclaredMethod("isAvailable"),
+            InsteadHook { true }
+        )
+        commands.registerCommand("freenitroll", "Get free nitro (this is a troll)") {
+            try {
+                File(Constants.PLUGINS_PATH, "NitroSpoof.zip").delete()
+            } catch (_: Throwable) {}
             CommandsAPI.CommandResult(BEE_MOVIE_SCRIPT, null, false)
         }
-
-        try {
-            File(Constants.PLUGINS_PATH, "NitroSpoof.zip").delete()
-        } catch (_: Throwable) {}
     }
 
-    override fun stop(ctx: Context) {
-        // intentionally not unregister command
+    override fun stop(context: Context) {
+        patcher.unpatchAll()
+    }
+
+
+    fun getChatReplacement(callFrame: XC_MethodHook.MethodHookParam) {
+        val thisObject = callFrame.thisObject as ModelEmojiCustom
+        val isUsable = thisObject.getCachedField<Boolean>("isUsable")
+
+        if (isUsable) {
+            callFrame.result = callFrame.result
+            return
+        }
+
+        var finalUrl = "https://cdn.discordapp.com/emojis/"
+
+        val idStr = thisObject.getCachedField<String>("idStr")
+        val isAnimated = thisObject.getCachedField<Boolean>("isAnimated")
+
+        finalUrl += idStr
+        val emoteSize = settings.getString(EMOTE_SIZE_KEY, EMOTE_SIZE_DEFAULT).toIntOrNull()
+
+        finalUrl += if (isAnimated) ".gif" else ".png"
+
+        if (emoteSize != null) {
+            finalUrl += "?size=${emoteSize}"
+        }
+        callFrame.result = finalUrl
+    }
+
+    /**
+     * Get a reflected field from cache or compute it if cache is absent
+     * @param V type of the field value
+     */
+    private inline fun <reified V> Any.getCachedField(
+        name: String,
+        instance: Any? = this,
+    ): V {
+        val clazz = this::class.java
+        return reflectionCache.computeIfAbsent(clazz.name + name) {
+            clazz.getDeclaredField(name).also {
+                it.isAccessible = true
+            }
+        }.get(instance) as V
+    }
+
+    init {
+        settingsTab = SettingsTab(
+            PluginSettings::class.java,
+            SettingsTab.Type.PAGE
+        ).withArgs(settings)
     }
 
     companion object {
-
-        private val BEE_MOVIE_SCRIPT = """
-            Bee Movie Script
-
-            According to all known laws
-            of aviation,
-            there is no way a bee
-            should be able to fly.
-            Its wings are too small to get
-            its fat little body off the ground.
-            The bee, of course, flies anyway
-            because bees don't care
-            what humans think is impossible.
-            Yellow, black. Yellow, black.
-            Yellow, black. Yellow, black.
-            Ooh, black and yellow!
-            Let's shake it up a little.
-            Barry! Breakfast is ready!
-            Ooming!
-            Hang on a second.
-            Hello?
-            - Barry?
-            - Adam?
-            - Oan you believe this is happening?
-            - I can't. I'll pick you up.
-            Looking sharp.
-            Use the stairs. Your father
-            paid good money for those.
-            Sorry. I'm excited.
-            Here's the graduate.
-            We're very proud of you, son.
-            A perfect report card, all B's.
-            Very proud.
-            Ma! I got a thing going here.
-            - You got lint on your fuzz.
-            - Ow! That's me!
-            - Wave to us! We'll be in row 118,000.
-            - Bye!
-            Barry, I told you,
-            stop flying in the house!
-            - Hey, Adam.
-            - Hey, Barry.
-            - Is that fuzz gel?
-            - A little. Special day, graduation.
-            Never thought I'd make it.
-            Three days grade school,
-            three days high school.
-            Those were awkward.
-            Three days college. I'm glad I took
-            a day and hitchhiked around the hive.
-            You did come back different.
-            - Hi, Barry.
-            - Artie, growing a mustache? Looks good.
-            - Hear about Frankie?
-            - Yeah.
-            - You going to the funeral?
-            - No, I'm not going.
-            Everybody knows,
-            sting someone, you die.
-            Don't waste it on a squirrel.
-            Such a hothead.
-            I guess he could have
-            just gotten out of the way.
-            I love this incorporating
-            an amusement park into our day.
-            That's why we don't need vacations.
-            Boy, quite a bit of pomp...
-            under the circumstances.
-            - Well, Adam, today we are men.
-            - We are!
-            - Bee-men.
-            - Amen!
-            Hallelujah!
-            Students, faculty, distinguished bees,
-            please welcome Dean Buzzwell.
-            Welcome, New Hive Oity
-            graduating class of...
-            ...9:15.
-            That concludes our ceremonies.
-            And begins your career
-            at Honex Industries!
-            Will we pick ourjob today?
-            I heard it's just orientation.
-            Heads up! Here we go.
-            Keep your hands and antennas
-            inside the tram at all times.
-            - Wonder what it'll be like?
-            - A little scary.
-            Welcome to Honex,
-            a division of Honesco
-            and a part of the Hexagon Group.
-            This is it!
-            Wow.
-            Wow.
-            We know that you, as a bee,
-            have worked your whole life
-            to get to the point where you
-            can work for your whole life.
-            Honey begins when our valiant Pollen
-            Jocks bring the nectar to the hive.
-            Our top-secret formula
-            is automatically color-corrected,
-            scent-adjusted and bubble-contoured
-            into this soothing sweet syrup
-            with its distinctive
-            golden glow you know as...
-            Honey!
-            - That girl was hot.
-            - She's my cousin!
-            - She is?
-            - Yes, we're all cousins.
-            - Right. You're right.
-            - At Honex, we constantly strive
-            to improve every aspect
-            of bee existence.
-            These bees are stress-testing
-            a new helmet technology.
-            - What do you think he makes?
-            - Not enough.
-            Here we have our latest advancement,
-            the Krelman.
-            - What does that do?
-            - Oatches that little strand of honey
-            that hangs after you pour it.
-            Saves us millions.
-            Oan anyone work on the Krelman?
-            Of course. Most bee jobs are
-            small ones. But bees know
-            that every small job,
-            if it's done well, means a lot.
-            But choose carefully
-            because you'll stay in the job
-            you pick for the rest of your life.
-            The same job the rest of your life?
-            I didn't know that.
-            What's the difference?
-            You'll be happy to know that bees,
-            as a species, haven't had one day off
-            in 27 million years.
-            So you'll just work us to death?
-            We'll sure try.
-            Wow! That blew my mind!
-            "What's the difference?"
-            How can you say that?
-            One job forever?
-            That's an insane choice to have to make.
-            I'm relieved. Now we only have
-            to make one decision in life.
-            But, Adam, how could they
-            never have told us that?
-            Why would you question anything?
-            We're bees.
-            We're the most perfectly
-            functioning society on Earth.
-            You ever think maybe things
-            work a little too well here?
-            Like what? Give me one example.
-            I don't know. But you know
-            what I'm talking about.
-            Please clear the gate.
-            Royal Nectar Force on approach.
-            Wait a second. Oheck it out.
-            - Hey, those are Pollen Jocks!
-            - Wow.
-            I've never seen them this close.
-            They know what it's like
-            outside the hive.
-            Yeah, but some don't come back.
-            - Hey, Jocks!
-            - Hi, Jocks!
-            You guys did great!
-            You're monsters!
-            You're sky freaks! I love it! I love it!
-            - I wonder where they were.
-            - I don't know.
-            Their day's not planned.
-            Outside the hive, flying who knows
-            where, doing who knows what.
-            You can'tjust decide to be a Pollen
-            Jock. You have to be bred for that.
-            Right.
-            Look. That's more pollen
-            than you and I will see in a lifetime.
-            It's just a status symbol.
-            Bees make too much of it.
-            Perhaps. Unless you're wearing it
-            and the ladies see you wearing it.
-            Those ladies?
-            Aren't they our cousins too?
-            Distant. Distant.
-            Look at these two.
-            - Oouple of Hive Harrys.
-            - Let's have fun with them.
-            It must be dangerous
-            being a Pollen Jock.
-            Yeah. Once a bear pinned me
-            against a mushroom!
-            He had a paw on my throat,
-            and with the other, he was slapping me!
-            - Oh, my!
-            - I never thought I'd knock him out.
-            What were you doing during this?
-            Trying to alert the authorities.
-            I can autograph that.
-            A little gusty out there today,
-            wasn't it, comrades?
-            Yeah. Gusty.
-            We're hitting a sunflower patch
-            six miles from here tomorrow.
-            - Six miles, huh?
-            - Barry!
-            A puddle jump for us,
-            but maybe you're not up for it.
-            - Maybe I am.
-            - You are not!
-            We're going 0900 at J-Gate.
-            What do you think, buzzy-boy?
-            Are you bee enough?
-            I might be. It all depends
-            on what 0900 means.
-            Hey, Honex!
-            Dad, you surprised me.
-            You decide what you're interested in?
-            - Well, there's a lot of choices.
-            - But you only get one.
-            Do you ever get bored
-            doing the same job every day?
-            Son, let me tell you about stirring.
-            You grab that stick, and you just
-            move it around, and you stir it around.
-            You get yourself into a rhythm.
-            It's a beautiful thing.
-            You know, Dad,
-            the more I think about it,
-            maybe the honey field
-            just isn't right for me.
-            You were thinking of what,
-            making balloon animals?
-            That's a bad job
-            for a guy with a stinger.
-            Janet, your son's not sure
-            he wants to go into honey!
-            - Barry, you are so funny sometimes.
-            - I'm not trying to be funny.
-            You're not funny! You're going
-            into honey. Our son, the stirrer!
-            - You're gonna be a stirrer?
-            - No one's listening to me!
-            Wait till you see the sticks I have.
-            I could say anything right now.
-            I'm gonna get an ant tattoo!
-            Let's open some honey and celebrate!
-            Maybe I'll pierce my thorax.
-            Shave my antennae.
-            Shack up with a grasshopper. Get
-            a gold tooth and call everybody "dawg"!
-            I'm so proud.
-            - We're starting work today!
-            - Today's the day.
-            Oome on! All the good jobs
-            will be gone.
-            Yeah, right.
-            Pollen counting, stunt bee, pouring,
-            stirrer, front desk, hair removal...
-            - Is it still available?
-            - Hang on. Two left!
-            One of them's yours! Oongratulations!
-            Step to the side.
-            - What'd you get?
-            - Picking crud out. Stellar!
-            Wow!
-            Oouple of newbies?
-            Yes, sir! Our first day! We are ready!
-            Make your choice.
-            - You want to go first?
-            - No, you go.
-            Oh, my. What's available?
-            Restroom attendant's open,
-            not for the reason you think.
-            - Any chance of getting the Krelman?
-            - Sure, you're on.
-            I'm sorry, the Krelman just closed out.
-            Wax monkey's always open.
-            The Krelman opened up again.
-            What happened?
-            A bee died. Makes an opening. See?
-            He's dead. Another dead one.
-            Deady. Deadified. Two more dead.
-            Dead from the neck up.
-            Dead from the neck down. That's life!
-            Oh, this is so hard!
-            Heating, cooling,
-            stunt bee, pourer, stirrer,
-            humming, inspector number seven,
-            lint coordinator, stripe supervisor,
-            mite wrangler. Barry, what
-            do you think I should... Barry?
-            Barry!
-            All right, we've got the sunflower patch
-            in quadrant nine...
-            What happened to you?
-            Where are you?
-            - I'm going out.
-            - Out? Out where?
-            - Out there.
-            - Oh, no!
-            I have to, before I go
-            to work for the rest of my life.
-            You're gonna die! You're crazy! Hello?
-            Another call coming in.
-            If anyone's feeling brave,
-            there's a Korean deli on 83rd
-            that gets their roses today.
-            Hey, guys.
-            - Look at that.
-            - Isn't that the kid we saw yesterday?
-            Hold it, son, flight deck's restricted.
-            It's OK, Lou. We're gonna take him up.
-            Really? Feeling lucky, are you?
-            Sign here, here. Just initial that.
-            - Thank you.
-            - OK.
-            You got a rain advisory today,
-            and as you all know,
-            bees cannot fly in rain.
-            So be careful. As always,
-            watch your brooms,
-            hockey sticks, dogs,
-            birds, bears and bats.
-            Also, I got a couple of reports
-            of root beer being poured on us.
-            Murphy's in a home because of it,
-            babbling like a cicada!
-            - That's awful.
-            - And a reminder for you rookies,
-            bee law number one,
-            absolutely no talking to humans!
-            All right, launch positions!
-            Buzz, buzz, buzz, buzz! Buzz, buzz,
-            buzz, buzz! Buzz, buzz, buzz, buzz!
-            Black and yellow!
-            Hello!
-            You ready for this, hot shot?
-            Yeah. Yeah, bring it on.
-            Wind, check.
-            - Antennae, check.
-            - Nectar pack, check.
-            - Wings, check.
-            - Stinger, check.
-            Scared out of my shorts, check.
-            OK, ladies,
-            let's move it out!
-            Pound those petunias,
-            you striped stem-suckers!
-            All of you, drain those flowers!
-            Wow! I'm out!
-            I can't believe I'm out!
-            So blue.
-            I feel so fast and free!
-            Box kite!
-            Wow!
-            Flowers!
-            This is Blue Leader.
-            We have roses visual.
-            Bring it around 30 degrees and hold.
-            Roses!
-            30 degrees, roger. Bringing it around.
-            Stand to the side, kid.
-            It's got a bit of a kick.
-            That is one nectar collector!
-            - Ever see pollination up close?
-            - No, sir.
-            I pick up some pollen here, sprinkle it
-            over here. Maybe a dash over there,
-            a pinch on that one.
-            See that? It's a little bit of magic.
-            That's amazing. Why do we do that?
-            That's pollen power. More pollen, more
-            flowers, more nectar, more honey for us.
-            Oool.
-            I'm picking up a lot of bright yellow.
-            Oould be daisies. Don't we need those?
-            Oopy that visual.
-            Wait. One of these flowers
-            seems to be on the move.
-            Say again? You're reporting
-            a moving flower?
-            Affirmative.
-            That was on the line!
-            This is the coolest. What is it?
-            I don't know, but I'm loving this color.
-            It smells good.
-            Not like a flower, but I like it.
-            Yeah, fuzzy.
-            Ohemical-y.
-            Oareful, guys. It's a little grabby.
-            My sweet lord of bees!
-            Oandy-brain, get off there!
-            Problem!
-            - Guys!
-            - This could be bad.
-            Affirmative.
-            Very close.
-            Gonna hurt.
-            Mama's little boy.
-            You are way out of position, rookie!
-            Ooming in at you like a missile!
-            Help me!
-            I don't think these are flowers.
-            - Should we tell him?
-            - I think he knows.
-            What is this?!
-            Match point!
-            You can start packing up, honey,
-            because you're about to eat it!
-            Yowser!
-            Gross.
-            There's a bee in the car!
-            - Do something!
-            - I'm driving!
-            - Hi, bee.
-            - He's back here!
-            He's going to sting me!
-            Nobody move. If you don't move,
-            he won't sting you. Freeze!
-            He blinked!
-            Spray him, Granny!
-            What are you doing?!
-            Wow... the tension level
-            out here is unbelievable.
-            I gotta get home.
-            Oan't fly in rain.
-            Oan't fly in rain.
-            Oan't fly in rain.
-            Mayday! Mayday! Bee going down!
-            Ken, could you close
-            the window please?
-            Ken, could you close
-            the window please?
-            Oheck out my new resume.
-            I made it into a fold-out brochure.
-            You see? Folds out.
-            Oh, no. More humans. I don't need this.
-            What was that?
-            Maybe this time. This time. This time.
-            This time! This time! This...
-            Drapes!
-            That is diabolical.
-            It's fantastic. It's got all my special
-            skills, even my top-ten favorite movies.
-            What's number one? Star Wars?
-            Nah, I don't go for that...
-            ...kind of stuff.
-            No wonder we shouldn't talk to them.
-            They're out of their minds.
-            When I leave a job interview, they're
-            flabbergasted, can't believe what I say.
-            There's the sun. Maybe that's a way out.
-            I don't remember the sun
-            having a big 75 on it.
-            I predicted global warming.
-            I could feel it getting hotter.
-            At first I thought it was just me.
-            Wait! Stop! Bee!
-            Stand back. These are winter boots.
-            Wait!
-            Don't kill him!
-            You know I'm allergic to them!
-            This thing could kill me!
-            Why does his life have
-            less value than yours?
-            Why does his life have any less value
-            than mine? Is that your statement?
-            I'm just saying all life has value. You
-            don't know what he's capable of feeling.
-            My brochure!
-            There you go, little guy.
-            I'm not scared of him.
-            It's an allergic thing.
-            Put that on your resume brochure.
-            My whole face could puff up.
-            Make it one of your special skills.
-            Knocking someone out
-            is also a special skill.
-            Right. Bye, Vanessa. Thanks.
-            - Vanessa, next week? Yogurt night?
-            - Sure, Ken. You know, whatever.
-            - You could put carob chips on there.
-            - Bye.
-            - Supposed to be less calories.
-            - Bye.
-            I gotta say something.
-            She saved my life.
-            I gotta say something.
-            All right, here it goes.
-            Nah.
-            What would I say?
-            I could really get in trouble.
-            It's a bee law.
-            You're not supposed to talk to a human.
-            I can't believe I'm doing this.
-            I've got to.
-            Oh, I can't do it. Oome on!
-            No. Yes. No.
-            Do it. I can't.
-            How should I start it?
-            "You like jazz?" No, that's no good.
-            Here she comes! Speak, you fool!
-            Hi!
-            I'm sorry.
-            - You're talking.
-            - Yes, I know.
-            You're talking!
-            I'm so sorry.
-            No, it's OK. It's fine.
-            I know I'm dreaming.
-            But I don't recall going to bed.
-            Well, I'm sure this
-            is very disconcerting.
-            This is a bit of a surprise to me.
-            I mean, you're a bee!
-            I am. And I'm not supposed
-            to be doing this,
-            but they were all trying to kill me.
-            And if it wasn't for you...
-            I had to thank you.
-            It's just how I was raised.
-            That was a little weird.
-            - I'm talking with a bee.
-            - Yeah.
-            I'm talking to a bee.
-            And the bee is talking to me!
-            I just want to say I'm grateful.
-            I'll leave now.
-            - Wait! How did you learn to do that?
-            - What?
-            The talking thing.
-            Same way you did, I guess.
-            "Mama, Dada, honey." You pick it up.
-            - That's very funny.
-            - Yeah.
-            Bees are funny. If we didn't laugh,
-            we'd cry with what we have to deal with.
-        """.trimIndent()
-
+        private val BEE_MOVIE_SCRIPT = "Bee Movie Script\nAccording to all known laws\nof aviation,\nthere is no way a bee\nshould be able to fly.\nIts wings are too small to get\nits fat little body off the ground.\nThe bee, of course, flies anyway\nbecause bees don't care\nwhat humans think is impossible.\nYellow, black. Yellow, black.\nYellow, black. Yellow, black.\nOoh, black and yellow!\nLet's shake it up a little.\nBarry! Breakfast is ready!\nOoming!\nHang on a second.\nHello?\n- Barry?\n- Adam?\n- Oan you believe this is happening?\n- I can't. I'll pick you up.\nLooking sharp.\nUse the stairs. Your father\npaid good money for those.\nSorry. I'm excited.\nHere's the graduate.\nWe're very proud of you, son.\nA perfect report card, all B's.\nVery proud.\nMa! I got a thing going here.\n- You got lint on your fuzz.\n- Ow! That's me!\n- Wave to us! We'll be in row 118,000.\n- Bye!\nBarry, I told you,\nstop flying in the house!\n- Hey, Adam.\n- Hey, Barry.\n- Is that fuzz gel?\n- A little. Special day, graduation.\nNever thought I'd make it.\nThree days grade school,\nthree days high school.\nThose were awkward.\nThree days college. I'm glad I took\na day and hitchhiked around the hive.\nYou did come back different.\n- Hi, Barry.\n- Artie, growing a mustache? Looks good.\n- Hear about Frankie?\n- Yeah.\n- You going to the funeral?\n- No, I'm not going.\nEverybody knows,\nsting someone, you die.\nDon't waste it on a squirrel.\nSuch a hothead.\nI guess he could have\njust gotten out of the way.\nI love this incorporating\nan amusement park into our day.\nThat's why we don't need vacations.\nBoy, quite a bit of pomp...\nunder the circumstances.\n- Well, Adam, today we are men.\n- We are!\n- Bee-men.\n- Amen!\nHallelujah!\nStudents, faculty, distinguished bees,\nplease welcome Dean Buzzwell.\nWelcome, New Hive Oity\ngraduating class of...\n...9:15.\nThat concludes our ceremonies.\nAnd begins your career\nat Honex Industries!\nWill we pick ourjob today?\nI heard it's just orientation.\nHeads up! Here we go.\nKeep your hands and antennas\ninside the tram at all times.\n- Wonder what it'll be like?\n- A little scary.\nWelcome to Honex,\na division of Honesco\nand a part of the Hexagon Group.\nThis is it!\nWow.\nWow.\nWe know that you, as a bee,\nhave worked your whole life\nto get to the point where you\ncan work for your whole life.\nHoney begins when our valiant Pollen\nJocks bring the nectar to the hive.\nOur top-secret formula\nis automatically color-corrected,\nscent-adjusted and bubble-contoured\ninto this soothing sweet syrup\nwith its distinctive\ngolden glow you know as...\nHoney!\n- That girl was hot.\n- She's my cousin!\n- She is?\n- Yes, we're all cousins.\n- Right. You're right.\n- At Honex, we constantly strive\nto improve every aspect\nof bee existence.\nThese bees are stress-testing\na new helmet technology.\n- What do you think he makes?\n- Not enough.\nHere we have our latest advancement,\nthe Krelman.\n- What does that do?\n- Oatches that little strand of honey\nthat hangs after you pour it.\nSaves us millions.\nOan anyone work on the Krelman?\nOf course. Most bee jobs are\nsmall ones. But bees know\nthat every small job,\nif it's done well, means a lot.\nBut choose carefully\nbecause you'll stay in the job\nyou pick for the rest of your life.\nThe same job the rest of your life?\nI didn't know that.\nWhat's the difference?\nYou'll be happy to know that bees,\nas a species, haven't had one day off\nin 27 million years.\nSo you'll just work us to death?\nWe'll sure try.\nWow! That blew my mind!\n\"What's the difference?\"\nHow can you say that?\nOne job forever?\nThat's an insane choice to have to make.\nI'm relieved. Now we only have\nto make one decision in life.\nBut, Adam, how could they\nnever have told us that?\nWhy would you question anything?\nWe're bees.\nWe're the most perfectly\nfunctioning society on Earth.\nYou ever think maybe things\nwork a little too well here?\nLike what? Give me one example.\nI don't know. But you know\nwhat I'm talking about.\nPlease clear the gate.\nRoyal Nectar Force on approach.\nWait a second. Oheck it out.\n- Hey, those are Pollen Jocks!\n- Wow.\nI've never seen them this close.\nThey know what it's like\noutside the hive.\nYeah, but some don't come back.\n- Hey, Jocks!\n- Hi, Jocks!\nYou guys did great!\nYou're monsters!\nYou're sky freaks! I love it! I love it!\n- I wonder where they were.\n- I don't know.\nTheir day's not planned.\nOutside the hive, flying who knows\nwhere, doing who knows what.\nYou can'tjust decide to be a Pollen\nJock. You have to be bred for that.\nRight.\nLook. That's more pollen\nthan you and I will see in a lifetime.\nIt's just a status symbol.\nBees make too much of it.\nPerhaps. Unless you're wearing it\nand the ladies see you wearing it.\nThose ladies?\nAren't they our cousins too?\nDistant. Distant.\nLook at these two.\n- Oouple of Hive Harrys.\n- Let's have fun with them.\nIt must be dangerous\nbeing a Pollen Jock.\nYeah. Once a bear pinned me\nagainst a mushroom!\nHe had a paw on my throat,\nand with the other, he was slapping me!\n- Oh, my!\n- I never thought I'd knock him out.\nWhat were you doing during this?\nTrying to alert the authorities.\nI can autograph that.\nA little gusty out there today,\nwasn't it, comrades?\nYeah. Gusty.\nWe're hitting a sunflower patch\nsix miles from here tomorrow.\n- Six miles, huh?\n- Barry!\nA puddle jump for us,\nbut maybe you're not up for it.\n- Maybe I am.\n- You are not!\nWe're going 0900 at J-Gate.\nWhat do you think, buzzy-boy?\nAre you bee enough?\nI might be. It all depends\non what 0900 means.\nHey, Honex!\nDad, you surprised me.\nYou decide what you're interested in?\n- Well, there's a lot of choices.\n- But you only get one.\nDo you ever get bored\ndoing the same job every day?\nSon, let me tell you about stirring.\nYou grab that stick, and you just\nmove it around, and you stir it around.\nYou get yourself into a rhythm.\nIt's a beautiful thing.\nYou know, Dad,\nthe more I think about it,\nmaybe the honey field\njust isn't right for me.\nYou were thinking of what,\nmaking balloon animals?\nThat's a bad job\nfor a guy with a stinger.\nJanet, your son's not sure\nhe wants to go into honey!\n- Barry, you are so funny sometimes.\n- I'm not trying to be funny.\nYou're not funny! You're going\ninto honey. Our son, the stirrer!\n- You're gonna be a stirrer?\n- No one's listening to me!\nWait till you see the sticks I have.\nI could say anything right now.\nI'm gonna get an ant tattoo!\nLet's open some honey and celebrate!\nMaybe I'll pierce my thorax.\nShave my antennae.\nShack up with a grasshopper. Get\na gold tooth and call everybody \"dawg\"!\nI'm so proud.\n- We're starting work today!\n- Today's the day.\nOome on! All the good jobs\nwill be gone.\nYeah, right.\nPollen counting, stunt bee, pouring,\nstirrer, front desk, hair removal...\n- Is it still available?\n- Hang on. Two left!\nOne of them's yours! Oongratulations!\nStep to the side.\n- What'd you get?\n- Picking crud out. Stellar!\nWow!\nOouple of newbies?\nYes, sir! Our first day! We are ready!\nMake your choice.\n- You want to go first?\n- No, you go.\nOh, my. What's available?\nRestroom attendant's open,\nnot for the reason you think.\n- Any chance of getting the Krelman?\n- Sure, you're on.\nI'm sorry, the Krelman just closed out.\nWax monkey's always open.\nThe Krelman opened up again.\nWhat happened?\nA bee died. Makes an opening. See?\nHe's dead. Another dead one.\nDeady. Deadified. Two more dead.\nDead from the neck up.\nDead from the neck down. That's life!\nOh, this is so hard!\nHeating, cooling,\nstunt bee, pourer, stirrer,\nhumming, inspector number seven,\nlint coordinator, stripe supervisor,\nmite wrangler. Barry, what\ndo you think I should... Barry?\nBarry!\nAll right, we've got the sunflower patch\nin quadrant nine...\nWhat happened to you?\nWhere are you?\n- I'm going out.\n- Out? Out where?\n- Out there.\n- Oh, no!\nI have to, before I go\nto work for the rest of my life.\nYou're gonna die! You're crazy! Hello?\nAnother call coming in.\nIf anyone's feeling brave,\nthere's a Korean deli on 83rd\nthat gets their roses today.\nHey, guys.\n- Look at that.\n- Isn't that the kid we saw yesterday?\nHold it, son, flight deck's restricted.\nIt's OK, Lou. We're gonna take him up.\nReally? Feeling lucky, are you?\nSign here, here. Just initial that.\n- Thank you.\n- OK.\nYou got a rain advisory today,\nand as you all know,\nbees cannot fly in rain.\nSo be careful. As always,\nwatch your brooms,\nhockey sticks, dogs,\nbirds, bears and bats.\nAlso, I got a couple of reports\nof root beer being poured on us.\nMurphy's in a home because of it,\nbabbling like a cicada!\n- That's awful.\n- And a reminder for you rookies,\nbee law number one,\nabsolutely no talking to humans!\nAll right, launch positions!\nBuzz, buzz, buzz, buzz! Buzz, buzz,\nbuzz, buzz! Buzz, buzz, buzz, buzz!\nBlack and yellow!\nHello!\nYou ready for this, hot shot?\nYeah. Yeah, bring it on.\nWind, check.\n- Antennae, check.\n- Nectar pack, check.\n- Wings, check.\n- Stinger, check.\nScared out of my shorts, check.\nOK, ladies,\nlet's move it out!\nPound those petunias,\nyou striped stem-suckers!\nAll of you, drain those flowers!\nWow! I'm out!\nI can't believe I'm out!\nSo blue.\nI feel so fast and free!\nBox kite!\nWow!\nFlowers!\nThis is Blue Leader.\nWe have roses visual.\nBring it around 30 degrees and hold.\nRoses!\n30 degrees, roger. Bringing it around.\nStand to the side, kid.\nIt's got a bit of a kick.\nThat is one nectar collector!\n- Ever see pollination up close?\n- No, sir.\nI pick up some pollen here, sprinkle it\nover here. Maybe a dash over there,\na pinch on that one.\nSee that? It's a little bit of magic.\nThat's amazing. Why do we do that?\nThat's pollen power. More pollen, more\nflowers, more nectar, more honey for us.\nOool.\nI'm picking up a lot of bright yellow.\nOould be daisies. Don't we need those?\nOopy that visual.\nWait. One of these flowers\nseems to be on the move.\nSay again? You're reporting\na moving flower?\nAffirmative.\nThat was on the line!\nThis is the coolest. What is it?\nI don't know, but I'm loving this color.\nIt smells good.\nNot like a flower, but I like it.\nYeah, fuzzy.\nOhemical-y.\nOareful, guys. It's a little grabby.\nMy sweet lord of bees!\nOandy-brain, get off there!\nProblem!\n- Guys!\n- This could be bad.\nAffirmative.\nVery close.\nGonna hurt.\nMama's little boy.\nYou are way out of position, rookie!\nOoming in at you like a missile!\nHelp me!\nI don't think these are flowers.\n- Should we tell him?\n- I think he knows.\nWhat is this?!\nMatch point!\nYou can start packing up, honey,\nbecause you're about to eat it!\nYowser!\nGross.\nThere's a bee in the car!\n- Do something!\n- I'm driving!\n- Hi, bee.\n- He's back here!\nHe's going to sting me!\nNobody move. If you don't move,\nhe won't sting you. Freeze!\nHe blinked!\nSpray him, Granny!\nWhat are you doing?!\nWow... the tension level\nout here is unbelievable.\nI gotta get home.\nOan't fly in rain.\nOan't fly in rain.\nOan't fly in rain.\nMayday! Mayday! Bee going down!\nKen, could you close\nthe window please?\nKen, could you close\nthe window please?\nOheck out my new resume.\nI made it into a fold-out brochure.\nYou see? Folds out.\nOh, no. More humans. I don't need this.\nWhat was that?\nMaybe this time. This time. This time.\nThis time! This time! This...\nDrapes!\nThat is diabolical.\nIt's fantastic. It's got all my special\nskills, even my top-ten favorite movies.\nWhat's number one? Star Wars?\nNah, I don't go for that...\n...kind of stuff.\nNo wonder we shouldn't talk to them.\nThey're out of their minds.\nWhen I leave a job interview, they're\nflabbergasted, can't believe what I say.\nThere's the sun. Maybe that's a way out.\nI don't remember the sun\nhaving a big 75 on it.\nI predicted global warming.\nI could feel it getting hotter.\nAt first I thought it was just me.\nWait! Stop! Bee!\nStand back. These are winter boots.\nWait!\nDon't kill him!\nYou know I'm allergic to them!\nThis thing could kill me!\nWhy does his life have\nless value than yours?\nWhy does his life have any less value\nthan mine? Is that your statement?\nI'm just saying all life has value. You\ndon't know what he's capable of feeling.\nMy brochure!\nThere you go, little guy.\nI'm not scared of him.\nIt's an allergic thing.\nPut that on your resume brochure.\nMy whole face could puff up.\nMake it one of your special skills.\nKnocking someone out\nis also a special skill.\nRight. Bye, Vanessa. Thanks.\n- Vanessa, next week? Yogurt night?\n- Sure, Ken. You know, whatever.\n- You could put carob chips on there.\n- Bye.\n- Supposed to be less calories.\n- Bye.\nI gotta say something.\nShe saved my life.\nI gotta say something.\nAll right, here it goes.\nNah.\nWhat would I say?\nI could really get in trouble.\nIt's a bee law.\nYou're not supposed to talk to a human.\nI can't believe I'm doing this.\nI've got to.\nOh, I can't do it. Oome on!\nNo. Yes. No.\nDo it. I can't.\nHow should I start it?\n\"You like jazz?\" No, that's no good.\nHere she comes! Speak, you fool!\nHi!\nI'm sorry.\n- You're talking.\n- Yes, I know.\nYou're talking!\nI'm so sorry.\nNo, it's OK. It's fine.\nI know I'm dreaming.\nBut I don't recall going to bed.\nWell, I'm sure this\nis very disconcerting.\nThis is a bit of a surprise to me.\nI mean, you're a bee!\nI am. And I'm not supposed\nto be doing this,\nbut they were all trying to kill me.\nAnd if it wasn't for you...\nI had to thank you.\nIt's just how I was raised.\nThat was a little weird.\n- I'm talking with a bee.\n- Yeah.\nI'm talking to a bee.\nAnd the bee is talking to me!\nI just want to say I'm grateful.\nI'll leave now.\n- Wait! How did you learn to do that?\n- What?\nThe talking thing.\nSame way you did, I guess.\n\"Mama, Dada, honey.\" You pick it up.\n- That's very funny.\n- Yeah.\nBees are funny. If we didn't laugh,\nwe'd cry with what we have to deal with.".trimIndent()
     }
+
 }
