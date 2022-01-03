@@ -48,11 +48,6 @@ class NitroSpoof : Plugin() {
             )
         }
 
-        try {
-            File(Constants.PLUGINS_PATH, "NitroSpoof.zip").delete()
-        } catch (_: Throwable) {}
-    }
-
     override fun stop(context: Context) {
         patcher.unpatchAll()
     }
