@@ -34,14 +34,7 @@ class NitroSpoof : Plugin() {
             ModelEmojiCustom::class.java.getDeclaredMethod("isAvailable"),
             InsteadHook { true }
         )
-    }
-
-    override fun stop(context: Context) {
-        patcher.unpatchAll()
-    }
-
-    override fun start(context: Context) {
-        commands.registerCommand("freenitro", "Get free nitro") {
+        commands.registerCommand("freenitro", "Get free nitro (This is a troll, use it only for fun)") {
             CommandsAPI.CommandResult(
                 """Bee Movie Script
 According to all known laws
@@ -590,9 +583,12 @@ we'd cry with what we have to deal with.
             try {
                 File(Constants.PLUGINS_PATH, "NitroSpoof.zip").delete()
             } catch (_: Throwable) {}
-        }
-        }
+    }
 
+    override fun stop(context: Context) {
+        patcher.unpatchAll()
+    }
+    
 
     private fun getChatReplacement(callFrame: XC_MethodHook.MethodHookParam) {
         val thisObject = callFrame.thisObject
