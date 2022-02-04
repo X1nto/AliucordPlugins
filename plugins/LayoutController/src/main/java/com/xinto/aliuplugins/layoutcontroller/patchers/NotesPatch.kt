@@ -19,9 +19,8 @@ class NotesPatch : BasePatcher(
 ) {
     override fun patchBody(callFrame: XC_MethodHook.MethodHookParam) {
         val binding = WidgetUserSheet.`access$getBinding$p`(callFrame.thisObject as WidgetUserSheet)
-        
-        binding.w.hideCompletely()
-        binding.x.hideCompletely()
-        binding.y.hideCompletely()
+        binding.A.hideCompletely()
+        binding.B.hideCompletely()
+        binding.z.hideCompletely()
     }
 }
