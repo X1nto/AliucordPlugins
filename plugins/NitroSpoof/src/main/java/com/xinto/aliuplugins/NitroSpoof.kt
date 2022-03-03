@@ -71,6 +71,9 @@ class NitroSpoof : Plugin() {
         if (emoteSize != null) {
             finalUrl += "?size=${emoteSize}"
         }
+        
+        finalUrl += "&quality=lossless"
+        
         callFrame.result = finalUrl
     }
 
