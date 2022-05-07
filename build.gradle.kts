@@ -62,6 +62,10 @@ subprojects {
         tasks.withType<KotlinCompile> {
             kotlinOptions {
                 jvmTarget = "11"
+                freeCompilerArgs = freeCompilerArgs +
+                    "-Xno-call-assertions" +
+                    "-Xno-param-assertions" +
+                    "-Xno-receiver-assertions"
             }
         }
     }
