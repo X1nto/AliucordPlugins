@@ -13,9 +13,6 @@ Appends "GNU/" prefix to every word in the sentence.
 ## [LayoutController](/plugins/LayoutController)
 Lets you control the discord mobile layout.
 
-## [Lyrics](/plugins/Lyrics)
-Get lyrics to a song.
-
 ## [NanomachinesSon](/plugins/NanomachinesSon)
 Returns a copypasta of Senator Armstrong's political speech.
 
