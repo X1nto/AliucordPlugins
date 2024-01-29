@@ -59,7 +59,11 @@ class NitroSpoof : Plugin() {
             return
         }
 
-        var finalUrl = (if (settings.getBool("emptyChar", false)) EMPTY_CHAR + "(https://cdn.discordapp.com/emojis/" else "https://cdn.discordapp.com/emojis/")
+        var finalUrl = (if (settings.getBool("emptyChar", false)) { 
+        		EMPTY_CHAR + "(https://cdn.discordapp.com/emojis/"
+        		} else {
+        			"https://cdn.discordapp.com/emojis/"
+        		})
 
         val idStr = thisObject.getCachedField<String>("idStr")
         val isAnimated = thisObject.getCachedField<Boolean>("isAnimated")
