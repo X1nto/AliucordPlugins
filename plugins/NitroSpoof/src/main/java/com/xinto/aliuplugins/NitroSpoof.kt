@@ -94,7 +94,7 @@ class NitroSpoof : Plugin() {
             finalUrl += "&size=${emoteSize}"
         }
 
-        if(settings.getBool("emptyChar", false)) {
+        if(settings.getBool("emptyChar", false) && !servBlacklist.contains(GuildWrapper.id)) {
         	finalUrl += ")"
         }
         
