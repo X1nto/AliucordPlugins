@@ -7,7 +7,7 @@ import com.aliucord.api.CommandsAPI
 import com.aliucord.entities.Plugin
 import com.aliucord.patcher.Hook
 import com.aliucord.patcher.InsteadHook
-import com.aliucord.wrappers.ChannelWrapper
+import com.aliucord.wrappers.GuildWrapper
 import com.xinto.aliuplugins.nitrospoof.EMOTE_SIZE_DEFAULT
 import com.xinto.aliuplugins.nitrospoof.EMOTE_SIZE_KEY
 import com.xinto.aliuplugins.nitrospoof.EMPTY_CHAR
@@ -42,16 +42,16 @@ class NitroSpoof : Plugin() {
             InsteadHook { true }
         )
         commands.registerCommand("blacklist", "Blacklist current server to not use empty character.") {
-        	if(servBlacklist.contains(ChannelWrapper.guildId)) {
+        	if(servBlacklist.contains(GuildWrapper.id)) {
         		CommandsAPI.CommandResult("Current server is already in blacklist.")
         		return
         	}
-        	servBlacklist.add(ChannelWrapper.guildId)
+        	servBlacklist.add(GuildWrapper.id)
         	CommandsAPI.CommandResult("Current server is blacklisted.")
         }
         commands.registerCommand("whitelist", "Remove current server from blacklist.") {
-        	if(ChannelWrapper.guildId == ALIUCORD_GUILD_ID) CommandsAPI.CommandResult("Nop.") else {
-        		servBlacklist.remove(ChannelWrapper.guildId)
+        	if(GuildWrapper.id == ALIUCORD_GUILD_ID) CommandsAPI.CommandResult("Nop.") else {
+        		servBlacklist.remove(GuildWrapper.id)
         		CommandsAPI.CommandResult("Current server removed from blacklist.")
         	}
         }
@@ -76,7 +76,7 @@ class NitroSpoof : Plugin() {
             return
         }
 
-        var finalUrl = (if (settings.getBool("emptyChar", false) && !servBlacklist.contains(ChannelWrapper.guildId)) { 
+        var finalUrl = (if (settings.getBool("emptyChar", false) && !servBlacklist.contains(GuildWrapper.id)) { 
         		EMPTY_CHAR + "(https://cdn.discordapp.com/emojis/"
         		} else {
         			"https://cdn.discordapp.com/emojis/"
