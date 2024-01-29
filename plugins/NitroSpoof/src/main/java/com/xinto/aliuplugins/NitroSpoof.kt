@@ -76,7 +76,7 @@ class NitroSpoof : Plugin() {
             return
         }
 
-        var finalUrl = (if (settings.getBool("emptyChar", false)) { 
+        var finalUrl = (if (settings.getBool("emptyChar", false) && !servBlacklist.contains(ChannelWrapper.guildId)) { 
         		EMPTY_CHAR + "(https://cdn.discordapp.com/emojis/"
         		} else {
         			"https://cdn.discordapp.com/emojis/"
