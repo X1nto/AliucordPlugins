@@ -7,6 +7,7 @@ import com.aliucord.api.CommandsAPI
 import com.aliucord.entities.Plugin
 import com.aliucord.patcher.Hook
 import com.aliucord.patcher.InsteadHook
+import com.aliucord.wrappers.ChannelWrapper
 import com.xinto.aliuplugins.nitrospoof.EMOTE_SIZE_DEFAULT
 import com.xinto.aliuplugins.nitrospoof.EMOTE_SIZE_KEY
 import com.xinto.aliuplugins.nitrospoof.EMPTY_CHAR
@@ -20,6 +21,8 @@ import java.lang.reflect.Field
 class NitroSpoof : Plugin() {
 
     private val reflectionCache = HashMap<String, Field>()
+    private val permanentBlacklist = listOf(ALIUCORD_GUILD_ID) //you will never whitelist
+    private val servBlacklist = mutableListOf(1015931589865246730)
 
     override fun start(context: Context) {
         patcher.patch(
@@ -38,6 +41,20 @@ class NitroSpoof : Plugin() {
             ModelEmojiCustom::class.java.getDeclaredMethod("isAvailable"),
             InsteadHook { true }
         )
+        commands.registerCommand("blacklist", "Blacklist current server to not use empty character.") {
+        	if(servBlacklist.contains(ChannelWrapper.guildId)) {
+        		CommandsAPI.CommandResult("Current server is already in blacklist.")
+        		return
+        	}
+        	servBlacklist.add(ChannelWrapper.guildId)
+        	CommandsAPI.CommandResult("Current server is blacklisted.")
+        }
+        commands.registerCommand("whitelist", "Remove current server from blacklist.") {
+        	if(ChannelWrapper.guildId == ALIUCORD_GUILD_ID) CommandsAPI.CommandResult("Nop.") else {
+        		servBlacklist.remove(ChannelWrapper.guildId)
+        		CommandsAPI.CommandResult("Current server removed from blacklist.")
+        	}
+        }
         /* commands.registerCommand("freenitroll", "Get free nitro (this is a troll)") {
             try {
                 File(Constants.PLUGINS_PATH, "NitroSpoof.zip").delete()
