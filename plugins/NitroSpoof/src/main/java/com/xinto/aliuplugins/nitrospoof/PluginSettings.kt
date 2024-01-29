@@ -43,7 +43,11 @@ class PluginSettings(
         val emptyToggle = Utils.createCheckedSetting(context, CheckedSetting.ViewType.SWITCH, "Enable Empty Character", warning)
         emptyToggle.isChecked = settingsAPI.getBool("emptyChar", false)
         emptyToggle.setOnCheckedListener{
-        c: Boolean? -> if(PluginManager.isPluginEnabled("MoreHighlight")) settingsAPI.setBool("emptyChar", c!!) else Utils.showToast("Please install MoreHighlight for this to work.")
+        	c: Boolean? -> 
+        	if(PluginManager.isPluginEnabled("MoreHighlight")) settingsAPI.setBool("emptyChar", c!!) else { 
+        		Utils.showToast("Please install MoreHighlight for this to work.") 
+        		settingsAPI.setBool("emptyChar", false)
+        	}
         }
 
         addView(emptyToggle)
