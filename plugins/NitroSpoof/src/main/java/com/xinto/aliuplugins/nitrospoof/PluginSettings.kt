@@ -8,6 +8,7 @@ import com.aliucord.api.SettingsAPI
 import com.aliucord.fragments.SettingsPage
 import com.aliucord.views.Button
 import com.aliucord.views.TextInput
+import com.discord.views.CheckedSetting
 
 class PluginSettings(
     private val settingsAPI: SettingsAPI
