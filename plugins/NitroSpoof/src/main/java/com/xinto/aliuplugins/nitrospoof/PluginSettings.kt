@@ -40,9 +40,9 @@ class PluginSettings(
         }
 
         val emptyToggle = Utils.createCheckedSetting(context, CheckedSetting.ViewType.SWITCH, "Enable Empty Character", warning)
-        emptyToggle.isChecked = settingsAPI.getBool(emptyChar, false)
+        emptyToggle.isChecked = settingsAPI.getBool("emptyChar", false)
         emptyToggle.setOnCheckedListener{
-        c: Boolean? -> settingsAPI.setBool(emptyChar, c!!)
+        c: Boolean? -> settingsAPI.setBool("emptyChar", c!!)
         }
 
         addView(emptyToggle)

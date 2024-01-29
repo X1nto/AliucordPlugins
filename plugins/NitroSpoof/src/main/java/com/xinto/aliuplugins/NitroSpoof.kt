@@ -59,7 +59,7 @@ class NitroSpoof : Plugin() {
             return
         }
 
-        var finalUrl = settings.getBool(emptyChar, false) ? EMPTY_CHAR + "(https://cdn.discordapp.com/emojis/" : "https://cdn.discordapp.com/emojis/"
+        var finalUrl = settings.getBool("emptyChar", false) ? EMPTY_CHAR + "(https://cdn.discordapp.com/emojis/" : "https://cdn.discordapp.com/emojis/"
 
         val idStr = thisObject.getCachedField<String>("idStr")
         val isAnimated = thisObject.getCachedField<Boolean>("isAnimated")
@@ -69,7 +69,7 @@ class NitroSpoof : Plugin() {
 
         finalUrl += (if (isAnimated) ".gif" else ".png") + "?quality=lossless"
 
-        if(settings.getBool(emptyChar, false)) {
+        if(settings.getBool("emptyChar", false)) {
         	finalUrl += ")"
         }
 
