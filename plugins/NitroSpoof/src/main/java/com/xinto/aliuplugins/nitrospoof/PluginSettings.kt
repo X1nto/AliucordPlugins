@@ -5,6 +5,7 @@ import android.text.InputType
 import android.view.View
 import com.aliucord.Utils
 import com.aliucord.api.SettingsAPI
+import com aliucord.PluginManager
 import com.aliucord.fragments.SettingsPage
 import com.aliucord.views.Button
 import com.aliucord.views.TextInput
@@ -42,7 +43,7 @@ class PluginSettings(
         val emptyToggle = Utils.createCheckedSetting(context, CheckedSetting.ViewType.SWITCH, "Enable Empty Character", warning)
         emptyToggle.isChecked = settingsAPI.getBool("emptyChar", false)
         emptyToggle.setOnCheckedListener{
-        c: Boolean? -> settingsAPI.setBool("emptyChar", c!!)
+        c: Boolean? -> if(PluginManager.isPluginEnabled("MoreHighlight") settingsAPI.setBool("emptyChar", c!!) else Utils.showToast("Please install MoreHighlight for this to work.")
         }
 
         addView(emptyToggle)
