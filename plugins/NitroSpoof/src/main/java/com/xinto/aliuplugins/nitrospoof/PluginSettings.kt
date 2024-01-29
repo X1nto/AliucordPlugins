@@ -3,7 +3,7 @@ package com.xinto.aliuplugins.nitrospoof
 import android.annotation.SuppressLint
 import android.text.InputType
 import android.view.View
-import com.aliucord.Utils.*
+import com.aliucord.Utils
 import com.aliucord.api.SettingsAPI
 import com.aliucord.fragments.SettingsPage
 import com.aliucord.views.Button
