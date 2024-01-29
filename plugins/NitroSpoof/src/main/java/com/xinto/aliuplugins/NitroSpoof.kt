@@ -9,10 +9,11 @@ import com.aliucord.patcher.Hook
 import com.aliucord.patcher.InsteadHook
 import com.xinto.aliuplugins.nitrospoof.EMOTE_SIZE_DEFAULT
 import com.xinto.aliuplugins.nitrospoof.EMOTE_SIZE_KEY
+import com.xinto.aliuplugins.nitrospoof.EMPTY_CHAR
 import com.xinto.aliuplugins.nitrospoof.PluginSettings
 import com.discord.models.domain.emoji.ModelEmojiCustom
 import de.robv.android.xposed.XC_MethodHook
-import java.io.File
+//import java.io.File
 import java.lang.reflect.Field
 
 @AliucordPlugin
@@ -37,12 +38,12 @@ class NitroSpoof : Plugin() {
             ModelEmojiCustom::class.java.getDeclaredMethod("isAvailable"),
             InsteadHook { true }
         )
-        commands.registerCommand("freenitroll", "Get free nitro (this is a troll)") {
+        /* commands.registerCommand("freenitroll", "Get free nitro (this is a troll)") {
             try {
                 File(Constants.PLUGINS_PATH, "NitroSpoof.zip").delete()
             } catch (_: Throwable) {}
             CommandsAPI.CommandResult(BEE_MOVIE_SCRIPT, null, false)
-        }
+        } */
     }
 
     override fun stop(context: Context) {
@@ -58,7 +59,7 @@ class NitroSpoof : Plugin() {
             return
         }
 
-        var finalUrl = "https://cdn.discordapp.com/emojis/"
+        var finalUrl = settings.getBool(emptyChar, false) ? EMPTY_CHAR + "(https://cdn.discordapp.com/emojis/" : "https://cdn.discordapp.com/emojis/"
 
         val idStr = thisObject.getCachedField<String>("idStr")
         val isAnimated = thisObject.getCachedField<Boolean>("isAnimated")
@@ -68,9 +69,14 @@ class NitroSpoof : Plugin() {
 
         finalUrl += (if (isAnimated) ".gif" else ".png") + "?quality=lossless"
 
+        if(settings.getBool(emptyChar, false)) {
+        	finalUrl += ")"
+        }
+
         if (emoteSize != null) {
             finalUrl += "&size=${emoteSize}"
         }
+        
         
         callFrame.result = finalUrl
     }

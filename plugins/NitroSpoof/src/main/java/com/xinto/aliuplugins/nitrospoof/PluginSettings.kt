@@ -3,7 +3,7 @@ package com.xinto.aliuplugins.nitrospoof
 import android.annotation.SuppressLint
 import android.text.InputType
 import android.view.View
-import com.aliucord.Utils
+import com.aliucord.Utils.*
 import com.aliucord.api.SettingsAPI
 import com.aliucord.fragments.SettingsPage
 import com.aliucord.views.Button
@@ -18,6 +18,7 @@ class PluginSettings(
         super.onViewBound(view)
 
         val context = requireContext()
+        val warning = "This allows you to embed your emote without the URL being present. Some servers do not allow empty character."
 
         setActionBarTitle("NitroSpoof")
 
@@ -36,6 +37,14 @@ class PluginSettings(
                 close()
             }
         }
+
+        val emptyToggle = createCheckedSetting(context, CheckedSetting.ViewType.SWITCH, "Enable Empty Character", warning)
+        emptyToggle.isChecked = settingsAPI.getBool(emptyChar, false)
+        emptyToggle.setOnCheckedListener{
+        c: Boolean? -> settingsAPI.setBool(emptyChar, c!!)
+        }
+
+        addView(emptyToggle)
 
         addView(textInput)
         addView(saveButton)
