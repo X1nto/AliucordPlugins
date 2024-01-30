@@ -2,12 +2,13 @@ package com.xinto.aliuplugins
 
 import android.content.Context
 import com.aliucord.Constants
+import com.aliucord.Constants.ALIUCORD_GUILD_ID
 import com.aliucord.annotations.AliucordPlugin
 import com.aliucord.api.CommandsAPI
 import com.aliucord.entities.Plugin
 import com.aliucord.patcher.Hook
 import com.aliucord.patcher.InsteadHook
-import com.aliucord.wrappers.GuildWrapper
+import com.aliucord.wrappers.GuildWrapper.*
 import com.xinto.aliuplugins.nitrospoof.EMOTE_SIZE_DEFAULT
 import com.xinto.aliuplugins.nitrospoof.EMOTE_SIZE_KEY
 import com.xinto.aliuplugins.nitrospoof.EMPTY_CHAR
@@ -44,10 +45,10 @@ class NitroSpoof : Plugin() {
         commands.registerCommand("blacklist", "Blacklist current server to not use empty character.") {
         	if(servBlacklist.contains(GuildWrapper.id)) {
         		CommandsAPI.CommandResult("Current server is already in blacklist.")
-        		return
-        	}
+        	} else {
         	servBlacklist.put(GuildWrapper.id, GuildWrapper.name)
         	CommandsAPI.CommandResult("Current server is blacklisted.")
+        	}
         }
         commands.registerCommand("whitelist", "Remove current server from blacklist.") {
         	if(GuildWrapper.id == ALIUCORD_GUILD_ID) CommandsAPI.CommandResult("Nop.") else {
