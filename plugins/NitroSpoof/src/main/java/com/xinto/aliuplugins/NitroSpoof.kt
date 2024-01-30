@@ -28,7 +28,7 @@ class NitroSpoof : Plugin() {
     val permanentBlacklist = mapOf(ALIUCORD_GUILD_ID to "Aliucord") //you will never whitelist
     val servBlacklist = mutableMapOf(1015931589865246730 to "Vendetta")
     private val CW = ChannelWrapper(StoreStream.getChannelsSelected().getSelectedChannel())
-    val GW = GuildWrapper(StoreGuilds.getGuilds().getGuild(CW.guildId))
+    val GW = GuildWrapper(StoreGuilds.getGuild(CW.guildId))
 
     override fun start(context: Context) {
         patcher.patch(
