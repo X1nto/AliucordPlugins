@@ -8,6 +8,7 @@ import com.aliucord.api.CommandsAPI
 import com.aliucord.entities.Plugin
 import com.aliucord.patcher.Hook
 import com.aliucord.patcher.InsteadHook
+import com.aliucord.wrappers.ChannelWrapper
 import com.aliucord.wrappers.GuildWrapper
 import com.xinto.aliuplugins.nitrospoof.EMOTE_SIZE_DEFAULT
 import com.xinto.aliuplugins.nitrospoof.EMOTE_SIZE_KEY
@@ -25,7 +26,8 @@ class NitroSpoof : Plugin() {
     private val reflectionCache = HashMap<String, Field>()
     val permanentBlacklist = mapOf(ALIUCORD_GUILD_ID to "Aliucord") //you will never whitelist
     val servBlacklist = mutableMapOf(1015931589865246730 to "Vendetta")
-    val GW = GuildWrapper(StoreStream.getGuilds().getSelectedGuild())
+    private val CW = ChannelWrapper(StoreStream.getChannelsSelected().getSelectedChannel())
+    val GW = GuildWrapper(StoreStream.getGuilds().getGuild(CW.guildId))
 
     override fun start(context: Context) {
         patcher.patch(
