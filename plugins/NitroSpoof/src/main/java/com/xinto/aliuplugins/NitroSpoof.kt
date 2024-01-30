@@ -15,6 +15,7 @@ import com.xinto.aliuplugins.nitrospoof.EMOTE_SIZE_KEY
 import com.xinto.aliuplugins.nitrospoof.EMPTY_CHAR
 import com.xinto.aliuplugins.nitrospoof.PluginSettings
 import com.discord.models.domain.emoji.ModelEmojiCustom
+import com.discord.stores.StoreGuilds
 import com.discord.stores.StoreStream
 import de.robv.android.xposed.XC_MethodHook
 //import java.io.File
@@ -27,7 +28,7 @@ class NitroSpoof : Plugin() {
     val permanentBlacklist = mapOf(ALIUCORD_GUILD_ID to "Aliucord") //you will never whitelist
     val servBlacklist = mutableMapOf(1015931589865246730 to "Vendetta")
     private val CW = ChannelWrapper(StoreStream.getChannelsSelected().getSelectedChannel())
-    val GW = GuildWrapper(StoreStream.getGuilds().getGuild(CW.guildId))
+    val GW = GuildWrapper(StoreGuilds.getGuilds().getGuild(CW.guildId))
 
     override fun start(context: Context) {
         patcher.patch(
