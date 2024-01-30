@@ -21,8 +21,8 @@ import java.lang.reflect.Field
 class NitroSpoof : Plugin() {
 
     private val reflectionCache = HashMap<String, Field>()
-    private val permanentBlacklist = listOf(ALIUCORD_GUILD_ID) //you will never whitelist
-    private val servBlacklist = mutableListOf(1015931589865246730)
+    val permanentBlacklist = mapOf(ALIUCORD_GUILD_ID to "Aliucord") //you will never whitelist
+    val servBlacklist = mutableMapOf(1015931589865246730 to "Vendetta")
 
     override fun start(context: Context) {
         patcher.patch(
@@ -46,7 +46,7 @@ class NitroSpoof : Plugin() {
         		CommandsAPI.CommandResult("Current server is already in blacklist.")
         		return
         	}
-        	servBlacklist.add(GuildWrapper.id)
+        	servBlacklist.put(GuildWrapper.id, GuildWrapper.name)
         	CommandsAPI.CommandResult("Current server is blacklisted.")
         }
         commands.registerCommand("whitelist", "Remove current server from blacklist.") {
