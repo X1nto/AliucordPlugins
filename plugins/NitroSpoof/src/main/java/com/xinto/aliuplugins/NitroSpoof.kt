@@ -14,7 +14,7 @@ import com.xinto.aliuplugins.nitrospoof.EMOTE_SIZE_KEY
 import com.xinto.aliuplugins.nitrospoof.EMPTY_CHAR
 import com.xinto.aliuplugins.nitrospoof.PluginSettings
 import com.discord.models.domain.emoji.ModelEmojiCustom
-import com.discord.stores.StoreStream.*
+import com.discord.stores.StoreStream
 import de.robv.android.xposed.XC_MethodHook
 //import java.io.File
 import java.lang.reflect.Field
