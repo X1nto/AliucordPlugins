@@ -8,15 +8,16 @@ import com.aliucord.api.CommandsAPI
 import com.aliucord.entities.Plugin
 import com.aliucord.patcher.Hook
 import com.aliucord.patcher.InsteadHook
-import com.aliucord.wrappers.ChannelWrapper
-import com.aliucord.wrappers.GuildWrapper
+import com.aliucord.wrapper.ChannelWrapper
 import com.xinto.aliuplugins.nitrospoof.EMOTE_SIZE_DEFAULT
 import com.xinto.aliuplugins.nitrospoof.EMOTE_SIZE_KEY
 import com.xinto.aliuplugins.nitrospoof.EMPTY_CHAR
+import com.xinto.aliuplugins.nitrospoof.permBlacklist
+import com.xinto.aliuplugins.nitrospoof.servBlacklist
 import com.xinto.aliuplugins.nitrospoof.PluginSettings
-import com.discord.models.domain.emoji.ModelEmojiCustom
-import com.discord.stores.StoreGuilds
 import com.discord.stores.StoreStream
+import com.discord.models.guild.Guild
+import com.discord.models.domain.emoji.ModelEmojiCustom
 import de.robv.android.xposed.XC_MethodHook
 //import java.io.File
 import java.lang.reflect.Field
@@ -25,10 +26,8 @@ import java.lang.reflect.Field
 class NitroSpoof : Plugin() {
 
     private val reflectionCache = HashMap<String, Field>()
-    val permanentBlacklist = mapOf(ALIUCORD_GUILD_ID to "Aliucord") //you will never whitelist
-    val servBlacklist = mutableMapOf(1015931589865246730 to "Vendetta")
     private val CW = ChannelWrapper(StoreStream.getChannelsSelected().getSelectedChannel())
-    val GW = GuildWrapper(StoreGuilds.getGuild(CW.guildId))
+    private val GW = StoreStream.getGuilds().getGuild(CW.guildId)
 
     override fun start(context: Context) {
         patcher.patch(
@@ -48,19 +47,19 @@ class NitroSpoof : Plugin() {
             InsteadHook { true }
         )
         commands.registerCommand("blacklist", "Blacklist current server to not use empty character.") {
-        	if(servBlacklist.contains(GW.id)) {
+        	if(servBlacklist.contains(CW.guildId)) {
         		CommandsAPI.CommandResult("Current server is already in blacklist.")
         	} else {
-        	servBlacklist.put(GW.id, GW.name)
+        	servBlacklist.put(CW.guildId, GW.getName())
         	CommandsAPI.CommandResult("Current server is blacklisted.")
         	}
         }
         commands.registerCommand("whitelist", "Remove current server from blacklist.") {
-        	if(GuildWrapper.id == ALIUCORD_GUILD_ID) CommandsAPI.CommandResult("Nop.") else {
-        		servBlacklist.remove(GW.id)
+        	if(CW.guildId == ALIUCORD_GUILD_ID) CommandsAPI.CommandResult("Nop.") else {
+        		servBlacklist.remove(CW.id)
         		CommandsAPI.CommandResult("Current server removed from blacklist.")
         	}
-        } */
+        } 
         /* commands.registerCommand("freenitroll", "Get free nitro (this is a troll)") {
             try {
                 File(Constants.PLUGINS_PATH, "NitroSpoof.zip").delete()
@@ -82,7 +81,7 @@ class NitroSpoof : Plugin() {
             return
         }
 
-        var finalUrl = (if (settings.getBool("emptyChar", false) && !servBlacklist.contains(GW.id)) { 
+        var finalUrl = (if (settings.getBool("emptyChar", false) && !servBlacklist.contains(CW.guildId) && !permBlacklist.contains(CW.guildId)) { 
         		EMPTY_CHAR + "(https://cdn.discordapp.com/emojis/"
         		} else {
         			"https://cdn.discordapp.com/emojis/"
@@ -100,7 +99,7 @@ class NitroSpoof : Plugin() {
             finalUrl += "&size=${emoteSize}"
         }
 
-        if(settings.getBool("emptyChar", false) && !servBlacklist.contains(GW.id)) {
+        if(settings.getBool("emptyChar", false) && !servBlacklist.contains(CW.guildId) && !permBlacklist.contains(CW.guildId)) {
         	finalUrl += ")"
         }
         
