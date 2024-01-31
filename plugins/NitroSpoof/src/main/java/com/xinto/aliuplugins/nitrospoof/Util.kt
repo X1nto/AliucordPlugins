@@ -6,4 +6,4 @@ const val EMOTE_SIZE_DEFAULT = "48"
 const val EMOTE_SIZE_KEY = "emote_size"
 const val EMPTY_CHAR = "[‎ ]"
 val permBlacklist = mapOf(ALIUCORD_GUILD_ID to "Aliucord")
-val servBlacklist = mutableMapOf(1015931589865246730 to "Vendetta
+val servBlacklist = mutableMapOf(1015931589865246730 to "Vendetta")
