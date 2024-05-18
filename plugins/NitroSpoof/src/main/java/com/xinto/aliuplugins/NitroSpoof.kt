@@ -27,7 +27,11 @@ class NitroSpoof : Plugin() {
 
     private val reflectionCache = HashMap<String, Field>()
     private val CW = ChannelWrapper(StoreStream.getChannelsSelected().getSelectedChannel())
-    private val GW = StoreStream.getGuilds().getGuild(CW.guildId)
+    private var GW? = StoreStream.getGuilds().getGuild(CW.guildId)
+
+    if(GW == null) {
+        GW = 0
+      }
 
     override fun start(context: Context) {
         patcher.patch(
