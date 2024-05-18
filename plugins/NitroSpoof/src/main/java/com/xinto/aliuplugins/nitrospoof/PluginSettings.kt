@@ -5,9 +5,11 @@ import android.text.InputType
 import android.view.View
 import com.aliucord.Utils
 import com.aliucord.api.SettingsAPI
+import com.aliucord.PluginManager
 import com.aliucord.fragments.SettingsPage
 import com.aliucord.views.Button
 import com.aliucord.views.TextInput
+import com.discord.views.CheckedSetting
 
 class PluginSettings(
     private val settingsAPI: SettingsAPI
@@ -18,6 +20,7 @@ class PluginSettings(
         super.onViewBound(view)
 
         val context = requireContext()
+        val warning = "This allows you to embed your emote without the URL being present. Some servers do not allow empty character."
 
         setActionBarTitle("NitroSpoof")
 
@@ -36,6 +39,18 @@ class PluginSettings(
                 close()
             }
         }
+
+        val emptyToggle = Utils.createCheckedSetting(context, CheckedSetting.ViewType.SWITCH, "Enable Empty Character", warning)
+        emptyToggle.isChecked = settingsAPI.getBool("emptyChar", false)
+        emptyToggle.setOnCheckedListener{
+        	c: Boolean? -> 
+        	if(PluginManager.isPluginEnabled("MoreHighlight")) settingsAPI.setBool("emptyChar", c!!) else { 
+        		Utils.showToast("Please install MoreHighlight for this to work.") 
+        		settingsAPI.setBool("emptyChar", false)
+        	}
+        }
+
+        addView(emptyToggle)
 
         addView(textInput)
         addView(saveButton)
