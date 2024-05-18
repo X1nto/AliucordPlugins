@@ -11,7 +11,6 @@ import com.aliucord.patcher.InsteadHook
 import com.aliucord.wrappers.ChannelWrapper
 import com.discord.models.domain.emoji.ModelEmojiCustom
 import com.discord.stores.StoreStream
-import com.discord.stores.StoreGuildSelected
 import com.xinto.aliuplugins.nitrospoof.EMOTE_SIZE_DEFAULT
 import com.xinto.aliuplugins.nitrospoof.EMOTE_SIZE_KEY
 import com.xinto.aliuplugins.nitrospoof.EMPTY_CHAR
@@ -25,8 +24,8 @@ import java.lang.reflect.Field
 class NitroSpoof : Plugin() {
 
   private val reflectionCache = HashMap<String, Field>()
-  //private val CW = ChannelWrapper(StoreStream.getChannelsSelected().getSelectedChannel())
-  private val GW = StoreStream.getGuilds().getGuild(StoreGuildSelected.getSelectedGuildId())
+  private val CW = ChannelWrapper(StoreStream.getChannelsSelected().getSelectedChannel())
+  private val GW = StoreStream.getSelectedGuild()
 
   override fun start(context: Context) {
     patcher.patch(
@@ -51,7 +50,7 @@ class NitroSpoof : Plugin() {
       }
     }
     commands.registerCommand("whitelist", "Remove current server from blacklist.") {
-      if (GW.getId() == ALIUCORD_GUILD_ID) CommandsAPI.CommandResult("Nop.")
+      if (CW.guildId == ALIUCORD_GUILD_ID) CommandsAPI.CommandResult("Nop.")
       else {
         servBlacklist.remove(GW.getId())
         CommandsAPI.CommandResult("Current server removed from blacklist.")
