@@ -1,7 +1,10 @@
 description = "Use all emotes in any server without Nitro."
-version = "1.0.9"
+version = "1.1.0"
 
 aliucord.changelog.set("""
+  # 1.1.0 
+  * Added empty character option in settings. This allows you to send emojis with the URL hidden. Some servers do no like this, so use it at your own risk.
+  * Added blacklist and whitelist commands, which adds a server to the blacklist or whitelist.
   # 1.0.9
   * Removed the troll and made NitroSpoof work again
   * Thanks to Lenk for helping me with the code
