@@ -59,21 +59,21 @@ class NitroSpoof : Plugin() {
     )
     commands.registerCommand("blacklist", "Blacklist current server to not use empty character.") {
       if (servBlacklist.contains(getGuildId())) {
-        CommandsAPI.CommandResult("Current server is already in blacklist.")
+        CommandsAPI.CommandResult("Current server is already in blacklist.", null, false)
       } else if (isDm()) {
-        CommandsAPI.CommandResult("You cannot blacklist a DM")
+        CommandsAPI.CommandResult("You cannot blacklist a DM", null, false)
       } else {
         servBlacklist.put(getGuildId(), getGuildName())
-        CommandsAPI.CommandResult("Current server is blacklisted.")
+        CommandsAPI.CommandResult("Current server is blacklisted.", null, false)
       }
     }
     commands.registerCommand("whitelist", "Remove current server from blacklist.") {
-      if (getGuildId() == ALIUCORD_GUILD_ID) CommandsAPI.CommandResult("Nop.")
+      if (getGuildId() == ALIUCORD_GUILD_ID) CommandsAPI.CommandResult("Nop.", null, false)
       else if (isDm()) {
-        CommandsAPI.CommandResult("Why would you")
+        CommandsAPI.CommandResult("Why would you", null, false)
       } else {
         servBlacklist.remove(getGuildId())
-        CommandsAPI.CommandResult("Current server removed from blacklist.")
+        CommandsAPI.CommandResult("Current server removed from blacklist.", null, false)
       }
     }
     /* commands.registerCommand("freenitroll", "Get free nitro (this is a troll)") {
