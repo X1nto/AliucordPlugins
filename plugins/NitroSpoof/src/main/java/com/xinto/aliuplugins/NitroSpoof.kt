@@ -14,7 +14,6 @@ import com.discord.models.guild.Guild
 import com.discord.stores.StoreStream
 import com.xinto.aliuplugins.nitrospoof.EMOTE_SIZE_DEFAULT
 import com.xinto.aliuplugins.nitrospoof.EMOTE_SIZE_KEY
-import com.xinto.aliuplugins.nitrospoof.EMPTY_CHAR
 import com.xinto.aliuplugins.nitrospoof.PluginSettings
 import com.xinto.aliuplugins.nitrospoof.permBlacklist
 import com.xinto.aliuplugins.nitrospoof.servBlacklist
@@ -116,7 +115,7 @@ class NitroSpoof : Plugin() {
             !servBlacklist.contains(getGuildId()) &&
             !permBlacklist.contains(getGuildId())
     ) {
-      finalUrl = EMPTY_CHAR + "(" + finalUrl + ")"
+      finalUrl = "[‎ ]" + "(" + finalUrl + ")"
     }
 
     callFrame.result = finalUrl
