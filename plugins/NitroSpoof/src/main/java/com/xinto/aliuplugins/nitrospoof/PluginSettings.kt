@@ -20,7 +20,6 @@ class PluginSettings(
         super.onViewBound(view)
 
         val context = requireContext()
-        val warning = "This allows you to embed your emote without the URL being present. Some servers do not allow empty character."
 
         setActionBarTitle("NitroSpoof")
 
@@ -40,13 +39,12 @@ class PluginSettings(
             }
         }
 
-        val emptyToggle = Utils.createCheckedSetting(context, CheckedSetting.ViewType.SWITCH, "Enable Empty Character", warning)
+        val emptyToggle = Utils.createCheckedSetting(context, CheckedSetting.ViewType.SWITCH, "Enable Empty Character", "This allows you to embed your emote without the URL being present. Some servers do not allow empty character.")
         emptyToggle.isChecked = settingsAPI.getBool("emptyChar", false)
-        emptyToggle.setOnCheckedListener{
-        	c: Boolean? -> 
-        	if(PluginManager.isPluginEnabled("MoreHighlight")) settingsAPI.setBool("emptyChar", c!!) else { 
-        		Utils.showToast("Please install MoreHighlight for this to work.") 
-        		settingsAPI.setBool("emptyChar", false)
+        emptyToggle.setOnCheckedListener {
+        	if (PluginManager.isPluginEnabled("MoreHighlight")) settingsAPI.setBool("emptyChar", true) else { 
+        	Utils.showToast("Please install MoreHighlight for this to work.") 
+        	settingsAPI.setBool("emptyChar", false)
         	}
         }
 
