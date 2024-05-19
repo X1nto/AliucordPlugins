@@ -33,13 +33,15 @@ class NitroSpoof : Plugin() {
   
   fun getGuildName(): String {
     val CW = ChannelWrapper(StoreStream.getChannelsSelected().getSelectedChannel())
-    val Guild get() = if (CW.isDM()) StoreStream.getGuilds().getGuild(769749710479032340) else StoreStream.getGuilds().getGuild(CW.guildId())
-    return Guild.getName()
+    val Guild: Guild get() = if (CW.isDM()) StoreStream.getGuilds().getGuild(769749710479032340) else StoreStream.getGuilds().getGuild(CW.guildId())
+    val name = Guild.getName()
+    return name
   }
 
   fun isDm(): Boolean {
     val CW = ChannelWrapper(StoreStream.getChannelsSelected().getSelectedChannel())
-    return CW.isDM()
+    val dm = CW.isDM()
+    return dm
   }
 
   override fun start(context: Context) {
