@@ -39,9 +39,9 @@ class PluginSettings(
             }
         }
 
-        val emptyToggle = Utils.createCheckedSetting(context, CheckedSetting.ViewType.SWITCH, "Enable Empty Character", "This allows you to embed your emote without the URL being present. Some servers do not allow empty character.").let {
-		it.isChecked = settingsAPI.getBool("emptyChar", false)
-		it.setOnCheckedListener {
+        val emptyToggle = Utils.createCheckedSetting(context, CheckedSetting.ViewType.SWITCH, "Enable Empty Character", "This allows you to embed your emote without the URL being present. Some servers do not allow empty character.").apply {
+		this.isChecked = settingsAPI.getBool("emptyChar", false)
+		this.setOnCheckedListener {
 			c: Boolean? -> if (PluginManager.isPluginEnabled("MoreHighlight")) settingsAPI.setBool("emptyChar", c!!) else { 
 			Utils.showToast("Please install MoreHighlight for this to work.") 
 			settingsAPI.setBool("emptyChar", false)
