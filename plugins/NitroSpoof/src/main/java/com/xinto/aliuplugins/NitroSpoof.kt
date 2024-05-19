@@ -25,8 +25,22 @@ import java.lang.reflect.Field
 class NitroSpoof : Plugin() {
 
   private val reflectionCache = HashMap<String, Field>()
-  private val CW = ChannelWrapper(StoreStream.getChannelsSelected().getSelectedChannel())
-  private val GW get() = if (CW.isDM()) StoreStream.getGuilds().getGuild(769749710479032340) else StoreStream.getGuilds().getGuild(CW.guildId)
+
+  fun getGuildId(): Long {
+    val CW = ChannelWrapper(StoreStream.getChannelsSelected().getSelectedChannel())
+    return CW.guildId
+  }
+  
+  fun getGuildName(): String {
+    val CW = ChannelWrapper(StoreStream.getChannelsSelected().getSelectedChannel())
+    val Guild get() = if (CW.isDM()) StoreStream.getGuilds().getGuild(769749710479032340) else StoreStream.getGuilds().getGuild(CW.guildId())
+    return Guild.getName()
+  }
+
+  fun isDm(): Boolean {
+    val CW = ChannelWrapper(StoreStream.getChannelsSelected().getSelectedChannel())
+    return CW.isDM()
+  }
 
   override fun start(context: Context) {
     patcher.patch(
@@ -43,21 +57,21 @@ class NitroSpoof : Plugin() {
         InsteadHook { true }
     )
     commands.registerCommand("blacklist", "Blacklist current server to not use empty character.") {
-      if (servBlacklist.contains(CW.guildId)) {
+      if (servBlacklist.contains(getGuildId())) {
         CommandsAPI.CommandResult("Current server is already in blacklist.")
-      } else if (CW.isDM()) {
+      } else if (isDm()) {
         CommandsAPI.CommandResult("You cannot blacklist a DM")
       } else {
-        servBlacklist.put(CW.guildId, GW.getName())
+        servBlacklist.put(getGuildId(), getGuildName())
         CommandsAPI.CommandResult("Current server is blacklisted.")
       }
     }
     commands.registerCommand("whitelist", "Remove current server from blacklist.") {
-      if (CW.guildId == ALIUCORD_GUILD_ID) CommandsAPI.CommandResult("Nop.")
-      else if (CW.isDM()) {
+      if (getGuildId() == ALIUCORD_GUILD_ID) CommandsAPI.CommandResult("Nop.")
+      else if (isDm()) {
         CommandsAPI.CommandResult("Why would you")
       } else {
-        servBlacklist.remove(CW.id)
+        servBlacklist.remove(getGuildId())
         CommandsAPI.CommandResult("Current server removed from blacklist.")
       }
     }
@@ -97,8 +111,8 @@ class NitroSpoof : Plugin() {
     }
 
     if (settings.getBool("emptyChar", false) &&
-            !servBlacklist.contains(CW.guildId) &&
-            !permBlacklist.contains(CW.guildId)
+            !servBlacklist.contains(getGuildId()) &&
+            !permBlacklist.contains(getGuildId())
     ) {
       finalUrl = EMPTY_CHAR + "(" + finalUrl + ")"
     }
