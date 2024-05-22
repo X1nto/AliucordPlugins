@@ -1,6 +1,5 @@
 package com.xinto.aliuplugins
 
-// import java.io.File
 import android.content.Context
 import com.aliucord.Constants.ALIUCORD_GUILD_ID
 import com.aliucord.annotations.AliucordPlugin
