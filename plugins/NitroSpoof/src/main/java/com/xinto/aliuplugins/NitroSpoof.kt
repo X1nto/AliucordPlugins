@@ -59,6 +59,7 @@ class NitroSpoof : Plugin() {
       }
     }
     commands.registerCommand("whitelist", "Remove current server from blacklist.") {
+      val (gId, gName, dm) = getGuildInfo()
       if (gId == ALIUCORD_GUILD_ID) CommandsAPI.CommandResult("Nop.", null, false)
       else if (dm) {
         CommandsAPI.CommandResult("Why would you", null, false)
