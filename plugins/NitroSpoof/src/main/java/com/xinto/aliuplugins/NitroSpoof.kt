@@ -25,7 +25,7 @@ class NitroSpoof : Plugin() {
 
   private val reflectionCache = HashMap<String, Field>()
 
-  fun getGuildInfo(): Triple {
+  fun getGuildInfo(): Triple<Long, String, Boolean> {
     val CW = ChannelWrapper(StoreStream.getChannelsSelected().getSelectedChannel())
     val guild = if (CW.isDM()) { StoreStream.getGuilds().getGuild(769749710479032340) } else { StoreStream.getGuilds().getGuild(CW.guildId()) }
     val name = guild.getName()
