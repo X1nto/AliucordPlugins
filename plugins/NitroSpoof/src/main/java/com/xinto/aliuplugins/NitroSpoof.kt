@@ -102,7 +102,7 @@ class NitroSpoof : Plugin() {
           !servBlacklist.contains(gId) &&
           !permBlacklist.contains(gId)
       ) {
-          finalUrl = "[‎ ]" + "(" + finalUrl + ")"
+          finalUrl = "[‎⠀]" + "(" + finalUrl + ")"
       }
 
       callFrame.result = finalUrl
