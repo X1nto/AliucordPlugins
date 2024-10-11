@@ -52,8 +52,9 @@ class NitroSpoof : Plugin() {
     private fun getChatReplacement(callFrame: XC_MethodHook.MethodHookParam) {
         val thisObject = callFrame.thisObject as ModelEmojiCustom
         val isUsable = thisObject.getCachedField<Boolean>("isUsable")
+        val available = thisObject.getCachedField<Boolean>("available")
 
-        if (isUsable) {
+        if (isUsable && available) {
             callFrame.result = callFrame.result
             return
         }
