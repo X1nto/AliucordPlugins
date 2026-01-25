@@ -1,7 +1,9 @@
-description = "Use all emotes in any server without Nitro."
-version = "1.0.10"
+description = "Use all emotes in any server without Nitro using markdown links. The plugin MoreHighlights is required for displaying the markdown links correctly."
+version = "1.0.11"
 
 aliucord.changelog.set("""
+  # 1.0.11
+  * Changed the way of adding emotes to the messages, using markdown link buttons rather than just addiing the link sp that the emojis can be used inline
   # 1.0.10
   * Added the lossless quality argument to the emoji URL to combat Blur (by RGBCube)
   * Added the emoji name argument to the URL to help Vencord properly display the emoji (by Delphox)
