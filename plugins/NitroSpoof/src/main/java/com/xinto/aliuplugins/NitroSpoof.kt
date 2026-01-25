@@ -73,8 +73,13 @@ class NitroSpoof : Plugin() {
         if (emoteSize != null) {
             finalUrl += "&size=${emoteSize}"
         }
-        
-        callFrame.result = finalUrl
+        /**
+         * changed callFrame.result to adapt Discord's markdown interperter for a cleaner look.
+         * so the emote will be displayed as just the emote name on the rendered message,
+         * similar to how Vencord does it on their FakeNitro plugin.
+         * (when the comment is larger than the change :trolley:)
+         */
+        callFrame.result = "[" + emoteName + "](" + finalUrl + ")"        
     }
 
     /**
