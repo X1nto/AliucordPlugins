@@ -4,8 +4,6 @@ version = "1.3.0"
 aliucord {
     author("Juby210", 324622488644616195L)
 
-    excludeFromUpdaterJson.set(true)
-
     changelog.set("""
        Added {added marginTop} 
        ======================
