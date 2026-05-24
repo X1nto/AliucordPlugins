@@ -46,7 +46,6 @@ jobs:
           ./gradlew make generateUpdaterJson
           rm $GITHUB_WORKSPACE/builds/*
           cp plugins/**/build/*.zip $GITHUB_WORKSPACE/builds
-          rm $GITHUB_WORKSPACE/builds/ShowHiddenChannels.zip
           cp build/updater.json $GITHUB_WORKSPACE/builds
 
       - name: Push builds
